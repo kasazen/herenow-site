@@ -1,44 +1,46 @@
 /**
- * Hero animation: black box → reveal hidden green/red pixels → sort
- * greens to the top, expel reds outside → reds pixelate and vanish →
- * greens propagate row by row until the box is fully green.
+ * Hero animation.
  *
- * Built with vanilla rAF + Canvas. ~5 seconds end-to-end.
+ * Story: a black box → reveal hidden green/red pixels → sort greens to
+ * the top of the grid, reds to the bottom of the grid → reds drift out
+ * past the box edge and pixelate away → green floods down through the
+ * (formerly red) rows until the entire box is green.
+ *
+ * Vanilla rAF + Canvas, ~5s end-to-end. Reduced-motion users see the
+ * settled state immediately.
  */
 
 type Phase = "idle" | "breathe" | "reveal" | "sort" | "purge" | "spread" | "settled";
 
 interface Pixel {
-  // grid position within the GRID×GRID matrix (0..GRID-1)
   col: number;
   row: number;
-  // current rendered position (in pixel space, relative to box top-left)
+  // Current rendered position (pixel space, relative to box top-left).
   x: number;
   y: number;
-  // sort destination (in pixel space, relative to box top-left). For reds,
-  // this is somewhere outside the box.
+  // Sorted destination inside the grid.
   destX: number;
   destY: number;
-  // color identity
-  kind: "noise" | "green" | "red";
-  // 0..1 intensity used during reveal/purge
-  intensity: number;
-  // jitter offsets for the "expelled" red drift
+  // For reds only: the position outside the box they drift toward during
+  // the purge phase. For greens, equal to destX/destY (no movement).
+  expelX: number;
+  expelY: number;
+  kind: "green" | "red";
   jitterPhase: number;
 }
 
 const GRID = 24;
+const GREEN_RATIO = 0.72;
 const GREEN = "#34d399";
 const RED = "#f87171";
-const NOISE = "#1a1a1a";
 const BG = "#0a0a0a";
+const BOX = "#0e0e10";
 
-// Phase boundaries in seconds
 const T_BREATHE = 0.9;
-const T_REVEAL = 1.6;
-const T_SORT = 2.9;
-const T_PURGE = 3.6;
-const T_SPREAD = 5.0;
+const T_REVEAL = 1.7;
+const T_SORT = 3.0;
+const T_PURGE = 3.9;
+const T_SPREAD = 5.2;
 
 const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 const easeInOutCubic = (t: number) =>
@@ -47,14 +49,8 @@ const clamp01 = (t: number) => Math.max(0, Math.min(1, t));
 
 function seedPixels(): Pixel[] {
   const pixels: Pixel[] = [];
-  // ~14% green, ~7% red, rest noise. Greens cluster slightly so the sort
-  // feels like discovery, not pure randomness.
   for (let row = 0; row < GRID; row++) {
     for (let col = 0; col < GRID; col++) {
-      const r = Math.random();
-      let kind: Pixel["kind"] = "noise";
-      if (r < 0.14) kind = "green";
-      else if (r < 0.21) kind = "red";
       pixels.push({
         col,
         row,
@@ -62,8 +58,9 @@ function seedPixels(): Pixel[] {
         y: 0,
         destX: 0,
         destY: 0,
-        kind,
-        intensity: 0,
+        expelX: 0,
+        expelY: 0,
+        kind: Math.random() < GREEN_RATIO ? "green" : "red",
         jitterPhase: Math.random() * Math.PI * 2,
       });
     }
@@ -72,47 +69,44 @@ function seedPixels(): Pixel[] {
 }
 
 function assignDestinations(pixels: Pixel[], cell: number, boxSize: number): void {
-  // Greens fill the top rows in reading order. Noise fills below the greens.
-  // Reds get random destinations outside the box (left/right margins).
+  // Stable order: walk the grid in reading order, assign greens to the
+  // top G cells and reds to the remaining cells. Every grid cell ends
+  // up with exactly one pixel.
   const greens = pixels.filter((p) => p.kind === "green");
-  const noise = pixels.filter((p) => p.kind === "noise");
   const reds = pixels.filter((p) => p.kind === "red");
 
-  const sorted = [...greens, ...noise];
-  for (let i = 0; i < sorted.length; i++) {
-    const p = sorted[i];
+  for (let i = 0; i < greens.length; i++) {
+    const p = greens[i];
     const r = Math.floor(i / GRID);
     const c = i % GRID;
     p.destX = c * cell;
     p.destY = r * cell;
+    p.expelX = p.destX;
+    p.expelY = p.destY;
   }
 
-  for (const p of reds) {
-    // Pick a random angle pointing outward, push them past the box edge.
-    const side = Math.random();
-    const margin = boxSize * 0.35;
-    if (side < 0.5) {
-      // Left
-      p.destX = -margin - Math.random() * margin * 0.6;
-      p.destY = Math.random() * boxSize;
-    } else {
-      // Right
-      p.destX = boxSize + Math.random() * margin * 0.6;
-      p.destY = Math.random() * boxSize;
-    }
+  for (let i = 0; i < reds.length; i++) {
+    const p = reds[i];
+    const offset = greens.length + i;
+    const r = Math.floor(offset / GRID);
+    const c = offset % GRID;
+    p.destX = c * cell;
+    p.destY = r * cell;
+
+    // Expel toward whichever side is closer, with a slight vertical drift.
+    const margin = boxSize * 0.45;
+    const goLeft = p.destX < boxSize / 2;
+    p.expelX = goLeft
+      ? -margin - Math.random() * margin * 0.6
+      : boxSize + Math.random() * margin * 0.6;
+    p.expelY = p.destY + (Math.random() - 0.5) * boxSize * 0.5;
   }
 }
 
-function pixelColor(p: Pixel, alpha: number): string {
-  let base: string;
-  if (p.kind === "green") base = GREEN;
-  else if (p.kind === "red") base = RED;
-  else base = NOISE;
-
-  // Build rgba from hex
-  const r = parseInt(base.slice(1, 3), 16);
-  const g = parseInt(base.slice(3, 5), 16);
-  const b = parseInt(base.slice(5, 7), 16);
+function rgba(hex: string, alpha: number): string {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
@@ -121,12 +115,17 @@ export function mountHero(canvas: HTMLCanvasElement, onComplete: () => void): vo
   if (!ctx) return;
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
   const pixels = seedPixels();
+  const greenCount = pixels.filter((p) => p.kind === "green").length;
+  const greenRowsFull = Math.floor(greenCount / GRID);
+  const greenInLastRow = greenCount - greenRowsFull * GRID;
+
   let phase: Phase = "idle";
   let phaseStart = 0;
   let started = false;
   let completed = false;
+  let startedAt = 0;
+  let rafId = 0;
   let dpr = 1;
   let cssSize = 0;
   let cell = 0;
@@ -147,9 +146,6 @@ export function mountHero(canvas: HTMLCanvasElement, onComplete: () => void): vo
     originX = (cssSize - boxSize) / 2;
     originY = (cssSize - boxSize) / 2;
     assignDestinations(pixels, cell, boxSize);
-    // Initial position is collapsed inside the box (we'll spawn from a
-    // tight center scatter when reveal begins; for breathe, we draw the
-    // solid box instead).
     for (const p of pixels) {
       p.x = p.col * cell;
       p.y = p.row * cell;
@@ -161,143 +157,131 @@ export function mountHero(canvas: HTMLCanvasElement, onComplete: () => void): vo
     phaseStart = t;
   }
 
+  function clear(): void {
+    ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx!.fillStyle = BG;
+    ctx!.fillRect(0, 0, cssSize, cssSize);
+  }
+
   function drawSolidBox(scale: number): void {
-    ctx!.fillStyle = "#0a0a0a";
     const w = boxSize * scale;
     const h = boxSize * scale;
     const x = originX + (boxSize - w) / 2;
     const y = originY + (boxSize - h) / 2;
-    // Subtle outline to anchor the box in the dark background
-    ctx!.fillStyle = "#0e0e10";
+    ctx!.fillStyle = BOX;
     ctx!.fillRect(x, y, w, h);
     ctx!.strokeStyle = "rgba(255,255,255,0.06)";
     ctx!.lineWidth = 1;
     ctx!.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);
   }
 
-  function drawPixel(p: Pixel, alpha: number): void {
-    const px = originX + p.x;
-    const py = originY + p.y;
-    ctx!.fillStyle = pixelColor(p, alpha);
-    // Subtract a 1px gap between pixels for a crisp grid feel
-    ctx!.fillRect(Math.floor(px), Math.floor(py), Math.max(1, Math.floor(cell - 1)), Math.max(1, Math.floor(cell - 1)));
+  function drawCell(x: number, y: number, color: string, alpha: number, size: number = cell - 1): void {
+    ctx!.fillStyle = rgba(color, alpha);
+    ctx!.fillRect(
+      Math.floor(originX + x),
+      Math.floor(originY + y),
+      Math.max(1, Math.floor(size)),
+      Math.max(1, Math.floor(size)),
+    );
   }
 
   function frame(now: number): void {
     if (!started) return;
     const t = (now - phaseStart) / 1000;
     const elapsed = (now - startedAt) / 1000;
-
-    ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx!.clearRect(0, 0, cssSize, cssSize);
-    // Background
-    ctx!.fillStyle = BG;
-    ctx!.fillRect(0, 0, cssSize, cssSize);
+    clear();
 
     if (phase === "breathe") {
       const k = clamp01(t / T_BREATHE);
-      // Slight scale pulse (1 → 1.02 → 1)
       const pulse = 1 + Math.sin(k * Math.PI * 2) * 0.012;
       drawSolidBox(pulse);
       if (t >= T_BREATHE) setPhase("reveal", now);
     } else if (phase === "reveal") {
-      const k = clamp01(t / (T_REVEAL - T_BREATHE));
+      const dur = T_REVEAL - T_BREATHE;
+      const k = clamp01(t / dur);
       const eased = easeOutCubic(k);
-      // Draw box getting eaten away as pixels appear
-      drawSolidBox(1 - eased * 0.05);
-      // Reveal pixels with rising intensity
+      drawSolidBox(1 - eased * 0.04);
       for (const p of pixels) {
-        // Stagger reveal by row+col so it feels organic
         const stagger = ((p.row + p.col) % 8) / 8;
         const local = clamp01((eased - stagger * 0.4) * 1.6);
         if (local <= 0) continue;
-        const colored = p.kind !== "noise";
-        const alpha = colored ? local * 0.95 : local * 0.55;
-        drawPixel(p, alpha);
+        drawCell(p.col * cell, p.row * cell, p.kind === "green" ? GREEN : RED, local * 0.95);
       }
-      if (t >= T_REVEAL - T_BREATHE) setPhase("sort", now);
+      if (t >= dur) setPhase("sort", now);
     } else if (phase === "sort") {
-      const k = clamp01(t / (T_SORT - T_REVEAL));
+      const dur = T_SORT - T_REVEAL;
+      const k = clamp01(t / dur);
       const eased = easeInOutCubic(k);
       for (const p of pixels) {
         const startX = p.col * cell;
         const startY = p.row * cell;
-        p.x = startX + (p.destX - startX) * eased;
-        p.y = startY + (p.destY - startY) * eased;
-        const colored = p.kind !== "noise";
-        const alpha = colored ? 0.95 : 0.55;
-        drawPixel(p, alpha);
+        const x = startX + (p.destX - startX) * eased;
+        const y = startY + (p.destY - startY) * eased;
+        drawCell(x, y, p.kind === "green" ? GREEN : RED, 0.95);
       }
-      if (t >= T_SORT - T_REVEAL) setPhase("purge", now);
+      if (t >= dur) setPhase("purge", now);
     } else if (phase === "purge") {
-      const k = clamp01(t / (T_PURGE - T_SORT));
-      // Reds jitter and fade. Greens + noise sit in their sorted positions.
-      for (const p of pixels) {
-        if (p.kind === "red") {
-          const wobble = Math.sin(now / 60 + p.jitterPhase) * 2 * (1 - k);
-          const px = p.destX + wobble;
-          const py = p.destY + wobble;
-          const alpha = (1 - k) * 0.95;
-          // Pixelate-out: shrink the rect as it fades
-          const shrink = Math.max(1, (cell - 1) * (1 - k));
-          ctx!.fillStyle = pixelColor(p, alpha);
-          ctx!.fillRect(
-            Math.floor(originX + px + (cell - shrink) / 2),
-            Math.floor(originY + py + (cell - shrink) / 2),
-            Math.floor(shrink),
-            Math.floor(shrink),
-          );
-        } else {
-          drawPixel(p, p.kind === "green" ? 0.95 : 0.55);
-        }
-      }
-      if (t >= T_PURGE - T_SORT) setPhase("spread", now);
-    } else if (phase === "spread") {
-      const k = clamp01(t / (T_SPREAD - T_PURGE));
+      const dur = T_PURGE - T_SORT;
+      const k = clamp01(t / dur);
       const eased = easeInOutCubic(k);
-      // The greens already occupy the top N rows. Spread converts noise
-      // pixels (which are below the greens) to green, row by row.
-      const greenCount = pixels.filter((p) => p.kind === "green").length;
-      const greenRowsFull = Math.floor(greenCount / GRID);
-      const remainingRows = GRID - greenRowsFull;
-      const rowsToFill = Math.ceil(remainingRows * eased);
+      // Greens hold position. Reds drift to expel positions, shrink, fade.
+      for (const p of pixels) {
+        if (p.kind === "green") {
+          drawCell(p.destX, p.destY, GREEN, 0.95);
+          continue;
+        }
+        const wobble = Math.sin(now / 70 + p.jitterPhase) * 1.5;
+        const x = p.destX + (p.expelX - p.destX) * eased + wobble;
+        const y = p.destY + (p.expelY - p.destY) * eased;
+        const alpha = (1 - k) * 0.95;
+        const size = Math.max(1, (cell - 1) * (1 - k * 0.7));
+        drawCell(x, y, RED, alpha, size);
+      }
+      if (t >= dur) setPhase("spread", now);
+    } else if (phase === "spread") {
+      const dur = T_SPREAD - T_PURGE;
+      const k = clamp01(t / dur);
+      const eased = easeInOutCubic(k);
+      // Determine how many "red zone" rows have been converted to green so far.
+      const totalRows = GRID;
+      const redZoneStartRow = greenRowsFull;
+      const redZoneRowCount = totalRows - redZoneStartRow;
+      const filledRedRows = redZoneRowCount * eased;
 
       for (const p of pixels) {
-        if (p.kind === "red") continue;
-        // Where is this pixel in the sorted order?
-        const sortedIndex = Math.round(p.destY / cell) * GRID + Math.round(p.destX / cell);
-        const sortedRow = Math.floor(sortedIndex / GRID);
-        const isGreenZone = sortedRow < greenRowsFull;
-        const isFilled = sortedRow < greenRowsFull + rowsToFill;
-        if (isGreenZone || isFilled) {
-          // Render as green
-          const alpha = isGreenZone ? 0.95 : 0.85;
-          ctx!.fillStyle = pixelColor({ ...p, kind: "green" }, alpha);
-          ctx!.fillRect(
-            Math.floor(originX + p.destX),
-            Math.floor(originY + p.destY),
-            Math.max(1, Math.floor(cell - 1)),
-            Math.max(1, Math.floor(cell - 1)),
-          );
-        } else {
-          drawPixel(p, 0.55);
+        const cellRow = Math.round(p.destY / cell);
+        const cellCol = Math.round(p.destX / cell);
+
+        // Already-green zone: solid green.
+        if (cellRow < redZoneStartRow) {
+          drawCell(p.destX, p.destY, GREEN, 0.95);
+          continue;
         }
+
+        // First partial green row (mixed greens+reds inherently): fully green.
+        if (cellRow === redZoneStartRow && cellCol < greenInLastRow) {
+          drawCell(p.destX, p.destY, GREEN, 0.95);
+          continue;
+        }
+
+        // Red-zone rows: progressively flooded with green, top-down.
+        const distanceIntoRedZone = cellRow - redZoneStartRow;
+        if (distanceIntoRedZone < filledRedRows) {
+          // Brightness ramp on the leading row for a "sweep" feel.
+          const isLeadingRow =
+            distanceIntoRedZone >= Math.floor(filledRedRows) &&
+            distanceIntoRedZone < Math.ceil(filledRedRows);
+          const alpha = isLeadingRow ? 0.6 + 0.35 * (filledRedRows - Math.floor(filledRedRows)) : 0.95;
+          drawCell(p.destX, p.destY, GREEN, alpha);
+        }
+        // Cells past the leading edge stay dark — the red has gone, no green yet.
       }
-      if (t >= T_SPREAD - T_PURGE) {
-        setPhase("settled", now);
-      }
+
+      if (t >= dur) setPhase("settled", now);
     } else if (phase === "settled") {
-      // Steady green field with a gentle breathing alpha
-      const breath = 0.92 + Math.sin(elapsed * 1.4) * 0.04;
+      const breath = 0.9 + Math.sin(elapsed * 1.3) * 0.05;
       for (const p of pixels) {
-        if (p.kind === "red") continue;
-        ctx!.fillStyle = pixelColor({ ...p, kind: "green" }, breath);
-        ctx!.fillRect(
-          Math.floor(originX + p.destX),
-          Math.floor(originY + p.destY),
-          Math.max(1, Math.floor(cell - 1)),
-          Math.max(1, Math.floor(cell - 1)),
-        );
+        drawCell(p.destX, p.destY, GREEN, breath);
       }
       if (!completed) {
         completed = true;
@@ -308,8 +292,12 @@ export function mountHero(canvas: HTMLCanvasElement, onComplete: () => void): vo
     rafId = requestAnimationFrame(frame);
   }
 
-  let rafId = 0;
-  let startedAt = 0;
+  function renderFinalState(): void {
+    clear();
+    for (const p of pixels) {
+      drawCell(p.destX, p.destY, GREEN, 0.92);
+    }
+  }
 
   function start(): void {
     if (started) return;
@@ -319,30 +307,11 @@ export function mountHero(canvas: HTMLCanvasElement, onComplete: () => void): vo
     rafId = requestAnimationFrame(frame);
   }
 
-  function renderFinalState(): void {
-    ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx!.fillStyle = BG;
-    ctx!.fillRect(0, 0, cssSize, cssSize);
-    for (const p of pixels) {
-      if (p.kind === "red") continue;
-      ctx!.fillStyle = pixelColor({ ...p, kind: "green" }, 0.92);
-      ctx!.fillRect(
-        Math.floor(originX + p.destX),
-        Math.floor(originY + p.destY),
-        Math.max(1, Math.floor(cell - 1)),
-        Math.max(1, Math.floor(cell - 1)),
-      );
-    }
-  }
-
   resize();
   window.addEventListener("resize", () => {
     resize();
     if (!started) {
-      // Re-render the breathing solid box at idle
-      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx!.fillStyle = BG;
-      ctx!.fillRect(0, 0, cssSize, cssSize);
+      clear();
       drawSolidBox(1);
     }
   });
@@ -353,14 +322,9 @@ export function mountHero(canvas: HTMLCanvasElement, onComplete: () => void): vo
     return;
   }
 
-  // Initial paint: solid box, before IO triggers start.
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.fillStyle = BG;
-  ctx.fillRect(0, 0, cssSize, cssSize);
+  clear();
   drawSolidBox(1);
 
-  // Start when the canvas enters the viewport (covers reload at scroll
-  // position other than top).
   const io = new IntersectionObserver(
     (entries) => {
       for (const e of entries) {
@@ -374,7 +338,6 @@ export function mountHero(canvas: HTMLCanvasElement, onComplete: () => void): vo
   );
   io.observe(canvas);
 
-  // Stop the animation if the tab is hidden so we don't burn battery.
   document.addEventListener("visibilitychange", () => {
     if (document.hidden && rafId) {
       cancelAnimationFrame(rafId);

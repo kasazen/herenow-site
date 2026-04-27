@@ -1,5 +1,8 @@
 import "./styles.css";
 import { mountHero } from "./animations/hero";
+import { mountAudit } from "./animations/audit";
+import { mountMemo } from "./animations/memo";
+import { mountWedge } from "./animations/wedge";
 import { mountCalendly } from "./calendly";
 import { mountAnalytics, observeScrollDepth, track } from "./analytics";
 
@@ -21,6 +24,15 @@ ready(() => {
   } else {
     heroLine?.classList.add("is-visible");
   }
+
+  const audit = document.getElementById("audit-canvas") as HTMLCanvasElement | null;
+  if (audit) mountAudit(audit);
+
+  const memo = document.getElementById("memo-canvas") as HTMLCanvasElement | null;
+  if (memo) mountMemo(memo);
+
+  const wedge = document.getElementById("wedge-canvas") as HTMLCanvasElement | null;
+  if (wedge) mountWedge(wedge);
 
   const calendly = document.getElementById("calendly");
   const calendlyFallback = document.getElementById("calendly-fallback");
