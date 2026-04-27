@@ -4,257 +4,108 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Here Now Labs</title>
-  <meta name="description" content="A strategic memo on where your money is leaking — read in one sitting, defended in a live conversation, delivered in weeks not quarters." />
-  <meta name="theme-color" content="#0b0b0f" />
+  <meta name="description" content="A two-week audit of your company's actual data. We tell you where AI changes your numbers, and where it doesn't." />
+  <meta name="theme-color" content="#0a0a0a" />
   <meta property="og:title" content="Here Now Labs" />
-  <meta property="og:description" content="A strategic memo on where your money is leaking — read in one sitting, defended in a live conversation, delivered in weeks not quarters." />
+  <meta property="og:description" content="A two-week audit of your company's actual data. We tell you where AI changes your numbers, and where it doesn't." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://herenowlabs.xyz" />
   <link rel="canonical" href="https://herenowlabs.xyz/" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0b0f'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23ffffff'/%3E%3C/svg%3E" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%230a0a0a'/%3E%3Crect x='6' y='6' width='5' height='5' fill='%2334d399'/%3E%3Crect x='13' y='6' width='5' height='5' fill='%2334d399'/%3E%3Crect x='20' y='6' width='5' height='5' fill='%2334d399'/%3E%3Crect x='6' y='13' width='5' height='5' fill='%2334d399'/%3E%3Crect x='13' y='13' width='5' height='5' fill='%2334d399'/%3E%3Crect x='20' y='13' width='5' height='5' fill='%2334d399'/%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Inter:wght@400;500&display=swap" />
-  <style>
-    :root {
-      --bg: #fafaf7;
-      --paper: #ffffff;
-      --fg: #0b0b0f;
-      --ink: #1a1a1f;
-      --muted: #5a5a64;
-      --faint: #8a8a94;
-      --rule: #e2e2dc;
-      --hairline: #d4d4ce;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0b0b0f;
-        --paper: #0b0b0f;
-        --fg: #f2f2ee;
-        --ink: #e8e8e2;
-        --muted: #9a9aa2;
-        --faint: #6a6a72;
-        --rule: #22222a;
-        --hairline: #2c2c34;
-      }
-    }
-    *, *::before, *::after { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; }
-    html { -webkit-text-size-adjust: 100%; }
-    body {
-      background: var(--bg);
-      color: var(--fg);
-      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-      font-size: 17px;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      min-height: 100svh;
-      display: flex;
-      flex-direction: column;
-    }
-    .serif {
-      font-family: "Newsreader", "Iowan Old Style", "Charter", Georgia, serif;
-      font-feature-settings: "liga", "kern";
-    }
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      padding: clamp(2.5rem, 8vw, 6rem) clamp(1.5rem, 5vw, 3rem) clamp(3rem, 8vw, 6rem);
-    }
-    .page {
-      width: 100%;
-      max-width: 40rem;
-    }
-    .mark {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.625rem;
-      margin-bottom: clamp(3.5rem, 10vw, 6rem);
-    }
-    .mark .dot {
-      width: 0.5rem;
-      height: 0.5rem;
-      border-radius: 999px;
-      background: var(--fg);
-    }
-    .mark .label {
-      font-size: 0.75rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--muted);
-      font-weight: 500;
-    }
-    h1.headline {
-      font-size: clamp(2rem, 5vw, 3.125rem);
-      line-height: 1.1;
-      letter-spacing: -0.018em;
-      font-weight: 400;
-      margin: 0 0 1.75rem 0;
-      color: var(--ink);
-    }
-    h1.headline em {
-      font-style: italic;
-      color: var(--ink);
-    }
-    p.lede {
-      font-size: clamp(1.0625rem, 1.6vw, 1.1875rem);
-      color: var(--muted);
-      margin: 0 0 clamp(3rem, 7vw, 4.5rem) 0;
-      line-height: 1.55;
-    }
-    section {
-      margin-top: clamp(2.5rem, 6vw, 3.75rem);
-    }
-    section + section {
-      padding-top: clamp(2.5rem, 6vw, 3.75rem);
-      border-top: 1px solid var(--rule);
-    }
-    h2 {
-      font-size: 0.75rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--faint);
-      font-weight: 500;
-      margin: 0 0 1.25rem 0;
-    }
-    p {
-      margin: 0 0 1rem 0;
-      color: var(--ink);
-    }
-    p:last-child { margin-bottom: 0; }
-    p.muted { color: var(--muted); }
-    .deliverable {
-      margin: 1.25rem 0 0 0;
-      padding: 0;
-      list-style: none;
-      border-top: 1px solid var(--hairline);
-    }
-    .deliverable li {
-      display: grid;
-      grid-template-columns: 9rem 1fr;
-      gap: 1.5rem;
-      padding: 0.875rem 0;
-      border-bottom: 1px solid var(--hairline);
-      font-size: 0.9375rem;
-    }
-    .deliverable .k {
-      color: var(--faint);
-      font-variant-numeric: tabular-nums;
-      letter-spacing: 0.02em;
-    }
-    .deliverable .v {
-      color: var(--ink);
-    }
-    @media (max-width: 32rem) {
-      .deliverable li {
-        grid-template-columns: 1fr;
-        gap: 0.25rem;
-        padding: 0.75rem 0;
-      }
-    }
-    .trust {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-    .trust li {
-      padding: 0.5rem 0;
-      color: var(--ink);
-      font-size: 0.9375rem;
-      position: relative;
-      padding-left: 1.25rem;
-    }
-    .trust li::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 1.05rem;
-      width: 0.375rem;
-      height: 1px;
-      background: var(--faint);
-    }
-    .contact {
-      font-size: 0.9375rem;
-      color: var(--muted);
-    }
-    .contact a {
-      color: var(--ink);
-      text-decoration: none;
-      border-bottom: 1px solid var(--hairline);
-      transition: border-color 150ms ease;
-    }
-    .contact a:hover { border-bottom-color: var(--ink); }
-    footer {
-      border-top: 1px solid var(--rule);
-      padding: 1.5rem clamp(1.5rem, 5vw, 3rem);
-      font-size: 0.75rem;
-      letter-spacing: 0.04em;
-      color: var(--faint);
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-    @media (prefers-reduced-motion: no-preference) {
-      .page { animation: rise 700ms cubic-bezier(.2,.7,.2,1) both; }
-      @keyframes rise {
-        from { opacity: 0; transform: translateY(6px); }
-        to   { opacity: 1; transform: translateY(0); }
-      }
-    }
-    ::selection { background: var(--ink); color: var(--bg); }
-  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" />
+  <script type="module" src="/src/main.ts"></script>
 </head>
 <body>
+  <header class="topbar">
+    <a class="wordmark" href="/" aria-label="Here Now Labs — home">
+      <span class="wordmark__glyph" aria-hidden="true"></span>
+      <span class="wordmark__text">Here Now Labs</span>
+    </a>
+  </header>
+
   <main>
-    <article class="page">
-      <div class="mark">
-        <span class="dot" aria-hidden="true"></span>
-        <span class="label">Here Now Labs</span>
+    <section class="hero" aria-labelledby="hero-line">
+      <div class="hero__stage">
+        <canvas id="hero-canvas" width="640" height="640" aria-hidden="true"></canvas>
+        <div class="hero__static" aria-hidden="true"></div>
       </div>
+      <p id="hero-line" class="hero__line">
+        Every company is mostly working. The job is finding the part that isn't.
+      </p>
+    </section>
 
-      <h1 class="headline serif">A strategic memo on <em>where your money is leaking</em> — read in one sitting, defended in a live conversation, delivered in weeks not quarters.</h1>
+    <section class="premise" aria-label="Premise">
+      <p>
+        Most owners we talk to aren't afraid of AI. They're afraid of being the last person in their industry to figure out what to do with it. That's a different fear, and it deserves a different answer than a ninety-day strategy deck.
+      </p>
+    </section>
 
-      <p class="lede">We read the contracts, map the vendors, and trace the processes already inside your company. We return a prioritized account of what we found, with each recommendation tied to a dollar figure.</p>
+    <section class="block block--audit" aria-labelledby="audit-label">
+      <p id="audit-label" class="block__label">What we do</p>
+      <div class="block__visual" data-animation="audit">
+        <div class="block__visual-placeholder">
+          <span>animation — pages flowing through a lens, collapsing into a small ledger of findings</span>
+        </div>
+      </div>
+      <div class="block__body">
+        <p>
+          We spend two weeks inside your company's actual data. Contracts, Slack, invoices, tooling — the real material, not a survey. We come back with a short written account of where AI changes your numbers, and where it doesn't.
+        </p>
+      </div>
+    </section>
 
-      <section>
-        <h2>What you receive</h2>
-        <ul class="deliverable">
-          <li><span class="k">Format</span><span class="v">A dense strategic memo. Prose, not slides.</span></li>
-          <li><span class="k">Length</span><span class="v">Read in one sitting.</span></li>
-          <li><span class="k">Findings</span><span class="v">Few, prioritized, each load-bearing.</span></li>
-          <li><span class="k">Arithmetic</span><span class="v">Every recommendation tied to a dollar figure.</span></li>
-          <li><span class="k">Walkthrough</span><span class="v">A live working session with the executive team. Decisions made in the room.</span></li>
-          <li><span class="k">Turnaround</span><span class="v">Weeks, not quarters.</span></li>
-        </ul>
-      </section>
+    <section class="block block--memo" aria-labelledby="memo-label">
+      <p id="memo-label" class="block__label">What you walk away with</p>
+      <div class="block__visual" data-animation="memo">
+        <div class="block__visual-placeholder">
+          <span>animation — a memo cover and table of contents resolving as you scroll</span>
+        </div>
+      </div>
+      <div class="block__body">
+        <p>
+          A document. Not slides, not a dashboard, not a Notion page that decays the week after we leave. Twenty pages of prose, written for the executive who has to act on it. We sit with you for an afternoon and walk every recommendation in the room.
+        </p>
+      </div>
+    </section>
 
-      <section>
-        <h2>How we handle your data</h2>
-        <ul class="trust">
-          <li>Every engagement begins under NDA.</li>
-          <li>Client data is never used to train foundation models.</li>
-          <li>Workspaces, retention, and destruction are explicit, documented, and per‑engagement.</li>
-          <li>The signing executive always knows what we looked at, what we kept, and what we destroyed.</li>
-        </ul>
-      </section>
+    <section class="block block--wedge" aria-labelledby="wedge-label">
+      <p id="wedge-label" class="block__label">What comes after</p>
+      <div class="block__visual" data-animation="wedge">
+        <div class="block__visual-placeholder">
+          <span>animation — a single node branching into a small graph of follow-on builds</span>
+        </div>
+      </div>
+      <div class="block__body">
+        <p>
+          The audit is the engagement. It either ends there, with a memo you can act on yourself, or it doesn't — and we keep going. Most of the time it doesn't end. The companies who say yes to the audit usually have one or two things in their business that an off-the-shelf tool will never fit, and those are the things we end up building together.
+        </p>
+      </div>
+    </section>
 
-      <section>
-        <h2>Who this is for</h2>
-        <p>Mid‑market companies, $10M revenue and up, with a complex vendor or partnership footprint, meaningful spend on outside consultants, and a leadership team already curious about what AI could do inside their walls.</p>
-      </section>
+    <section class="qualifier" aria-labelledby="qualifier-label">
+      <p id="qualifier-label" class="block__label">Who tends to reach out</p>
+      <p class="qualifier__body">
+        Owners and operators of companies between twenty‑five and a few hundred people. Usually profitable, usually a few years past the founding scramble, usually with a year of half‑finished AI experiments behind them and a quiet anxiety that they're already behind.
+      </p>
+    </section>
 
-      <section>
-        <h2>Contact</h2>
-        <p class="contact"><a href="mailto:team@herenowlabs.xyz">team@herenowlabs.xyz</a></p>
-      </section>
-    </article>
+    <section class="waitlist" aria-labelledby="waitlist-headline">
+      <h2 id="waitlist-headline" class="waitlist__headline">
+        We're at capacity. Times open as engagements close.
+      </h2>
+      <div id="calendly" class="calendly-inline-widget" data-url=""></div>
+      <p id="calendly-fallback" class="waitlist__fallback" hidden>
+        Reach out at <a href="mailto:team@herenowlabs.xyz">team@herenowlabs.xyz</a> and we'll be in touch when a slot opens.
+      </p>
+      <p class="waitlist__coda">We read every one. We reply to a few.</p>
+    </section>
   </main>
-  <footer>
-    <span>&copy; 2026 Here Now Labs, Inc. &middot; A Delaware corporation.</span>
-    <span>herenowlabs.xyz</span>
+
+  <footer class="footer">
+    <span>&copy; 2026 Here Now Labs, Inc.</span>
+    <span>Delaware corporation</span>
   </footer>
 </body>
 </html>
