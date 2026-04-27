@@ -14,7 +14,7 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%230a0a0a'/%3E%3Crect x='6' y='6' width='5' height='5' fill='%2334d399'/%3E%3Crect x='13' y='6' width='5' height='5' fill='%2334d399'/%3E%3Crect x='20' y='6' width='5' height='5' fill='%2334d399'/%3E%3Crect x='6' y='13' width='5' height='5' fill='%2334d399'/%3E%3Crect x='13' y='13' width='5' height='5' fill='%2334d399'/%3E%3Crect x='20' y='13' width='5' height='5' fill='%2334d399'/%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Fraunces:opsz,wght@9..144,300..600&family=Geist+Mono:wght@400;500&display=swap" />
   <script type="module" src="/src/main.ts"></script>
 </head>
 <body>
@@ -23,6 +23,8 @@
       <span class="wordmark__glyph" aria-hidden="true"></span>
       <span class="wordmark__text">Here Now Labs</span>
     </a>
+    <span class="topbar__meta" aria-hidden="true">A memo, in two weeks.</span>
+    <div class="topbar__progress" id="scroll-progress" aria-hidden="true"></div>
   </header>
 
   <main>
@@ -37,13 +39,13 @@
     </section>
 
     <section class="premise" aria-label="Premise">
-      <p>
-        Most owners we talk to aren't afraid of AI. They're afraid of being the last person in their industry to figure out what to do with it. That's a different fear, and it deserves a different answer than a ninety-day strategy deck.
+      <p class="premise__body">
+        Most owners we talk to aren't afraid of AI. They're afraid of being the <em>last</em> person in their industry to figure out what to do with it. That's a different fear, and it deserves a different answer than a ninety-day strategy deck.
       </p>
     </section>
 
     <section class="block block--audit" aria-labelledby="audit-label">
-      <p id="audit-label" class="block__label">What we do</p>
+      <p id="audit-label" class="block__label" data-num="01">What we do</p>
       <div class="block__visual">
         <canvas id="audit-canvas" aria-hidden="true"></canvas>
       </div>
@@ -55,7 +57,7 @@
     </section>
 
     <section class="block block--memo" aria-labelledby="memo-label">
-      <p id="memo-label" class="block__label">What you walk away with</p>
+      <p id="memo-label" class="block__label" data-num="02">What you walk away with</p>
       <div class="block__visual">
         <canvas id="memo-canvas" aria-hidden="true"></canvas>
       </div>
@@ -67,7 +69,7 @@
     </section>
 
     <section class="block block--wedge" aria-labelledby="wedge-label">
-      <p id="wedge-label" class="block__label">What comes after</p>
+      <p id="wedge-label" class="block__label" data-num="03">What comes after</p>
       <div class="block__visual">
         <canvas id="wedge-canvas" aria-hidden="true"></canvas>
       </div>
@@ -79,7 +81,7 @@
     </section>
 
     <section class="qualifier" aria-labelledby="qualifier-label">
-      <p id="qualifier-label" class="block__label">Who tends to reach out</p>
+      <p id="qualifier-label" class="block__label" data-num="04">Who tends to reach out</p>
       <p class="qualifier__body">
         Owners and operators of companies between twenty‑five and a few hundred people. Usually profitable, usually a few years past the founding scramble, usually with a year of half‑finished AI experiments behind them and a quiet anxiety that they're already behind.
       </p>
@@ -98,8 +100,12 @@
   </main>
 
   <footer class="footer">
-    <span>&copy; 2026 Here Now Labs, Inc.</span>
-    <span>Delaware corporation</span>
+    <span class="footer__cell">
+      <span class="footer__dot" aria-hidden="true"></span>
+      <span>Here Now Labs, Inc.</span>
+    </span>
+    <span class="footer__cell footer__cell--center">A Delaware corporation, &copy; 2026</span>
+    <span class="footer__cell footer__cell--end">team@herenowlabs.xyz</span>
   </footer>
 </body>
 </html>

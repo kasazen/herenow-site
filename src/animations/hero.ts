@@ -301,6 +301,7 @@ export function mountHero(canvas: HTMLCanvasElement, onComplete: () => void): vo
 
   function start(): void {
     if (started) return;
+    resize();
     started = true;
     startedAt = performance.now();
     setPhase("breathe", startedAt);
@@ -308,13 +309,16 @@ export function mountHero(canvas: HTMLCanvasElement, onComplete: () => void): vo
   }
 
   resize();
-  window.addEventListener("resize", () => {
+  const ro = new ResizeObserver(() => {
     resize();
     if (!started) {
       clear();
       drawSolidBox(1);
+    } else if (completed) {
+      renderFinalState();
     }
   });
+  ro.observe(canvas);
 
   if (reduced) {
     renderFinalState();

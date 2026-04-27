@@ -158,16 +158,18 @@ export function mountMemo(canvas: HTMLCanvasElement): void {
 
   function start(): void {
     if (started) return;
+    resize();
     started = true;
     startedAt = performance.now();
     rafId = requestAnimationFrame(draw);
   }
 
   resize();
-  window.addEventListener("resize", () => {
+  const ro = new ResizeObserver(() => {
     resize();
     if (done) renderFinalState();
   });
+  ro.observe(canvas);
 
   if (reduced) {
     renderFinalState();

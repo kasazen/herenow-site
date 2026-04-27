@@ -241,6 +241,7 @@ export function mountAudit(canvas: HTMLCanvasElement): void {
 
   function start(): void {
     if (started) return;
+    resize();
     started = true;
     startedAt = performance.now();
     rafId = requestAnimationFrame(drawFrame);
@@ -266,10 +267,11 @@ export function mountAudit(canvas: HTMLCanvasElement): void {
   }
 
   resize();
-  window.addEventListener("resize", () => {
+  const ro = new ResizeObserver(() => {
     resize();
     if (done) renderFinalState();
   });
+  ro.observe(canvas);
 
   if (reduced) {
     renderFinalState();
