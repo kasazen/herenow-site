@@ -9,9 +9,9 @@ const CALENDLY_CSS = "https://assets.calendly.com/assets/external/widget.css";
  */
 function themedUrl(base: string): string {
   const url = new URL(base);
-  if (!url.searchParams.has("background_color")) url.searchParams.set("background_color", "0a0a0a");
-  if (!url.searchParams.has("text_color")) url.searchParams.set("text_color", "f5f5f4");
-  if (!url.searchParams.has("primary_color")) url.searchParams.set("primary_color", "34d399");
+  if (!url.searchParams.has("background_color")) url.searchParams.set("background_color", "ffffff");
+  if (!url.searchParams.has("text_color")) url.searchParams.set("text_color", "14141a");
+  if (!url.searchParams.has("primary_color")) url.searchParams.set("primary_color", "15803d");
   if (!url.searchParams.has("hide_landing_page_details")) url.searchParams.set("hide_landing_page_details", "1");
   if (!url.searchParams.has("hide_gdpr_banner")) url.searchParams.set("hide_gdpr_banner", "1");
   return url.toString();
