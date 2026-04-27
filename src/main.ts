@@ -1,10 +1,7 @@
 import "./styles.css";
 import { mountHero } from "./animations/hero";
-import { mountAudit } from "./animations/audit";
-import { mountMemo } from "./animations/memo";
-import { mountWedge } from "./animations/wedge";
 import { mountCalendly } from "./calendly";
-import { mountAnalytics, observeScrollDepth, track } from "./analytics";
+import { mountAnalytics, observeScrollDepth } from "./analytics";
 
 function ready(fn: () => void): void {
   if (document.readyState !== "loading") fn();
@@ -14,25 +11,8 @@ function ready(fn: () => void): void {
 ready(() => {
   mountAnalytics();
 
-  const canvas = document.getElementById("hero-canvas") as HTMLCanvasElement | null;
-  const heroLine = document.getElementById("hero-line");
-  if (canvas) {
-    mountHero(canvas, () => {
-      heroLine?.classList.add("is-visible");
-      track("hero_complete");
-    });
-  } else {
-    heroLine?.classList.add("is-visible");
-  }
-
-  const audit = document.getElementById("audit-canvas") as HTMLCanvasElement | null;
-  if (audit) mountAudit(audit);
-
-  const memo = document.getElementById("memo-canvas") as HTMLCanvasElement | null;
-  if (memo) mountMemo(memo);
-
-  const wedge = document.getElementById("wedge-canvas") as HTMLCanvasElement | null;
-  if (wedge) mountWedge(wedge);
+  const hero = document.getElementById("hero-svg") as SVGSVGElement | null;
+  if (hero) mountHero(hero);
 
   const calendly = document.getElementById("calendly");
   const calendlyFallback = document.getElementById("calendly-fallback");
