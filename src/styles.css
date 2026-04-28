@@ -1344,3 +1344,19 @@ main {
 .first-read__post-cta-row {
   margin: 0.5rem 0 0;
 }
+
+.first-read__soft-launch {
+  display: grid;
+  gap: clamp(1.25rem, 2.5vw, 1.75rem);
+}
+
+.first-read__inline-link {
+  color: var(--fg);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule-strong);
+  transition: border-color 150ms ease;
+}
+
+.first-read__inline-link:hover {
+  border-bottom-color: var(--accent);
+}

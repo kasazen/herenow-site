@@ -36,9 +36,17 @@ export type UnlockResponse = {
 };
 
 const API_URL = (import.meta.env.VITE_API_URL as string | undefined)?.trim() ?? "";
+const IS_DEV = import.meta.env.DEV;
+
+export function isApiConfigured(): boolean {
+  return API_URL.length > 0 || IS_DEV;
+}
 
 export async function generate(payload: IntakePayload): Promise<GenerateResponse> {
-  if (!API_URL) return mockGenerate(payload);
+  if (!API_URL) {
+    if (IS_DEV) return mockGenerate(payload);
+    throw new Error("api_unavailable");
+  }
   const res = await fetch(`${API_URL}/generate`, {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -49,7 +57,10 @@ export async function generate(payload: IntakePayload): Promise<GenerateResponse
 }
 
 export async function unlock(payload: UnlockPayload): Promise<UnlockResponse> {
-  if (!API_URL) return mockUnlock(payload);
+  if (!API_URL) {
+    if (IS_DEV) return mockUnlock(payload);
+    throw new Error("api_unavailable");
+  }
   const res = await fetch(`${API_URL}/unlock`, {
     method: "POST",
     headers: { "content-type": "application/json" },

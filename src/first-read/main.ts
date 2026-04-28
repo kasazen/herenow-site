@@ -1,11 +1,11 @@
 import "../styles.css";
 import { mountAnalytics, track } from "../analytics";
-import { generate, unlock, type GenerateResponse, type IntakePayload } from "./api";
+import { generate, unlock, isApiConfigured, type GenerateResponse, type IntakePayload } from "./api";
 import { readIntake, showIntakeError, clearIntakeError } from "./intake";
 import { readGate, showGateError, clearGateError } from "./unlock";
 import { mountTeaser, mountFull } from "./render-memo";
 
-type State = "intake" | "generating" | "teaser" | "unlocking" | "full";
+type State = "intake" | "generating" | "teaser" | "unlocking" | "full" | "soft-launch";
 
 const root = document.getElementById("first-read-root") as HTMLElement | null;
 const intakeForm = document.getElementById("intake-form") as HTMLFormElement | null;
@@ -36,6 +36,8 @@ function shouldShow(step: string, state: State): boolean {
       return state === "teaser" || state === "unlocking";
     case "post":
       return state === "full";
+    case "soft-launch":
+      return state === "soft-launch";
     default:
       return false;
   }
@@ -117,6 +119,12 @@ function ready(fn: () => void): void {
 
 ready(() => {
   mountAnalytics();
+
+  if (!isApiConfigured()) {
+    setState("soft-launch");
+    return;
+  }
+
   setState("intake");
 
   if (intakeForm) intakeForm.addEventListener("submit", onIntakeSubmit);
