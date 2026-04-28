@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>First Read — Here Now Labs</title>
+  <meta name="description" content="A short memo on where the leverage tends to live in operations like yours. Prepared by Here Now Labs." />
+  <meta name="theme-color" content="#faf9f5" />
+  <meta name="robots" content="noindex" />
+  <link rel="canonical" href="https://herenowlabs.xyz/first-read.html" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23faf9f5'/%3E%3Crect x='6' y='6' width='5' height='5' fill='%2315803d'/%3E%3Crect x='13' y='6' width='5' height='5' fill='%2315803d'/%3E%3Crect x='20' y='6' width='5' height='5' fill='%2315803d'/%3E%3Crect x='6' y='13' width='5' height='5' fill='%2315803d'/%3E%3Crect x='13' y='13' width='5' height='5' fill='%2315803d'/%3E%3Crect x='20' y='13' width='5' height='5' fill='%2315803d'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Fraunces:opsz,wght@9..144,300..600&family=Geist+Mono:wght@400;500&display=swap" />
+  <script type="module" src="/src/first-read/main.ts"></script>
+</head>
+<body class="first-read-page">
+  <header class="topbar">
+    <a class="wordmark" href="/" aria-label="Here Now Labs — home">
+      <span class="wordmark__glyph" aria-hidden="true"></span>
+      <span class="wordmark__text">Here Now Labs</span>
+    </a>
+    <span class="topbar__meta" aria-hidden="true">First Read</span>
+  </header>
+
+  <main class="first-read" data-state="intake" id="first-read-root">
+
+    <!-- ─── Soft launch (shown when API isn't configured yet) ─ -->
+    <section class="first-read__soft-launch" data-step="soft-launch" hidden>
+      <h1 class="first-read__headline">
+        We're putting the finishing touches on this.
+      </h1>
+      <p class="first-read__lede">
+        The First Read tool reads what you tell us about your operation and sends back a short memo on where the leverage tends to live. It opens to readers in the next few days.
+      </p>
+      <p class="first-read__lede">
+        If you'd like the early version: drop a short note to <a href="mailto:team@herenowlabs.xyz?subject=First%20Read%20%E2%80%94%20early%20access" class="first-read__inline-link">team@herenowlabs.xyz</a> and we'll send your read by hand.
+      </p>
+      <p class="first-read__post-cta-row">
+        <a class="block__cta" href="/">Back to Here Now</a>
+      </p>
+    </section>
+
+    <!-- ─── Intake ──────────────────────────────────────────── -->
+    <section class="first-read__intake" data-step="intake" aria-labelledby="intake-headline">
+      <h1 id="intake-headline" class="first-read__headline">
+        A short read on where the leverage tends to live.
+      </h1>
+      <p class="first-read__lede">
+        Tell us a few things about your operation. We'll send back a short memo. The 30-second version is on the next screen; the full version arrives in your inbox.
+      </p>
+
+      <form class="first-read__form" id="intake-form" novalidate>
+        <div class="first-read__field">
+          <label for="business" class="first-read__label">What does your business do?</label>
+          <textarea id="business" name="business" rows="3" required maxlength="600" placeholder="A line or two on the business, the customer, and roughly what's underneath the revenue."></textarea>
+        </div>
+
+        <div class="first-read__field-row">
+          <div class="first-read__field">
+            <label for="size" class="first-read__label">How many people?</label>
+            <select id="size" name="size" required>
+              <option value="">Select a range</option>
+              <option value="under-25">Under 25</option>
+              <option value="25-75">25–75</option>
+              <option value="75-200">75–200</option>
+              <option value="200-500">200–500</option>
+              <option value="500-plus">500+</option>
+            </select>
+          </div>
+
+          <div class="first-read__field">
+            <label for="revenue" class="first-read__label">Annual revenue band <span class="first-read__optional">(optional)</span></label>
+            <select id="revenue" name="revenue">
+              <option value="">Prefer not to say</option>
+              <option value="under-5m">Under $5M</option>
+              <option value="5-15m">$5–15M</option>
+              <option value="15-50m">$15–50M</option>
+              <option value="50-150m">$50–150M</option>
+              <option value="150m-plus">$150M+</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="first-read__field">
+          <label for="prompting" class="first-read__label">What's prompting you to think about AI now?</label>
+          <textarea id="prompting" name="prompting" rows="3" required maxlength="600" placeholder="A few honest sentences. We use this to focus the read."></textarea>
+        </div>
+
+        <div class="first-read__field">
+          <label for="firstName" class="first-read__label">First name <span class="first-read__optional">(optional, so we can address you)</span></label>
+          <input type="text" id="firstName" name="firstName" maxlength="80" autocomplete="given-name" />
+        </div>
+
+        <p class="first-read__privacy">We use what you tell us only to generate your memo. We don't share it.</p>
+
+        <button type="submit" class="first-read__submit">Generate my First Read</button>
+      </form>
+    </section>
+
+    <!-- ─── Generating ──────────────────────────────────────── -->
+    <section class="first-read__generating" data-step="generating" aria-live="polite" aria-busy="true">
+      <div class="first-read__pulse" aria-hidden="true"></div>
+      <p class="first-read__generating-text">Reading what you sent us<span class="first-read__dots"><span>.</span><span>.</span><span>.</span></span></p>
+      <p class="first-read__generating-sub">This usually takes 20–40 seconds. We're being careful.</p>
+    </section>
+
+    <!-- ─── Memo (teaser + full) ────────────────────────────── -->
+    <article class="first-read__memo" data-step="memo" aria-labelledby="memo-cover-title" hidden>
+      <header class="first-read__cover">
+        <div class="first-read__cover-mark" aria-hidden="true"></div>
+        <p class="first-read__cover-meta">FIRST READ · HERE NOW LABS</p>
+        <p class="first-read__cover-date" id="memo-cover-date"></p>
+        <h2 class="first-read__cover-title" id="memo-cover-title">A short read on your operation.</h2>
+        <p class="first-read__cover-echo" id="memo-cover-echo"></p>
+      </header>
+
+      <div class="first-read__body" id="memo-body">
+        <!-- sections are rendered here by render-memo.ts -->
+      </div>
+
+      <!-- Email gate: shown when state="teaser", hidden when "full" -->
+      <aside class="first-read__gate" data-step="gate">
+        <div class="first-read__gate-card">
+          <p class="first-read__gate-label">Read the rest</p>
+          <p class="first-read__gate-body">
+            We'll send the full memo to your inbox. One email, one read. No list, no follow-up.
+          </p>
+          <form class="first-read__gate-form" id="gate-form" novalidate>
+            <div class="first-read__field">
+              <label for="email" class="first-read__label">Email</label>
+              <input type="email" id="email" name="email" required autocomplete="email" />
+            </div>
+            <div class="first-read__field" id="gate-name-field">
+              <label for="gateName" class="first-read__label">First name</label>
+              <input type="text" id="gateName" name="firstName" maxlength="80" autocomplete="given-name" />
+            </div>
+            <button type="submit" class="first-read__submit">Send me the rest</button>
+          </form>
+          <p class="first-read__gate-note" id="gate-error" hidden></p>
+        </div>
+      </aside>
+
+      <!-- Post-memo CTA: shown when state="full" -->
+      <footer class="first-read__post" data-step="post" hidden>
+        <p class="first-read__post-confirm" id="post-confirm"></p>
+        <p class="first-read__post-headline">
+          Want the version that's specific to your numbers?
+        </p>
+        <p class="first-read__post-body">
+          Two weeks. Every recommendation tied to a dollar figure. Walked through with your team in a live debrief.
+        </p>
+        <p class="first-read__post-cta-row">
+          <a class="block__cta plausible-event-name=first_read_to_calendly" href="/#book">Book time with Here Now</a>
+        </p>
+      </footer>
+    </article>
+
+  </main>
+
+  <footer class="footer">
+    <span class="footer__cell">
+      <span class="footer__dot" aria-hidden="true"></span>
+      <span>Here Now Labs, Inc.</span>
+    </span>
+    <span class="footer__cell footer__cell--center">A Delaware corporation, &copy; 2026</span>
+    <span class="footer__cell footer__cell--end">team@herenowlabs.xyz</span>
+  </footer>
+</body>
+</html>

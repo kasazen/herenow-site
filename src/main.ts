@@ -23,6 +23,7 @@ ready(() => {
     { selector: ".block--audit", event: "scroll_audit" },
     { selector: ".block--memo", event: "scroll_memo" },
     { selector: ".block--wedge", event: "scroll_wedge" },
+    { selector: ".block--first-read", event: "scroll_first_read" },
     { selector: ".waitlist", event: "scroll_waitlist" },
   ]);
 
