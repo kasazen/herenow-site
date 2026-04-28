@@ -27,7 +27,6 @@ const COLORS = {
   fgMuted: "#4f4f57",
   fgFaint: "#8e8e95",
   rule: "#e6e3d8",
-  ruleStrong: "#d4d1c4",
   accent: "#15803d",
 };
 
@@ -61,7 +60,6 @@ export function renderEmail(input: RenderInput): RenderOutput {
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>${escapeHtml(subject)}</title>
 <style>
-  /* These rules are best-effort; most clients strip <style>. Inline styles do the real work. */
   body { margin: 0; padding: 0; }
   a { color: ${COLORS.fg}; }
   @media (prefers-color-scheme: dark) {
@@ -70,9 +68,8 @@ export function renderEmail(input: RenderInput): RenderOutput {
 </style>
 </head>
 <body style="margin:0;padding:0;background:${COLORS.bg};color:${COLORS.fg};">
-  <!-- Preheader (hidden, shows in inbox preview) -->
   <div style="display:none;visibility:hidden;opacity:0;color:transparent;height:0;width:0;overflow:hidden;mso-hide:all;">
-    A short read on your operation. Six pages. From Here Now Labs.
+    A short read on ${escapeHtml(domain)}. From Here Now Labs.
   </div>
 
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${COLORS.bg};">
@@ -80,7 +77,6 @@ export function renderEmail(input: RenderInput): RenderOutput {
       <td align="center" style="padding:32px 16px;">
         <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;background:${COLORS.paper};border:1px solid ${COLORS.rule};">
 
-          <!-- Header / cover -->
           <tr>
             <td style="padding:36px 40px 28px 40px;border-bottom:1px solid ${COLORS.rule};">
               <table role="presentation" cellpadding="0" cellspacing="0" border="0">
@@ -113,7 +109,6 @@ export function renderEmail(input: RenderInput): RenderOutput {
             </td>
           </tr>
 
-          <!-- Greeting -->
           <tr>
             <td style="padding:28px 40px 0 40px;font-family:${FONTS.sans};font-size:15px;line-height:1.6;color:${COLORS.fgMuted};">
               <p style="margin:0 0 14px 0;">${greeting}</p>
@@ -123,7 +118,6 @@ export function renderEmail(input: RenderInput): RenderOutput {
 
           ${sectionBlocks}
 
-          <!-- Signature -->
           <tr>
             <td style="padding:8px 40px 32px 40px;border-top:1px solid ${COLORS.rule};">
               <p style="margin:24px 0 6px 0;font-family:${FONTS.serif};font-style:italic;font-size:16px;color:${COLORS.fg};">— Here Now Labs</p>
@@ -133,7 +127,6 @@ export function renderEmail(input: RenderInput): RenderOutput {
             </td>
           </tr>
 
-          <!-- Footer note -->
           <tr>
             <td style="padding:18px 40px 32px 40px;border-top:1px solid ${COLORS.rule};font-family:${FONTS.mono};font-size:10px;letter-spacing:0.04em;color:${COLORS.fgFaint};text-transform:uppercase;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
@@ -200,7 +193,7 @@ function sectionBlock(index: number, title: string, body: string, isClosing: boo
     </tr>`;
 }
 
-function renderText(memo: MemoResult, firstName: string | undefined, _domain: string, calendlyHref: string, date: string): string {
+function renderText(memo: MemoResult, firstName: string | undefined, domain: string, calendlyHref: string, date: string): string {
   const greeting = firstName ? `${firstName} —` : "—";
   const sections = memo.sections
     .map((s) => {
@@ -213,7 +206,7 @@ function renderText(memo: MemoResult, firstName: string | undefined, _domain: st
     "FIRST READ — HERE NOW LABS",
     date,
     "",
-    `A short read on ${_domain}.`,
+    `A short read on ${domain}.`,
     "",
     memo.cover_echo,
     "",

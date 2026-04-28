@@ -3,8 +3,8 @@
 // be fast (single fetch, simple text extraction) and forgiving (graceful
 // errors so the user gets a clear "couldn't read that URL" message).
 
-const MAX_BYTES = 250_000; // hard cap on HTML body we'll process
-const MAX_TEXT_BYTES = 12_000; // body text we send to the model
+const MAX_BYTES = 250_000;
+const MAX_TEXT_BYTES = 12_000;
 const FETCH_TIMEOUT_MS = 7_000;
 const USER_AGENT = "Mozilla/5.0 (compatible; HereNowLabsFirstRead/1.0; +https://herenowlabs.xyz)";
 
@@ -38,8 +38,6 @@ export async function scrapeUrl(input: string): Promise<Scrape> {
         "user-agent": USER_AGENT,
         accept: "text/html,application/xhtml+xml",
       },
-      // @ts-expect-error Cloudflare-specific
-      cf: { cacheTtl: 60, cacheEverything: false },
     });
   } catch (err) {
     clearTimeout(timer);
@@ -59,7 +57,6 @@ export async function scrapeUrl(input: string): Promise<Scrape> {
     throw new ScrapeError("not_html", "That URL doesn't look like a webpage we can read.");
   }
 
-  // Read up to MAX_BYTES; many marketing sites are huge with embedded JSON.
   const buf = await res.arrayBuffer();
   const trimmed = buf.byteLength > MAX_BYTES ? buf.slice(0, MAX_BYTES) : buf;
   const html = new TextDecoder("utf-8", { fatal: false }).decode(trimmed);
@@ -106,7 +103,6 @@ function extractMeta(html: string, keys: string[]): string {
     );
     const m = html.match(re);
     if (m) return decodeEntities(m[1]).trim().slice(0, 400);
-    // Also try content first, then name/property
     const re2 = new RegExp(
       `<meta[^>]+content=["']([^"']*)["'][^>]+(?:name|property)=["']${escapeRe(key)}["']`,
       "i",
@@ -118,7 +114,6 @@ function extractMeta(html: string, keys: string[]): string {
 }
 
 function extractBodyText(html: string): string {
-  // Drop scripts/styles/svg/noscript wholesale.
   let t = html
     .replace(/<script[\s\S]*?<\/script>/gi, " ")
     .replace(/<style[\s\S]*?<\/style>/gi, " ")
@@ -127,12 +122,10 @@ function extractBodyText(html: string): string {
     .replace(/<head[\s\S]*?<\/head>/gi, " ")
     .replace(/<!--[\s\S]*?-->/g, " ");
 
-  // Strip remaining tags but preserve some structure with newlines on blocks.
   t = t.replace(/<\/?(?:p|div|li|h[1-6]|section|article|header|footer|main|nav|br|tr|td|th)[^>]*>/gi, "\n");
   t = stripTags(t);
   t = decodeEntities(t);
 
-  // Collapse whitespace; keep paragraph-ish breaks.
   t = t
     .replace(/[ \t\r\f\v]+/g, " ")
     .replace(/\n[ \t]+/g, "\n")

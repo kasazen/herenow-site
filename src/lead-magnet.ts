@@ -22,8 +22,12 @@ type UnlockResponse = {
   sections: Section[];
 };
 
-const API_URL = (import.meta.env.VITE_API_URL as string | undefined)?.trim() ?? "";
+// In prod (any deployed origin), the API is on the same origin under /api.
+// In dev (`vite` on localhost), fall back to the canned mock unless an
+// override is provided via VITE_API_URL.
 const IS_DEV = import.meta.env.DEV;
+const API_OVERRIDE = (import.meta.env.VITE_API_URL as string | undefined)?.trim() ?? "";
+const API_URL = API_OVERRIDE || (IS_DEV ? "" : "/api");
 const API_OK = API_URL.length > 0 || IS_DEV;
 
 let memoId: string | null = null;
