@@ -67,7 +67,6 @@ Provide a 1–2 sentence "first read" of the business in our voice — not a cop
 
 Today's date is provided in the user message. The reader's homepage content is provided as-scraped. Read it carefully before you write.`;
 
-// Tool definition — forces structured output rather than free-form text.
 export const MEMO_TOOL = {
   name: "produce_first_read",
   description: "Return the First Read memo as structured sections. Use this exclusively — do not write prose outside the tool input.",
