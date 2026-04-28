@@ -1,6 +1,6 @@
 /// <reference types="@cloudflare/workers-types" />
 
-import { generateMemo, type IntakePayload } from "./anthropic";
+import { generateMemo } from "./anthropic";
 import {
   storeMemo,
   getMemo,
@@ -11,6 +11,7 @@ import {
   type StoredMemo,
 } from "./storage";
 import { renderEmail } from "./email-template";
+import { scrapeUrl, ScrapeError } from "./scrape";
 
 interface Env {
   FIRST_READ: KVNamespace;
@@ -21,13 +22,12 @@ interface Env {
   CALENDLY_HREF: string;
 }
 
-const IP_LIMIT_PER_HOUR = 5;
+const IP_LIMIT_PER_HOUR = 8;
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
 
-    // CORS preflight
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: corsHeaders(env) });
     }
@@ -47,37 +47,65 @@ async function handleGenerate(request: Request, env: Env): Promise<Response> {
   const ip = request.headers.get("cf-connecting-ip") ?? "unknown";
   const rate = await checkAndIncrementIp(env.FIRST_READ, ip, IP_LIMIT_PER_HOUR);
   if (!rate.allowed) {
-    return jsonResponse({ error: "rate_limited" }, 429, env);
+    return jsonResponse({ error: "rate_limited", message: "Try again in a bit." }, 429, env);
   }
 
-  let intake: IntakePayload;
+  let body: { url?: string; prompting?: string };
   try {
-    intake = await request.json();
+    body = await request.json();
   } catch {
     return jsonResponse({ error: "invalid_json" }, 400, env);
   }
 
-  const validation = validateIntake(intake);
-  if (validation) return jsonResponse({ error: validation }, 400, env);
+  const urlInput = (body.url ?? "").trim();
+  const prompting = (body.prompting ?? "").trim();
+
+  if (!urlInput) {
+    return jsonResponse({ error: "url_required", message: "Add the URL of your business." }, 400, env);
+  }
+
+  let scrape;
+  try {
+    scrape = await scrapeUrl(urlInput);
+  } catch (err) {
+    if (err instanceof ScrapeError) {
+      return jsonResponse({ error: err.reason, message: err.message }, 400, env);
+    }
+    console.error("scrape_unknown", err);
+    return jsonResponse({ error: "scrape_failed", message: "We had trouble reading that URL." }, 500, env);
+  }
+
+  if (!scrape.body || scrape.body.length < 80) {
+    return jsonResponse(
+      {
+        error: "thin_content",
+        message: "We could load that URL but couldn't find enough text to read. Try a different page.",
+      },
+      400,
+      env,
+    );
+  }
 
   let memo;
   try {
-    memo = await generateMemo(env.ANTHROPIC_API_KEY, intake);
+    memo = await generateMemo(env.ANTHROPIC_API_KEY, scrape, prompting);
   } catch (err) {
     console.error("generate_failed", err);
-    return jsonResponse({ error: "generation_failed" }, 502, env);
+    return jsonResponse({ error: "generation_failed", message: "We had trouble generating your read. Try again in a moment." }, 502, env);
   }
 
   const id = crypto.randomUUID();
   const stored: StoredMemo = {
     memo,
-    intake: { business: intake.business, firstName: intake.firstName },
+    intake: {
+      url: scrape.url,
+      domain: scrape.domain,
+      prompting: prompting || undefined,
+    },
     createdAt: Date.now(),
   };
   await storeMemo(env.FIRST_READ, id, stored);
 
-  // Build the teaser response: section 1 unlocked, sections 2-5 locked
-  // with first sentence as preview.
   const teaserSections = memo.sections.map((s) => ({
     index: s.index,
     title: s.title,
@@ -94,7 +122,7 @@ async function handleGenerate(request: Request, env: Env): Promise<Response> {
   return jsonResponse(
     {
       id,
-      cover: { echo: memo.cover_echo, date: today },
+      cover: { echo: memo.cover_echo, date: today, domain: scrape.domain },
       sections: teaserSections,
     },
     200,
@@ -120,7 +148,6 @@ async function handleUnlock(request: Request, env: Env): Promise<Response> {
   const stored = await getMemo(env.FIRST_READ, id);
   if (!stored) return jsonResponse({ error: "memo_not_found" }, 404, env);
 
-  // Idempotency on the id; rate cap on the email.
   const idClaimed = await markIdUnlocked(env.FIRST_READ, id);
   const emailAlreadyUsed = await hasUnlockedEmail(env.FIRST_READ, email);
   if (!idClaimed && emailAlreadyUsed) {
@@ -128,13 +155,10 @@ async function handleUnlock(request: Request, env: Env): Promise<Response> {
   }
   await markEmailUnlocked(env.FIRST_READ, email);
 
-  // Send the email asynchronously, but don't fail the response if it bounces.
-  const effectiveName = firstName || stored.intake.firstName;
-  sendEmail(env, email, effectiveName, stored).catch((err) => {
+  sendEmail(env, email, firstName || undefined, stored).catch((err) => {
     console.error("email_send_failed", err);
   });
 
-  // Return all sections, fully unlocked.
   const sections = stored.memo.sections.map((s) => ({
     index: s.index,
     title: s.title,
@@ -154,6 +178,7 @@ async function sendEmail(
   const { html, text, subject } = renderEmail({
     memo: stored.memo,
     firstName,
+    domain: stored.intake.domain,
     calendlyHref: env.CALENDLY_HREF,
   });
 
@@ -173,20 +198,9 @@ async function sendEmail(
   });
 
   if (!res.ok) {
-    const body = await res.text();
-    throw new Error(`resend_${res.status}: ${body.slice(0, 300)}`);
+    const errorBody = await res.text();
+    throw new Error(`resend_${res.status}: ${errorBody.slice(0, 300)}`);
   }
-}
-
-function validateIntake(payload: unknown): string | null {
-  if (!payload || typeof payload !== "object") return "invalid_payload";
-  const p = payload as Record<string, unknown>;
-  if (typeof p.business !== "string" || p.business.trim().length < 20) return "business_too_short";
-  if (typeof p.size !== "string" || !p.size.trim()) return "size_required";
-  if (typeof p.prompting !== "string" || p.prompting.trim().length < 15) return "prompting_too_short";
-  if (p.business.length > 1500) return "business_too_long";
-  if (p.prompting.length > 1500) return "prompting_too_long";
-  return null;
 }
 
 function firstSentence(body: string): string {

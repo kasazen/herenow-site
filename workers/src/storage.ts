@@ -5,8 +5,9 @@ import type { MemoResult } from "./anthropic";
 export type StoredMemo = {
   memo: MemoResult;
   intake: {
-    business: string;
-    firstName?: string;
+    url: string;
+    domain: string;
+    prompting?: string;
   };
   createdAt: number;
 };

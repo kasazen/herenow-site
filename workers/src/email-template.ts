@@ -9,6 +9,7 @@ import type { MemoResult } from "./anthropic";
 type RenderInput = {
   memo: MemoResult;
   firstName?: string;
+  domain: string;
   calendlyHref: string;
 };
 
@@ -37,7 +38,7 @@ const FONTS = {
 };
 
 export function renderEmail(input: RenderInput): RenderOutput {
-  const { memo, firstName, calendlyHref } = input;
+  const { memo, firstName, domain, calendlyHref } = input;
 
   const date = new Date().toLocaleDateString("en-US", {
     month: "long",
@@ -45,7 +46,7 @@ export function renderEmail(input: RenderInput): RenderOutput {
     year: "numeric",
   });
 
-  const subject = "Your First Read";
+  const subject = `Your First Read — ${domain}`;
 
   const sectionBlocks = memo.sections
     .map((s) => sectionBlock(s.index, s.title, s.body, s.index === memo.sections.length))
@@ -100,7 +101,7 @@ export function renderEmail(input: RenderInput): RenderOutput {
                 </tr>
                 <tr>
                   <td style="padding-bottom:14px;font-family:${FONTS.serif};font-style:italic;font-size:24px;line-height:1.28;color:${COLORS.fg};letter-spacing:-0.01em;">
-                    A short read on your operation.
+                    A short read on ${escapeHtml(domain)}.
                   </td>
                 </tr>
                 <tr>
@@ -150,7 +151,7 @@ export function renderEmail(input: RenderInput): RenderOutput {
 </body>
 </html>`;
 
-  const text = renderText(memo, firstName, calendlyHref, date);
+  const text = renderText(memo, firstName, domain, calendlyHref, date);
 
   return { html, text, subject };
 }
@@ -199,7 +200,7 @@ function sectionBlock(index: number, title: string, body: string, isClosing: boo
     </tr>`;
 }
 
-function renderText(memo: MemoResult, firstName: string | undefined, calendlyHref: string, date: string): string {
+function renderText(memo: MemoResult, firstName: string | undefined, _domain: string, calendlyHref: string, date: string): string {
   const greeting = firstName ? `${firstName} —` : "—";
   const sections = memo.sections
     .map((s) => {
@@ -212,7 +213,7 @@ function renderText(memo: MemoResult, firstName: string | undefined, calendlyHre
     "FIRST READ — HERE NOW LABS",
     date,
     "",
-    "A short read on your operation.",
+    `A short read on ${_domain}.`,
     "",
     memo.cover_echo,
     "",
