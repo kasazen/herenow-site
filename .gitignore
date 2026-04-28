@@ -3,3 +3,6 @@
 node_modules
 dist
 *.local
+.dev.vars
+.wrangler/
+_feedback_*.png
