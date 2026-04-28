@@ -1,15 +1,8 @@
-// Minimal Anthropic Messages API client for Workers.
-// Avoids pulling in @anthropic-ai/sdk to keep the bundle small and edge-runtime safe.
+// Minimal Anthropic Messages API client. Sonnet 4.6 + prompt caching, no
+// extended thinking. Targets sub-15s end-to-end so the modal feels live.
 
 import { SYSTEM_PROMPT, MEMO_TOOL, buildUserMessage } from "./prompt";
-
-export type IntakePayload = {
-  business: string;
-  size: string;
-  revenue: string;
-  prompting: string;
-  firstName?: string;
-};
+import type { Scrape } from "./scrape";
 
 export type MemoSection = {
   index: number;
@@ -22,14 +15,18 @@ export type MemoResult = {
   sections: MemoSection[];
 };
 
-const MODEL = "claude-opus-4-7";
+const MODEL = "claude-sonnet-4-6";
 const API_URL = "https://api.anthropic.com/v1/messages";
 const ANTHROPIC_VERSION = "2023-06-01";
 
-export async function generateMemo(apiKey: string, intake: IntakePayload): Promise<MemoResult> {
+export async function generateMemo(
+  apiKey: string,
+  scrape: Scrape,
+  prompting: string | undefined,
+): Promise<MemoResult> {
   const body = {
     model: MODEL,
-    max_tokens: 4096,
+    max_tokens: 3000,
     system: [
       {
         type: "text",
@@ -42,7 +39,7 @@ export async function generateMemo(apiKey: string, intake: IntakePayload): Promi
     messages: [
       {
         role: "user",
-        content: buildUserMessage(intake),
+        content: buildUserMessage(scrape, prompting),
       },
     ],
   };
@@ -72,11 +69,9 @@ export async function generateMemo(apiKey: string, intake: IntakePayload): Promi
   }
   const result = toolUse.input as MemoResult;
 
-  // Defensive shape check.
   if (!result.cover_echo || !Array.isArray(result.sections) || result.sections.length !== 5) {
     throw new Error("anthropic_bad_shape");
   }
-  // Sort sections by index (the model usually orders them, but be safe).
   result.sections.sort((a, b) => a.index - b.index);
 
   return result;

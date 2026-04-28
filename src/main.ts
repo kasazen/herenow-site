@@ -2,6 +2,7 @@ import "./styles.css";
 import { mountHero } from "./animations/hero";
 import { mountCalendly } from "./calendly";
 import { mountAnalytics, observeScrollDepth } from "./analytics";
+import { mountLeadMagnet } from "./lead-magnet";
 
 function ready(fn: () => void): void {
   if (document.readyState !== "loading") fn();
@@ -18,12 +19,14 @@ ready(() => {
   const calendlyFallback = document.getElementById("calendly-fallback");
   if (calendly) mountCalendly(calendly, calendlyFallback);
 
+  mountLeadMagnet();
+
   observeScrollDepth([
+    { selector: ".invite", event: "scroll_invite" },
     { selector: ".premise", event: "scroll_premise" },
     { selector: ".block--audit", event: "scroll_audit" },
     { selector: ".block--memo", event: "scroll_memo" },
     { selector: ".block--wedge", event: "scroll_wedge" },
-    { selector: ".block--first-read", event: "scroll_first_read" },
     { selector: ".waitlist", event: "scroll_waitlist" },
   ]);
 
