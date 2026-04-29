@@ -1,6 +1,6 @@
-// Diagnostic endpoint. Reports which env vars are set (without leaking values)
-// and pings KV with a no-op so we can see if the integration is wired up.
-// Safe to leave deployed; no secrets are returned.
+// Diagnostic endpoint. Reports env-var presence (without leaking values).
+// No KV ping — that hung in 35s+ probes, so we just report what env is
+// configured and leave KV reachability to a separate test.
 
 export const runtime = "edge";
 
@@ -20,35 +20,18 @@ export default async function handler(): Promise<Response> {
     UPSTASH_REDIS_REST_TOKEN: present("UPSTASH_REDIS_REST_TOKEN"),
   };
 
-  let kvStatus: { ok: boolean; error?: string };
-  const url = (process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL ?? "").replace(/\/+$/, "");
-  const token = process.env.KV_REST_API_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN;
-
-  if (!url || !token) {
-    kvStatus = { ok: false, error: "missing KV_REST_API_URL or KV_REST_API_TOKEN env" };
-  } else {
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 4_000);
-    try {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
-        body: JSON.stringify(["PING"]),
-        signal: ctrl.signal,
-      });
-      clearTimeout(timer);
-      const body = await res.text();
-      kvStatus = res.ok
-        ? { ok: true }
-        : { ok: false, error: `upstash_${res.status}: ${body.slice(0, 120)}` };
-    } catch (err) {
-      clearTimeout(timer);
-      kvStatus = { ok: false, error: (err as Error).message?.slice(0, 200) ?? "unknown" };
-    }
+  // Snapshot the URL host (not the token) so we can confirm the integration
+  // is pointing at the right Upstash instance without leaking secrets.
+  const rawUrl = process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL ?? "";
+  let kvHost: string | null = null;
+  try {
+    if (rawUrl) kvHost = new URL(rawUrl).host;
+  } catch {
+    kvHost = "(invalid url)";
   }
 
-  return new Response(JSON.stringify({ env, kv: kvStatus, ts: new Date().toISOString() }, null, 2), {
-    status: 200,
-    headers: { "content-type": "application/json", "cache-control": "no-store" },
-  });
+  return new Response(
+    JSON.stringify({ env, kvHost, ts: new Date().toISOString() }, null, 2),
+    { status: 200, headers: { "content-type": "application/json", "cache-control": "no-store" } },
+  );
 }
