@@ -1,8 +1,8 @@
-// Diagnostic endpoint. Reports env-var presence (without leaking values).
-// No KV ping — that hung in 35s+ probes, so we just report what env is
-// configured and leave KV reachability to a separate test.
+// Diagnostic endpoint. Reports env-var presence (no values) and the KV host.
 
-export default async function handler(): Promise<Response> {
+import type { VercelRequest, VercelResponse } from "@vercel/node";
+
+export default function handler(_req: VercelRequest, res: VercelResponse): void {
   const present = (key: string): "set" | "missing" =>
     typeof process.env[key] === "string" && process.env[key]!.length > 0 ? "set" : "missing";
 
@@ -13,13 +13,10 @@ export default async function handler(): Promise<Response> {
     CALENDLY_HREF: present("CALENDLY_HREF"),
     KV_REST_API_URL: present("KV_REST_API_URL"),
     KV_REST_API_TOKEN: present("KV_REST_API_TOKEN"),
-    KV_URL: present("KV_URL"),
     UPSTASH_REDIS_REST_URL: present("UPSTASH_REDIS_REST_URL"),
     UPSTASH_REDIS_REST_TOKEN: present("UPSTASH_REDIS_REST_TOKEN"),
   };
 
-  // Snapshot the URL host (not the token) so we can confirm the integration
-  // is pointing at the right Upstash instance without leaking secrets.
   const rawUrl = process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL ?? "";
   let kvHost: string | null = null;
   try {
@@ -28,8 +25,5 @@ export default async function handler(): Promise<Response> {
     kvHost = "(invalid url)";
   }
 
-  return new Response(
-    JSON.stringify({ env, kvHost, ts: new Date().toISOString() }, null, 2),
-    { status: 200, headers: { "content-type": "application/json", "cache-control": "no-store" } },
-  );
+  res.status(200).json({ env, kvHost, ts: new Date().toISOString() });
 }
