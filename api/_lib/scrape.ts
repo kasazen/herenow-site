@@ -153,8 +153,8 @@ function decodeEntities(s: string): string {
     .replace(/&hellip;/g, "…")
     .replace(/&rsquo;/g, "'")
     .replace(/&lsquo;/g, "'")
-    .replace(/&rdquo;/g, """)
-    .replace(/&ldquo;/g, """)
+    .replace(/&rdquo;/g, "”")
+    .replace(/&ldquo;/g, "“")
     .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(parseInt(n, 10)))
     .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCharCode(parseInt(n, 16)));
 }
