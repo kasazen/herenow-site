@@ -4,7 +4,7 @@
 // web-safe font stacks so the experience matches the herenowlabs.xyz site
 // without requiring loaded webfonts.
 
-import type { MemoResult } from "./anthropic";
+import type { MemoResult } from "./anthropic.js";
 
 type RenderInput = {
   memo: MemoResult;

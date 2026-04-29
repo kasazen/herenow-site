@@ -11,8 +11,8 @@ import {
   markEmailUnlocked,
   markIdUnlocked,
   type StoredMemo,
-} from "./_lib/storage";
-import { renderEmail } from "./_lib/email-template";
+} from "./_lib/storage.js";
+import { renderEmail } from "./_lib/email-template.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
   setCors(res);
