@@ -1,8 +1,8 @@
 // Minimal Anthropic Messages API client. Sonnet 4.6 + prompt caching, no
 // extended thinking. Targets sub-15s end-to-end so the modal feels live.
 
-import { SYSTEM_PROMPT, MEMO_TOOL, buildUserMessage } from "./prompt";
-import type { Scrape } from "./scrape";
+import { SYSTEM_PROMPT, MEMO_TOOL, buildUserMessage } from "./prompt.js";
+import type { Scrape } from "./scrape.js";
 
 export type MemoSection = {
   index: number;

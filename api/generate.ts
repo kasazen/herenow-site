@@ -5,9 +5,9 @@
 
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
-import { generateMemo } from "./_lib/anthropic";
-import { scrapeUrl, ScrapeError } from "./_lib/scrape";
-import { storeMemo, checkAndIncrementIp, type StoredMemo } from "./_lib/storage";
+import { generateMemo } from "./_lib/anthropic.js";
+import { scrapeUrl, ScrapeError } from "./_lib/scrape.js";
+import { storeMemo, checkAndIncrementIp, type StoredMemo } from "./_lib/storage.js";
 
 const IP_LIMIT_PER_HOUR = 8;
 

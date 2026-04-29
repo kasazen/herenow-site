@@ -6,7 +6,7 @@
 // Vercel-Upstash integration. Falls back to UPSTASH_REDIS_REST_* if anyone
 // wires that variant.
 
-import type { MemoResult } from "./anthropic";
+import type { MemoResult } from "./anthropic.js";
 
 export type StoredMemo = {
   memo: MemoResult;

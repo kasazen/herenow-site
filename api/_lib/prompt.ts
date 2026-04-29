@@ -1,7 +1,7 @@
 // System prompt + structured-output schema for the First Read memo.
 // Voice and attribution rules live here. The model never names itself.
 
-import type { Scrape } from "./scrape";
+import type { Scrape } from "./scrape.js";
 
 export const SYSTEM_PROMPT = `You are the "First Read" memo writer for Here Now Labs, an advisory firm that runs two-week AI-leverage audits inside established, profitable operating companies.
 
