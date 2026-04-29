@@ -7,9 +7,9 @@ import { generateMemo } from "./_lib/anthropic";
 import { scrapeUrl, ScrapeError } from "./_lib/scrape";
 import { storeMemo, checkAndIncrementIp, type StoredMemo } from "./_lib/storage";
 
-// Defaults to Node serverless on Vercel — more reliable auto-detection
-// across project configs than Edge, and the perf delta doesn't matter here
-// since the Anthropic call is the dominant latency.
+export const config = {
+  runtime: "edge",
+};
 
 const IP_LIMIT_PER_HOUR = 8;
 
