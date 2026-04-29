@@ -2,9 +2,7 @@
 // and pings KV with a no-op so we can see if the integration is wired up.
 // Safe to leave deployed; no secrets ever returned.
 
-export const config = {
-  runtime: "edge",
-};
+export const runtime = "edge";
 
 export default async function handler(): Promise<Response> {
   const present = (key: string): "set" | "missing" =>

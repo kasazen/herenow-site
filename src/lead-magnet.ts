@@ -303,14 +303,25 @@ async function callGenerate(payload: { url: string; prompting: string }): Promis
     if (IS_DEV) return mockGenerate(payload);
     throw new Error("The tool isn't quite live yet — try again shortly.");
   }
-  const res = await fetch(`${API_URL}/generate`, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(payload),
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${API_URL}/generate`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+  } catch (err) {
+    console.error("network_failed", err);
+    throw new Error("Couldn't reach the tool. Check your connection and try again.");
+  }
   if (!res.ok) {
     const data = await safeJson(res);
-    throw new Error(data?.message || "We had trouble reading that URL. Try again.");
+    if (data?.message) throw new Error(data.message);
+    if (res.status >= 500) {
+      console.error("server_error", res.status, await safeText(res));
+      throw new Error("Something went wrong on our end. Email team@herenowlabs.xyz if it persists.");
+    }
+    throw new Error("We had trouble reading that URL. Try again.");
   }
   return (await res.json()) as GenerateResponse;
 }
@@ -320,23 +331,42 @@ async function callUnlock(payload: { id: string; email: string; firstName: strin
     if (IS_DEV) return mockUnlock();
     throw new Error("The tool isn't quite live yet.");
   }
-  const res = await fetch(`${API_URL}/unlock`, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(payload),
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${API_URL}/unlock`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+  } catch (err) {
+    console.error("network_failed", err);
+    throw new Error("Couldn't reach the tool. Check your connection and try again.");
+  }
   if (!res.ok) {
     const data = await safeJson(res);
-    throw new Error(data?.message || "We had trouble sending that.");
+    if (data?.message) throw new Error(data.message);
+    if (res.status >= 500) {
+      console.error("server_error", res.status, await safeText(res));
+      throw new Error("Something went wrong on our end. Try again, or email team@herenowlabs.xyz.");
+    }
+    throw new Error("We had trouble sending that.");
   }
   return (await res.json()) as UnlockResponse;
 }
 
 async function safeJson(res: Response): Promise<{ message?: string } | null> {
   try {
-    return (await res.json()) as { message?: string };
+    return (await res.clone().json()) as { message?: string };
   } catch {
     return null;
+  }
+}
+
+async function safeText(res: Response): Promise<string> {
+  try {
+    return (await res.clone().text()).slice(0, 200);
+  } catch {
+    return "";
   }
 }
 
