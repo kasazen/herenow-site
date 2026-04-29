@@ -7,8 +7,6 @@ import { generateMemo } from "./_lib/anthropic";
 import { scrapeUrl, ScrapeError } from "./_lib/scrape";
 import { storeMemo, checkAndIncrementIp, type StoredMemo } from "./_lib/storage";
 
-export const runtime = "edge";
-
 const IP_LIMIT_PER_HOUR = 8;
 
 export default async function handler(request: Request): Promise<Response> {

@@ -12,8 +12,6 @@ import {
 } from "./_lib/storage";
 import { renderEmail } from "./_lib/email-template";
 
-export const runtime = "edge";
-
 export default async function handler(request: Request): Promise<Response> {
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders() });
   if (request.method !== "POST") return json({ error: "method_not_allowed" }, 405);

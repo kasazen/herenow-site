@@ -2,8 +2,6 @@
 // No KV ping — that hung in 35s+ probes, so we just report what env is
 // configured and leave KV reachability to a separate test.
 
-export const runtime = "edge";
-
 export default async function handler(): Promise<Response> {
   const present = (key: string): "set" | "missing" =>
     typeof process.env[key] === "string" && process.env[key]!.length > 0 ? "set" : "missing";
