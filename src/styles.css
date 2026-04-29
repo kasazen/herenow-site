@@ -1036,8 +1036,9 @@ body.lm-open {
   place-items: stretch;
 }
 
-.lm[hidden] {
-  display: none;
+.lm[hidden],
+.lm [hidden] {
+  display: none !important;
 }
 
 .lm__backdrop {
