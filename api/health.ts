@@ -23,9 +23,13 @@ export default async function handler(): Promise<Response> {
 
   let kvStatus: { ok: boolean; error?: string };
   try {
-    const { kv } = await import("@vercel/kv");
-    await kv.set("health:probe", Date.now(), { ex: 60 });
-    const v = await kv.get("health:probe");
+    const { Redis } = await import("@upstash/redis");
+    const url = process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL;
+    const token = process.env.KV_REST_API_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN;
+    if (!url || !token) throw new Error("missing KV_REST_API_URL or KV_REST_API_TOKEN");
+    const redis = new Redis({ url, token });
+    await redis.set("health:probe", Date.now(), { ex: 60 });
+    const v = await redis.get("health:probe");
     kvStatus = { ok: v !== null && v !== undefined };
   } catch (err) {
     kvStatus = { ok: false, error: (err as Error).message?.slice(0, 200) ?? "unknown" };
