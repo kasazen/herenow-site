@@ -1,7 +1,10 @@
 // POST /api/unlock — Vercel Node serverless function.
-// Accepts { id, email, firstName? }, looks up the stored memo, marks email
-// unlocked, sends the typeset HTML email via Resend, and returns the full
-// memo for in-place reveal.
+// Accepts { id, email, firstName? }, looks up the stored memo, marks
+// email unlocked, and sends the typeset HTML email via Resend.
+//
+// Inbox-only delivery: the response does NOT include the memo sections.
+// The email is the only path to the full memo, so we await the send
+// and surface failures to the user instead of fire-and-forget.
 
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
@@ -21,7 +24,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     return;
   }
   if (req.method !== "POST") {
-    res.status(405).json({ error: "method_not_allowed" });
+    res.status(405).json({ ok: false, error: "method_not_allowed" });
     return;
   }
 
@@ -29,7 +32,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     | { id?: string; email?: string; firstName?: string }
     | null;
   if (!body) {
-    res.status(400).json({ error: "invalid_json" });
+    res.status(400).json({ ok: false, error: "invalid_json" });
     return;
   }
 
@@ -38,11 +41,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   const firstName = (body.firstName ?? "").trim();
 
   if (!id) {
-    res.status(400).json({ error: "missing_id" });
+    res.status(400).json({ ok: false, error: "missing_id" });
     return;
   }
   if (!isEmail(email)) {
-    res.status(400).json({ error: "invalid_email", message: "That doesn't look like an email address." });
+    res.status(400).json({ ok: false, error: "invalid_email", message: "That doesn't look like an email address." });
     return;
   }
 
@@ -51,11 +54,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     stored = await getMemo(id);
   } catch (err) {
     console.error("kv_get_failed", err);
-    res.status(503).json({ error: "kv_unavailable", message: "Our storage isn't reachable right now." });
+    res.status(503).json({ ok: false, error: "kv_unavailable", message: "Our storage isn't reachable right now." });
     return;
   }
   if (!stored) {
-    res.status(404).json({ error: "memo_not_found", message: "That read has expired. Generate a new one." });
+    res.status(404).json({ ok: false, error: "memo_not_found", message: "That read has expired. Generate a new one." });
     return;
   }
 
@@ -63,29 +66,35 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     const idClaimed = await markIdUnlocked(id);
     const emailAlreadyUsed = await hasUnlockedEmail(email);
     if (!idClaimed && emailAlreadyUsed) {
-      res.status(409).json({ error: "already_unlocked", message: "We've already sent one to that address." });
+      res
+        .status(409)
+        .json({ ok: false, error: "already_unlocked", message: "We've already sent one to that address." });
       return;
     }
     await markEmailUnlocked(email);
   } catch (err) {
     console.error("kv_unlock_marks_failed", err);
-    res.status(503).json({ error: "kv_unavailable", message: "Our storage isn't reachable right now." });
+    res.status(503).json({ ok: false, error: "kv_unavailable", message: "Our storage isn't reachable right now." });
     return;
   }
 
-  // Fire-and-forget email. Don't fail the response if it bounces.
-  sendEmail(email, firstName || undefined, stored).catch((err) => {
-    console.error("email_send_failed", err);
-  });
+  // Inbox-only: await the send and surface failures.
+  try {
+    await sendEmail(email, firstName || undefined, stored);
+  } catch (err) {
+    const msg = (err as Error)?.message?.slice(0, 300) ?? "unknown";
+    console.error("email_send_failed", msg);
+    res.status(502).json({
+      ok: false,
+      error: "email_send_failed",
+      message:
+        "We couldn't deliver the email. Drop us a note at team@herenowlabs.xyz and we'll send it by hand.",
+      detail: process.env.NODE_ENV === "development" ? msg : undefined,
+    });
+    return;
+  }
 
-  const sections = stored.memo.sections.map((s) => ({
-    index: s.index,
-    title: s.title,
-    body: s.body,
-    locked: false,
-  }));
-
-  res.status(200).json({ sections });
+  res.status(200).json({ ok: true, sentTo: email });
 }
 
 async function sendEmail(to: string, firstName: string | undefined, stored: StoredMemo): Promise<void> {
@@ -94,8 +103,7 @@ async function sendEmail(to: string, firstName: string | undefined, stored: Stor
   const calendlyHref = process.env.CALENDLY_HREF ?? "https://herenowlabs.xyz/#book";
 
   if (!resendKey) {
-    console.warn("resend_not_configured");
-    return;
+    throw new Error("resend_not_configured: RESEND_API_KEY env var is missing");
   }
 
   const { html, text, subject } = renderEmail({
@@ -115,8 +123,8 @@ async function sendEmail(to: string, firstName: string | undefined, stored: Stor
   });
 
   if (!r.ok) {
-    const body = await r.text();
-    throw new Error(`resend_${r.status}: ${body.slice(0, 300)}`);
+    const errBody = await r.text();
+    throw new Error(`resend_${r.status}: ${errBody.slice(0, 300)}`);
   }
 }
 
