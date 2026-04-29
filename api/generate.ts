@@ -12,6 +12,19 @@ import { storeMemo, checkAndIncrementIp, type StoredMemo } from "./_lib/storage"
 const IP_LIMIT_PER_HOUR = 8;
 
 export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
+  try {
+    await handleInner(req, res);
+  } catch (err) {
+    const msg = (err as Error)?.message?.slice(0, 400) ?? "unknown";
+    const stack = (err as Error)?.stack?.slice(0, 600) ?? "";
+    console.error("generate_unhandled", msg, stack);
+    if (!res.headersSent) {
+      res.status(500).json({ error: "unhandled", message: `Server error: ${msg}` });
+    }
+  }
+}
+
+async function handleInner(req: VercelRequest, res: VercelResponse): Promise<void> {
   setCors(res);
   if (req.method === "OPTIONS") {
     res.status(204).end();
