@@ -7,9 +7,7 @@ import { generateMemo } from "./_lib/anthropic";
 import { scrapeUrl, ScrapeError } from "./_lib/scrape";
 import { storeMemo, checkAndIncrementIp, type StoredMemo } from "./_lib/storage";
 
-export const config = {
-  runtime: "edge",
-};
+export const runtime = "edge";
 
 const IP_LIMIT_PER_HOUR = 8;
 
@@ -18,8 +16,16 @@ export default async function handler(request: Request): Promise<Response> {
   if (request.method !== "POST") return json({ error: "method_not_allowed" }, 405);
 
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "unknown";
-  const rate = await checkAndIncrementIp(ip, IP_LIMIT_PER_HOUR);
-  if (!rate.allowed) return json({ error: "rate_limited", message: "Try again in a bit." }, 429);
+  try {
+    const rate = await checkAndIncrementIp(ip, IP_LIMIT_PER_HOUR);
+    if (!rate.allowed) return json({ error: "rate_limited", message: "Try again in a bit." }, 429);
+  } catch (err) {
+    console.error("kv_rate_limit_failed", err);
+    return json(
+      { error: "kv_unavailable", message: "Our storage isn't reachable right now. Try again in a moment." },
+      503,
+    );
+  }
 
   let body: { url?: string; prompting?: string };
   try {
@@ -65,7 +71,15 @@ export default async function handler(request: Request): Promise<Response> {
     intake: { url: scrape.url, domain: scrape.domain, prompting: prompting || undefined },
     createdAt: Date.now(),
   };
-  await storeMemo(id, stored);
+  try {
+    await storeMemo(id, stored);
+  } catch (err) {
+    console.error("store_failed", err);
+    return json(
+      { error: "kv_unavailable", message: "We generated your read but couldn't save it. Try again in a moment." },
+      503,
+    );
+  }
 
   const teaserSections = memo.sections.map((s) => ({
     index: s.index,

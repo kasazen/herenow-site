@@ -12,9 +12,7 @@ import {
 } from "./_lib/storage";
 import { renderEmail } from "./_lib/email-template";
 
-export const config = {
-  runtime: "edge",
-};
+export const runtime = "edge";
 
 export default async function handler(request: Request): Promise<Response> {
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders() });
@@ -34,15 +32,26 @@ export default async function handler(request: Request): Promise<Response> {
   if (!id) return json({ error: "missing_id" }, 400);
   if (!isEmail(email)) return json({ error: "invalid_email", message: "That doesn't look like an email address." }, 400);
 
-  const stored = await getMemo(id);
+  let stored: StoredMemo | null;
+  try {
+    stored = await getMemo(id);
+  } catch (err) {
+    console.error("kv_get_failed", err);
+    return json({ error: "kv_unavailable", message: "Our storage isn't reachable right now." }, 503);
+  }
   if (!stored) return json({ error: "memo_not_found", message: "That read has expired. Generate a new one." }, 404);
 
-  const idClaimed = await markIdUnlocked(id);
-  const emailAlreadyUsed = await hasUnlockedEmail(email);
-  if (!idClaimed && emailAlreadyUsed) {
-    return json({ error: "already_unlocked", message: "We've already sent one to that address." }, 409);
+  try {
+    const idClaimed = await markIdUnlocked(id);
+    const emailAlreadyUsed = await hasUnlockedEmail(email);
+    if (!idClaimed && emailAlreadyUsed) {
+      return json({ error: "already_unlocked", message: "We've already sent one to that address." }, 409);
+    }
+    await markEmailUnlocked(email);
+  } catch (err) {
+    console.error("kv_unlock_marks_failed", err);
+    return json({ error: "kv_unavailable", message: "Our storage isn't reachable right now." }, 503);
   }
-  await markEmailUnlocked(email);
 
   // Fire-and-forget email. Don't fail the response if it bounces; the user
   // already sees the unlocked memo on-page.
