@@ -1,19 +1,27 @@
-// Fetch a website and extract the parts useful for grounding a memo:
-// title, meta description, first ~12KB of visible body text. Designed to
-// be fast (single fetch, simple text extraction) and forgiving (graceful
-// errors so the user gets a clear "couldn't read that URL" message).
+// Multi-page scraper. Takes a URL, fetches the root + up to 3 in-domain
+// pages that look like "about / services / team / industries / approach"
+// content, and returns the aggregate. Designed to give the model real
+// substance to work with — not just whatever's on the marketing splash.
 
-const MAX_BYTES = 250_000;
-const MAX_TEXT_BYTES = 12_000;
-const FETCH_TIMEOUT_MS = 7_000;
+const MAX_BYTES_PER_PAGE = 250_000;
+const MAX_TEXT_BYTES_PER_PAGE = 8_000;
+const MAX_TOTAL_TEXT_BYTES = 20_000;
+const PRIMARY_TIMEOUT_MS = 7_000;
+const SECONDARY_BUDGET_MS = 6_000;
+const MAX_SECONDARY_PAGES = 3;
 const USER_AGENT = "Mozilla/5.0 (compatible; HereNowLabsFirstRead/1.0; +https://herenowlabs.xyz)";
 
-export type Scrape = {
+export type PageData = {
   url: string;
-  domain: string;
   title: string;
   description: string;
   body: string;
+};
+
+export type Pages = {
+  domain: string;
+  primary: PageData;
+  secondary: PageData[];
 };
 
 export class ScrapeError extends Error {
@@ -22,12 +30,62 @@ export class ScrapeError extends Error {
   }
 }
 
-export async function scrapeUrl(input: string): Promise<Scrape> {
-  const url = normalizeUrl(input);
-  const domain = new URL(url).host.replace(/^www\./, "");
+export async function scrapeBusiness(input: string): Promise<Pages> {
+  const rootUrl = normalizeUrl(input);
+  const origin = new URL(rootUrl).origin;
+  const domain = new URL(rootUrl).host.replace(/^www\./, "");
 
+  const primary = await fetchPage(rootUrl, PRIMARY_TIMEOUT_MS, /* required */ true);
+
+  // Find candidate secondary URLs from the primary page's HTML.
+  const candidates = extractInteriorLinks(primary.rawHtml ?? "", origin)
+    .filter((u) => u !== primary.page.url)
+    .slice(0, MAX_SECONDARY_PAGES);
+
+  const secondary: PageData[] = [];
+  if (candidates.length) {
+    const aggregate = new AbortController();
+    const aggTimer = setTimeout(() => aggregate.abort(), SECONDARY_BUDGET_MS);
+    try {
+      const results = await Promise.allSettled(
+        candidates.map((u) => fetchPage(u, SECONDARY_BUDGET_MS, false, aggregate.signal)),
+      );
+      for (const r of results) {
+        if (r.status === "fulfilled" && r.value.page.body) {
+          secondary.push(r.value.page);
+        }
+      }
+    } finally {
+      clearTimeout(aggTimer);
+    }
+  }
+
+  // Cap total text size — give primary the most, share the rest among secondary.
+  const capped = capTotalText(primary.page, secondary);
+
+  return { domain, primary: capped.primary, secondary: capped.secondary };
+}
+
+// Back-compat alias for any caller that still imports the old name.
+export const scrapeUrl = scrapeBusiness;
+
+type FetchedPage = { page: PageData; rawHtml?: string };
+
+async function fetchPage(
+  url: string,
+  timeoutMs: number,
+  required: boolean,
+  externalSignal?: AbortSignal,
+): Promise<FetchedPage> {
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), FETCH_TIMEOUT_MS);
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+
+  // Forward external aborts (used to stop in-flight secondaries when budget elapses).
+  const onExternalAbort = () => ctrl.abort();
+  if (externalSignal) {
+    if (externalSignal.aborted) ctrl.abort();
+    else externalSignal.addEventListener("abort", onExternalAbort, { once: true });
+  }
 
   let res: Response;
   try {
@@ -41,38 +99,66 @@ export async function scrapeUrl(input: string): Promise<Scrape> {
     });
   } catch (err) {
     clearTimeout(timer);
-    if ((err as Error).name === "AbortError") {
-      throw new ScrapeError("timeout", "We couldn't load that site in time. Try again or paste a description instead.");
+    if (externalSignal) externalSignal.removeEventListener("abort", onExternalAbort);
+    if (required) {
+      const reason = (err as Error).name === "AbortError" ? "timeout" : "fetch_failed";
+      const msg =
+        reason === "timeout"
+          ? "We couldn't load that site in time. Try again or paste a description instead."
+          : "We couldn't reach that URL. Check it and try again.";
+      throw new ScrapeError(reason, msg);
     }
-    throw new ScrapeError("fetch_failed", "We couldn't reach that URL. Check it and try again.");
+    return emptyResult(url);
   }
   clearTimeout(timer);
+  if (externalSignal) externalSignal.removeEventListener("abort", onExternalAbort);
 
   if (!res.ok) {
-    throw new ScrapeError("http_error", `That URL returned ${res.status}. We can't read what isn't public.`);
+    if (required) throw new ScrapeError("http_error", `That URL returned ${res.status}. We can't read what isn't public.`);
+    return emptyResult(url);
   }
 
   const ct = res.headers.get("content-type") ?? "";
   if (!ct.includes("html") && !ct.includes("xml")) {
-    throw new ScrapeError("not_html", "That URL doesn't look like a webpage we can read.");
+    if (required) throw new ScrapeError("not_html", "That URL doesn't look like a webpage we can read.");
+    return emptyResult(url);
   }
 
   const buf = await res.arrayBuffer();
-  const trimmed = buf.byteLength > MAX_BYTES ? buf.slice(0, MAX_BYTES) : buf;
+  const trimmed = buf.byteLength > MAX_BYTES_PER_PAGE ? buf.slice(0, MAX_BYTES_PER_PAGE) : buf;
   const html = new TextDecoder("utf-8", { fatal: false }).decode(trimmed);
 
-  const title = extractTitle(html);
-  const description = extractMeta(html, ["description", "og:description", "twitter:description"]);
-  const body = extractBodyText(html);
-
-  return {
-    url,
-    domain,
-    title,
-    description,
-    body: body.slice(0, MAX_TEXT_BYTES),
+  const finalUrl = res.url || url;
+  const page: PageData = {
+    url: finalUrl,
+    title: extractTitle(html),
+    description: extractMeta(html, ["description", "og:description", "twitter:description"]),
+    body: extractBodyText(html).slice(0, MAX_TEXT_BYTES_PER_PAGE),
   };
+
+  return { page, rawHtml: html };
 }
+
+function emptyResult(url: string): FetchedPage {
+  return { page: { url, title: "", description: "", body: "" } };
+}
+
+function capTotalText(primary: PageData, secondary: PageData[]): { primary: PageData; secondary: PageData[] } {
+  let used = primary.body.length;
+  if (used > MAX_TOTAL_TEXT_BYTES) {
+    return { primary: { ...primary, body: primary.body.slice(0, MAX_TOTAL_TEXT_BYTES) }, secondary: [] };
+  }
+  const cappedSecondary: PageData[] = [];
+  for (const s of secondary) {
+    const remaining = MAX_TOTAL_TEXT_BYTES - used;
+    if (remaining <= 0) break;
+    cappedSecondary.push({ ...s, body: s.body.slice(0, remaining) });
+    used += Math.min(s.body.length, remaining);
+  }
+  return { primary, secondary: cappedSecondary };
+}
+
+// ── URL handling ────────────────────────────────────────────────────────
 
 function normalizeUrl(input: string): string {
   const trimmed = input.trim();
@@ -90,6 +176,42 @@ function normalizeUrl(input: string): string {
   }
 }
 
+const INTERESTING_LINK_RE =
+  /\/(?:about|about-us|services?|what-we-do|approach|process|team|people|industries|sectors|practice|practices|capabilities|solutions|work|case-studies|clients|customers|company)(?:\/|$|#|\?)/i;
+
+function extractInteriorLinks(html: string, origin: string): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  const linkRe = /<a\s+[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi;
+  let match: RegExpExecArray | null;
+  while ((match = linkRe.exec(html)) !== null) {
+    const href = match[1];
+    const text = stripTags(match[2]).trim().toLowerCase();
+    let resolved: URL;
+    try {
+      resolved = new URL(href, origin);
+    } catch {
+      continue;
+    }
+    if (resolved.origin !== origin) continue;
+    if (resolved.pathname === "/" || resolved.pathname === "") continue;
+    // Score: prefer URL-pattern matches; secondarily, link text matches.
+    const urlMatch = INTERESTING_LINK_RE.test(resolved.pathname);
+    const textMatch = /(about|services?|what we do|approach|team|industries|capabilities|solutions|clients|customers)/i.test(
+      text,
+    );
+    if (!urlMatch && !textMatch) continue;
+    // Drop fragments and queries for de-dup, prefer canonical pathname.
+    const canonical = resolved.origin + resolved.pathname.replace(/\/+$/, "");
+    if (seen.has(canonical)) continue;
+    seen.add(canonical);
+    out.push(canonical);
+  }
+  return out;
+}
+
+// ── HTML parsing primitives ────────────────────────────────────────────
+
 function extractTitle(html: string): string {
   const m = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
   return m ? decodeEntities(stripTags(m[1])).trim().slice(0, 200) : "";
@@ -97,12 +219,12 @@ function extractTitle(html: string): string {
 
 function extractMeta(html: string, keys: string[]): string {
   for (const key of keys) {
-    const re = new RegExp(
+    const re1 = new RegExp(
       `<meta[^>]+(?:name|property)=["']${escapeRe(key)}["'][^>]+content=["']([^"']*)["']`,
       "i",
     );
-    const m = html.match(re);
-    if (m) return decodeEntities(m[1]).trim().slice(0, 400);
+    const m1 = html.match(re1);
+    if (m1) return decodeEntities(m1[1]).trim().slice(0, 400);
     const re2 = new RegExp(
       `<meta[^>]+content=["']([^"']*)["'][^>]+(?:name|property)=["']${escapeRe(key)}["']`,
       "i",

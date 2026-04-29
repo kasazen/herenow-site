@@ -1243,11 +1243,17 @@ body.lm-open {
 
 .lm-generating {
   display: grid;
-  gap: 1rem;
-  justify-items: start;
+  gap: 1.25rem;
   padding: clamp(2rem, 5vw, 3rem) 0;
-  max-width: 32rem;
+  max-width: 34rem;
   margin: 0 auto;
+  min-height: 16rem;
+}
+
+.lm-stream-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
 }
 
 .lm-pulse {
@@ -1255,6 +1261,7 @@ body.lm-open {
   height: 0.5rem;
   background: var(--accent);
   animation: lm-pulse 1.4s ease-in-out infinite;
+  flex: 0 0 auto;
 }
 
 @keyframes lm-pulse {
@@ -1262,21 +1269,54 @@ body.lm-open {
   50%      { opacity: 1; transform: scale(1.2); }
 }
 
-.lm-status {
-  margin: 0;
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: clamp(1.25rem, 2vw, 1.5rem);
-  color: var(--fg);
-}
-
-.lm-status-sub {
+.lm-stream-label {
   margin: 0;
   font-family: var(--font-mono);
   font-size: 0.6875rem;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   color: var(--fg-faint);
   text-transform: uppercase;
+}
+
+.lm-stream {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.lm-stream__line {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.0625rem, 1.6vw, 1.1875rem);
+  line-height: 1.5;
+  color: var(--fg);
+  letter-spacing: -0.01em;
+  opacity: 0;
+  transform: translateY(6px);
+  animation: lm-stream-in 360ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  transition: opacity 600ms ease;
+}
+
+.lm-stream__line--header {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.lm-stream__line--fading {
+  opacity: 0.45;
+}
+
+@keyframes lm-stream-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ─── Modal: memo (teaser + full) ────────────────────────────── */
@@ -1337,11 +1377,6 @@ body.lm-open {
 .lm-body {
   display: grid;
   gap: clamp(1.5rem, 3vw, 2.25rem);
-  transition: opacity 280ms ease;
-}
-
-.lm-body--unlocking {
-  opacity: 0;
 }
 
 .lm-section {
@@ -1377,17 +1412,6 @@ body.lm-open {
 
 .lm-section__body p:last-child {
   margin-bottom: 0;
-}
-
-.lm-section--closing .lm-section__body {
-  background: var(--paper-tint);
-  padding: clamp(0.875rem, 2vw, 1.25rem);
-  border-left: 2px solid var(--accent);
-}
-
-.lm-section--closing .lm-section__body p {
-  font-style: italic;
-  color: var(--fg);
 }
 
 .lm-section__redacted {
@@ -1457,43 +1481,55 @@ body.lm-open {
   }
 }
 
-/* ─── Modal: post-memo footer ───────────────────────────────── */
+/* ─── Modal: sent (terminal confirmation) ───────────────────── */
 
-.lm-post {
-  margin-top: clamp(2rem, 4vw, 2.75rem);
-  padding-top: clamp(1.5rem, 3vw, 2rem);
-  border-top: 1px solid var(--rule);
+.lm-sent {
   display: grid;
-  gap: 0.625rem;
+  gap: 1rem;
+  max-width: 32rem;
+  margin: 0 auto;
+  padding: clamp(1.5rem, 3vw, 2.5rem) 0;
+  text-align: left;
+  justify-items: start;
 }
 
-.lm-post-confirm {
+.lm-sent__eyebrow {
   margin: 0;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.02em;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--accent);
 }
 
-.lm-post-headline {
-  margin: 0.125rem 0 0;
+.lm-sent__headline {
+  margin: 0;
   font-family: var(--font-serif);
-  font-style: italic;
   font-optical-sizing: auto;
-  font-size: clamp(1.25rem, 2.2vw, 1.5rem);
+  font-size: clamp(1.625rem, 3vw, 2.125rem);
   font-weight: 400;
-  letter-spacing: -0.012em;
-  line-height: 1.3;
+  font-style: italic;
+  letter-spacing: -0.018em;
+  line-height: 1.24;
   color: var(--fg);
 }
 
-.lm-post-body {
+.lm-sent__body {
   margin: 0;
-  font-size: 0.9375rem;
+  font-size: clamp(1rem, 1.4vw, 1.0625rem);
   line-height: 1.6;
   color: var(--fg-muted);
+  max-width: 32rem;
 }
 
-.lm-post-cta {
+.lm-sent__cta-row {
   margin: 0.5rem 0 0;
+}
+
+.lm-sent__fine {
+  margin: 0.5rem 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.02em;
+  color: var(--fg-faint);
 }
