@@ -7,6 +7,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 import { generateMemoStreaming, type StreamEvent } from "./_lib/anthropic.js";
+import { researchBusiness } from "./_lib/research.js";
 import { scrapeBusiness, ScrapeError, type Pages } from "./_lib/scrape.js";
 import { storeMemo, checkAndIncrementIp, type StoredMemo } from "./_lib/storage.js";
 
@@ -136,6 +137,22 @@ async function handleInner(req: VercelRequest, res: VercelResponse): Promise<voi
       return;
     }
 
+    // Research phase: pull context from outside the website. Fails soft —
+    // if research times out or errors, memo generation proceeds without it.
+    writeEvent(res, "progress", { text: "looking outside the site" });
+    const research = await researchBusiness(apiKey, pages, prompting, (e) => {
+      if (e.type === "search_query") {
+        writeEvent(res, "progress", { text: `searching: ${e.query}` });
+      } else if (e.type === "finding") {
+        writeEvent(res, "observation", { text: e.text });
+      }
+    });
+    if (research.findings.length > 0) {
+      writeEvent(res, "progress", {
+        text: `${research.findings.length} outside note${research.findings.length === 1 ? "" : "s"} · drafting`,
+      });
+    }
+
     // Stream phase: forward observation/section events to the client.
     const onEvent = (e: StreamEvent) => {
       writeEvent(res, e.type, e);
@@ -143,7 +160,7 @@ async function handleInner(req: VercelRequest, res: VercelResponse): Promise<voi
 
     let memo;
     try {
-      memo = await generateMemoStreaming(apiKey, pages, prompting, onEvent);
+      memo = await generateMemoStreaming(apiKey, pages, prompting, research.findings, onEvent);
     } catch (err) {
       console.error("generate_failed", err);
       writeEvent(res, "error", {

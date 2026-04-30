@@ -127,8 +127,8 @@ function shouldShow(step: string, state: State): boolean {
     case "generating":
       return state === "generating";
     case "memo":
-      return state === "teaser" || state === "unlocking";
     case "gate":
+    case "dialog":
       return state === "teaser" || state === "unlocking";
     case "sent":
       return state === "sent";
@@ -608,36 +608,38 @@ async function mockStream(payload: { url: string }): Promise<CompletePayload> {
   } catch {
     /* keep default */
   }
-  // The website is the entry point; the read is about the BUSINESS.
-  // Phase 1 learnings: brief page-meta noticings as we scrape.
-  // Phase 2 learnings: pivot to operational thinking — the reader's
-  // attention shifts from "what's on the site" to "what kind of operation
-  // is this and where does the margin live."
+  // Dev-only mock. Stays category-neutral on purpose: the goal here is to
+  // demo the shape and motion of the experience, not to pretend the model
+  // knows the operator's category. Real backend produces specifics.
   await delay(260);
   setStageAction(`Reading ${domain}`);
   setStagePhase("1 of 4 pages");
   await delay(900);
-  enqueueLearning("residential lawn care, four trucks, New England seasonal swing");
+  enqueueLearning(`reading the front door of ${domain}`);
   await delay(700);
   setStagePhase("2 of 4 pages");
   await delay(900);
-  enqueueLearning("programs and pricing — looks like bundled service plans, not á la carte");
+  enqueueLearning("how they describe what they sell, in their own words");
   await delay(700);
   setStagePhase("3 of 4 pages");
   await delay(900);
-  enqueueLearning("family-owned, fifteen seasons — that's a lot of customer history nobody's mining yet");
+  enqueueLearning("the team page tells you which roles they thought were worth a face");
+  await delay(700);
+  setStagePhase("looking outside the site");
+  await delay(900);
+  enqueueLearning("checking peer-category benchmarks the site won't tell us");
   await delay(700);
   setStagePhase("drafting the read");
   await delay(800);
-  enqueueLearning("A regional residential lawn-care operator, four trucks, season-driven cash. The growth ceiling is the dispatcher's working memory — and that's repriceable now.");
+  enqueueLearning(`a first-pass operator's read of ${domain} — taking a position, not a summary`);
   await delay(1300);
   setStagePhase("writing 01 · What we'd bet on");
   await delay(900);
-  enqueueLearning("Your margin lives in route density, not customer count.");
+  enqueueLearning("the margin lives one layer below where the team's attention is right now");
   await delay(900);
   setStagePhase("writing 02 · Where the leverage tends to live");
   await delay(800);
-  enqueueLearning("Watch the second-touch follow-up — it's where most of this category leaves money on the table.");
+  enqueueLearning("watch the second-touch — the work that happens between yes and showing up");
   await delay(700);
 
   const sections: Section[] = [
@@ -645,36 +647,35 @@ async function mockStream(payload: { url: string }): Promise<CompletePayload> {
       index: 1,
       title: "What we'd bet on",
       body:
-        "Your margin lives in route density, not customer count. The crews running tight afternoon routes — three jobs in a six-block radius — are the ones hitting the daily number. The ones chasing a stray fourth job across town eat the gas, the windshield time, and the missed start at job five. The pattern shows up at every multi-truck residential operator we've looked inside.\n\nWe'd bet two of your crews are running 70% denser routes than your other crews, and that nobody on staff can tell you which two without picking up the phone and asking the dispatcher. That asymmetry is where the next twelve points of margin live.",
+        `The leverage at ${domain} probably lives one layer below where the team's attention is right now. The work that pays the bills tends to be the most procedural, and the most procedural work is what's getting the fastest cost delta from the current generation of tools — in your category and in every category we look inside.\n\n` +
+        "We'd bet there's one workflow the team would describe as boring that, if it ran 3x faster, would change what the week looks like by Friday. The fact that it's boring is the reason nobody on staff has repriced it yet.",
     },
     {
       index: 2,
       title: "Where the leverage tends to live",
       body:
-        "Watch the second-touch follow-up. The lead calls in, your CSR prices the property, the homeowner says \"send me something in writing,\" and the proposal goes out — then nothing happens for nine days because the CSR is on the next call and Bob is in the field. The lead either books a competitor or forgets about the work. We've seen one regional operator turn a 19% close rate into 34% by automating that nine-day window with a sequence the owner could write in an afternoon.\n\nThe other place is the gap between the salesperson taking the work and the install crew showing up. The customer is most willing to add the application, the aerate, the late-season fert in that window — and almost nobody is talking to them in it.",
+        "Watch the second-touch. A prospect reaches out, somebody on your team takes the call, the work gets quoted, the prospect says \"send me something in writing\" — and then nothing happens for several days because that person is on the next call. The prospect either buys from somebody else or forgets. The window between yes-in-principle and yes-on-paper is where most of this category leaves money on the table.\n\nThe other place is the handoff between the person who books the work and the team that delivers it. The customer is most willing to add scope in that window — and almost nobody is talking to them in it.",
     },
     {
       index: 3,
       title: "Where AI is shifting your numbers",
       body:
-        "The $24/hr CSR seat that prices a property and quotes a job is being repriced to about $0.40 per conversation by operators who set this up well — and the conversation is happening at 9pm on a Tuesday when the homeowner is actually thinking about their yard. That's not a labor-cost story. That's a top-of-funnel story: you stop losing the leads who don't want to call you back tomorrow.\n\nThe proposal-writing that takes your sales lead three hours per commercial bid is being done in twelve minutes by people doing it well — and the twelve-minute version is sharper, because the model is pulling from your last forty bids instead of the bidder's memory of the last four.",
+        "The seat that intakes a request, qualifies the buyer, and quotes the work is being repriced — by operators in your category who set this up well — to a fraction of what it cost a year ago. That's not a labor-cost story. That's a top-of-funnel story: you stop losing the buyers who don't want to call you back tomorrow.\n\nThe proposal-writing that takes your senior person several hours per bid is being done in minutes by people doing it well — and the faster version is often sharper, because it pulls from the last forty proposals instead of the bidder's memory of the last four.",
     },
     {
       index: 4,
       title: "Two questions we'd ask first",
       body:
-        "If your top three commercial accounts all canceled in the same quarter, how long does the company survive on what's left? Most lawn-care operators we talk to discover the answer is \"about ninety days,\" and they hadn't run the math.\n\nWhich of your services would you stop selling tomorrow if you could? The answer usually points at the lowest-margin, most-emotional offering in the book — and the reason it's still on the book is almost always one specific customer.",
+        "If your top three accounts all canceled in the same quarter, how long does the company survive on what's left? Most operators we talk to discover the answer is shorter than they'd guess, and they hadn't run the math.\n\nWhich of your offerings would you stop selling tomorrow if you could? The answer usually points at the lowest-margin, most-emotional thing on the book — and the reason it's still on the book is almost always one specific customer.",
     },
     {
       index: 5,
       title: "A note on what this can't see",
       body:
-        "We didn't read your contracts. We didn't read the customer who keeps you up at night. We didn't read the handshake with the supplier who keeps your fert priced under the spot market, the one crew chief who really runs the operation, or the conversation you had with your accountant in March. The numbers we'd care about — gross margin by route, customer concentration, the seasonal swing — aren't on the site, because they shouldn't be.\n\nWhat Here Now sees in two weeks that this memo can't: all of it.",
+        "We didn't read your contracts. We didn't read the customer who keeps you up at night. We didn't read the handshake with the vendor who's quietly doing more than the contract says, the one person on the team who really runs the operation, or the conversation you had with your accountant last quarter. The numbers we'd care about — gross margin by line, customer concentration, the real seasonality — aren't on the site, because they shouldn't be.\n\nWhat Here Now sees in two weeks that this memo can't: all of it.",
     },
   ];
 
-  // Apply the same teaser-shape the real backend applies: section 01
-  // unlocked, sections 02–05 trimmed to their first sentence and locked.
   const teaserSections: Section[] = sections.map((s) => ({
     index: s.index,
     title: s.title,
@@ -685,7 +686,7 @@ async function mockStream(payload: { url: string }): Promise<CompletePayload> {
   return {
     id: "mock-" + Math.random().toString(36).slice(2, 10),
     cover: {
-      echo: "A regional residential lawn-care operator, four trucks, season-driven cash. The growth ceiling is the dispatcher's working memory — and that's repriceable now.",
+      echo: `A first-pass read of ${domain} from the outside. The margin probably lives one layer below where the team's attention is right now — and the procedural layer is the layer that's been repriced.`,
       date: new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }),
       domain,
     },
