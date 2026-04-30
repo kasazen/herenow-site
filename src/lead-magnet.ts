@@ -139,6 +139,9 @@ async function onIntakeSubmit(ev: SubmitEvent): Promise<void> {
 
   setState("generating");
   document.getElementById("lm-stream")?.replaceChildren();
+  // Seed an immediate "reading" line so the modal has motion at t=0,
+  // before the server's first progress event arrives.
+  appendStreamLine(seedHostFromUrl(url) ?? "reading the site", true);
   track("lm_started");
 
   try {
@@ -211,6 +214,8 @@ async function streamGenerate(payload: { url: string; prompting: string }): Prom
 
       if (event === "observation" && data.text) {
         appendStreamLine(data.text);
+      } else if (event === "progress" && data.text) {
+        appendStreamLine(data.text, true);
       } else if (event === "section_start" && typeof data.index === "number" && data.title) {
         appendStreamLine(`${String(data.index).padStart(2, "0")} · ${data.title}`, true);
       } else if (event === "complete") {
@@ -228,6 +233,18 @@ async function streamGenerate(payload: { url: string; prompting: string }): Prom
 }
 
 // ── Stream-line UI ──────────────────────────────────────────────────────
+
+function seedHostFromUrl(input: string): string | null {
+  const trimmed = input.trim();
+  if (!trimmed) return null;
+  const withScheme = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+  try {
+    const host = new URL(withScheme).host.replace(/^www\./, "");
+    return host ? `reading ${host}` : null;
+  } catch {
+    return null;
+  }
+}
 
 function appendStreamLine(text: string, isHeader = false): void {
   const stream = document.getElementById("lm-stream");
@@ -306,10 +323,14 @@ function paragraphsEl(paragraphs: string[]): HTMLElement {
 function redactedEl(): HTMLElement {
   const wrap = document.createElement("div");
   wrap.className = "lm-section__redacted";
-  for (let i = 0; i < 3; i++) {
+  // Five lines of varying widths — reads as a redacted paragraph, with the
+  // last line shorter (paragraph end). Widths are deterministic-feeling
+  // rather than uniform skeleton bars.
+  const widths = [96, 88, 92, 80, 54];
+  for (const w of widths) {
     const line = document.createElement("span");
     line.className = "lm-redact-line";
-    line.style.width = `${68 + Math.random() * 24}%`;
+    line.style.width = `${w + (Math.random() * 4 - 2)}%`;
     wrap.appendChild(line);
   }
   return wrap;
@@ -425,7 +446,16 @@ async function mockStream(payload: { url: string }): Promise<CompletePayload> {
   } catch {
     /* keep default */
   }
+  // Mirror the real backend's scrape-progress events.
+  await delay(300);
+  appendStreamLine(`reading ${domain}`, true);
+  await delay(500);
+  appendStreamLine("reading /services", true);
   await delay(400);
+  appendStreamLine("reading /about", true);
+  await delay(900);
+  appendStreamLine("read 3 pages · drafting", true);
+  await delay(500);
   appendStreamLine("A focused operating company in a category where execution discipline still beats hype.");
   await delay(800);
   appendStreamLine("01 · What we see in your operation", true);

@@ -97,10 +97,18 @@ async function handleInner(req: VercelRequest, res: VercelResponse): Promise<voi
   }, 5000);
 
   try {
-    // Scrape phase.
+    // Scrape phase. Stream progress so the modal isn't empty during fetch.
     let pages: Pages;
     try {
-      pages = await scrapeBusiness(urlInput);
+      pages = await scrapeBusiness(urlInput, (p) => {
+        if (p.type === "primary_start") {
+          writeEvent(res, "progress", { text: `reading ${p.domain}` });
+        } else if (p.type === "secondary_start") {
+          writeEvent(res, "progress", { text: `reading ${p.pathname}` });
+        } else if (p.type === "complete") {
+          writeEvent(res, "progress", { text: `read ${p.pageCount} pages · drafting` });
+        }
+      });
     } catch (err) {
       if (err instanceof ScrapeError) {
         writeEvent(res, "error", { code: err.reason, message: err.message });
