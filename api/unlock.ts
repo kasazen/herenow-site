@@ -29,7 +29,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   }
 
   const body = (typeof req.body === "string" ? safeParseJson(req.body) : req.body) as
-    | { id?: string; email?: string; firstName?: string }
+    | { id?: string; email?: string; firstName?: string; note?: string }
     | null;
   if (!body) {
     res.status(400).json({ ok: false, error: "invalid_json" });
@@ -39,6 +39,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   const id = (body.id ?? "").trim();
   const email = (body.email ?? "").trim().toLowerCase();
   const firstName = (body.firstName ?? "").trim();
+  const note = (body.note ?? "").trim().slice(0, 1500);
 
   if (!id) {
     res.status(400).json({ ok: false, error: "missing_id" });
@@ -94,7 +95,50 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     return;
   }
 
+  // Note from the bottom dialog: send a separate notification to the team
+  // so a human can pick up the conversation. Fire-and-forget — failure here
+  // shouldn't block the user's success state.
+  if (note) {
+    sendTeamNote({ from: email, firstName, note, domain: stored.intake.domain }).catch((err) => {
+      console.error("team_note_send_failed", (err as Error)?.message?.slice(0, 200));
+    });
+  }
+
   res.status(200).json({ ok: true, sentTo: email });
+}
+
+async function sendTeamNote(input: {
+  from: string;
+  firstName: string;
+  note: string;
+  domain: string;
+}): Promise<void> {
+  const resendKey = process.env.RESEND_API_KEY;
+  const fromAddr = process.env.EMAIL_FROM ?? "Here Now Labs <team@herenowlabs.xyz>";
+  const teamAddr = process.env.TEAM_NOTE_TO ?? "team@herenowlabs.xyz";
+  if (!resendKey) return;
+
+  const subject = `First Read note · ${input.domain}`;
+  const lines = [
+    `From: ${input.from}${input.firstName ? ` (${input.firstName})` : ""}`,
+    `Domain: ${input.domain}`,
+    "",
+    "Note:",
+    input.note,
+  ];
+  const text = lines.join("\n");
+
+  await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { "content-type": "application/json", authorization: `Bearer ${resendKey}` },
+    body: JSON.stringify({
+      from: fromAddr,
+      to: teamAddr,
+      reply_to: input.from,
+      subject,
+      text,
+    }),
+  });
 }
 
 async function sendEmail(to: string, firstName: string | undefined, stored: StoredMemo): Promise<void> {

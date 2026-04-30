@@ -26,8 +26,13 @@ const ANTHROPIC_VERSION = "2023-06-01";
 
 // ── Non-streaming (kept for compatibility with any callers that don't need streaming) ──
 
-export async function generateMemo(apiKey: string, pages: Pages, prompting: string | undefined): Promise<MemoResult> {
-  const body = baseRequestBody(pages, prompting, false);
+export async function generateMemo(
+  apiKey: string,
+  pages: Pages,
+  prompting: string | undefined,
+  research?: string[],
+): Promise<MemoResult> {
+  const body = baseRequestBody(pages, prompting, research, false);
   const res = await fetch(API_URL, { method: "POST", headers: headers(apiKey), body: JSON.stringify(body) });
   if (!res.ok) {
     const text = await res.text();
@@ -45,9 +50,10 @@ export async function generateMemoStreaming(
   apiKey: string,
   pages: Pages,
   prompting: string | undefined,
+  research: string[] | undefined,
   onEvent: (e: StreamEvent) => void,
 ): Promise<MemoResult> {
-  const body = baseRequestBody(pages, prompting, true);
+  const body = baseRequestBody(pages, prompting, research, true);
   const res = await fetch(API_URL, { method: "POST", headers: headers(apiKey), body: JSON.stringify(body) });
   if (!res.ok || !res.body) {
     const text = res.body ? await res.text() : "";
@@ -106,7 +112,12 @@ export async function generateMemoStreaming(
 
 // ── Helpers ────────────────────────────────────────────────────────────
 
-function baseRequestBody(pages: Pages, prompting: string | undefined, stream: boolean) {
+function baseRequestBody(
+  pages: Pages,
+  prompting: string | undefined,
+  research: string[] | undefined,
+  stream: boolean,
+) {
   return {
     model: MODEL,
     max_tokens: 3000,
@@ -114,7 +125,7 @@ function baseRequestBody(pages: Pages, prompting: string | undefined, stream: bo
     system: [{ type: "text", text: SYSTEM_PROMPT, cache_control: { type: "ephemeral" } }],
     tools: [MEMO_TOOL],
     tool_choice: { type: "tool", name: MEMO_TOOL.name },
-    messages: [{ role: "user", content: buildUserMessage(pages, prompting) }],
+    messages: [{ role: "user", content: buildUserMessage(pages, prompting, research) }],
   };
 }
 

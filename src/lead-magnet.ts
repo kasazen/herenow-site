@@ -48,6 +48,24 @@ export function mountLeadMagnet(): void {
 
   document.getElementById("lm-intake-form")?.addEventListener("submit", onIntakeSubmit);
   document.getElementById("lm-gate-form")?.addEventListener("submit", onGateSubmit);
+  document.getElementById("lm-dialog-form")?.addEventListener("submit", onDialogSubmit);
+
+  // Mirror email between top gate and bottom dialog so the user only has
+  // to type it once if they've engaged with both.
+  const topEmail = document.getElementById("lm-email") as HTMLInputElement | null;
+  const bottomEmail = document.getElementById("lm-dialog-email") as HTMLInputElement | null;
+  if (topEmail && bottomEmail) {
+    topEmail.addEventListener("input", () => {
+      if (!bottomEmail.value || bottomEmail.dataset.fromTop === "1") {
+        bottomEmail.value = topEmail.value;
+        bottomEmail.dataset.fromTop = "1";
+      }
+    });
+    bottomEmail.addEventListener("input", () => {
+      bottomEmail.dataset.fromTop = "";
+      if (!topEmail.value) topEmail.value = bottomEmail.value;
+    });
+  }
 }
 
 // ── Modal show/hide ─────────────────────────────────────────────────────
@@ -109,8 +127,8 @@ function shouldShow(step: string, state: State): boolean {
     case "generating":
       return state === "generating";
     case "memo":
-      return state === "teaser" || state === "unlocking";
     case "gate":
+    case "dialog":
       return state === "teaser" || state === "unlocking";
     case "sent":
       return state === "sent";
@@ -138,7 +156,11 @@ async function onIntakeSubmit(ev: SubmitEvent): Promise<void> {
   }
 
   setState("generating");
-  document.getElementById("lm-stream")?.replaceChildren();
+  resetStage();
+  // Seed an immediate action line so the modal has motion at t=0,
+  // before the server's first event arrives.
+  setStageAction(seedHostFromUrl(url) ?? "Reading the site");
+  setStagePhase("opening the door");
   track("lm_started");
 
   try {
@@ -210,9 +232,11 @@ async function streamGenerate(payload: { url: string; prompting: string }): Prom
       }
 
       if (event === "observation" && data.text) {
-        appendStreamLine(data.text);
+        enqueueLearning(data.text);
+      } else if (event === "progress" && data.text) {
+        applyProgress(data.text);
       } else if (event === "section_start" && typeof data.index === "number" && data.title) {
-        appendStreamLine(`${String(data.index).padStart(2, "0")} · ${data.title}`, true);
+        setStagePhase(`writing ${String(data.index).padStart(2, "0")} · ${data.title}`);
       } else if (event === "complete") {
         complete = { id: data.id, cover: data.cover, sections: data.sections };
       } else if (event === "error") {
@@ -227,24 +251,128 @@ async function streamGenerate(payload: { url: string; prompting: string }): Prom
   return complete;
 }
 
-// ── Stream-line UI ──────────────────────────────────────────────────────
+// ── Generating-state stage ──────────────────────────────────────────────
+//
+// The generating modal has three zones:
+//   - action header (mono accent, persistent — what we're doing)
+//   - phase indicator (mono faint, updates per page/section — where we are)
+//   - learning line (italic serif, rotates — what we just noticed)
+//
+// Learnings arrive faster than they can be read, so they go through a
+// queue. The current learning displays for at least MIN_HOLD_MS before the
+// next one crossfades in. If the queue is empty, the last learning holds.
 
-function appendStreamLine(text: string, isHeader = false): void {
-  const stream = document.getElementById("lm-stream");
-  if (!stream) return;
-  const li = document.createElement("li");
-  li.className = "lm-stream__line" + (isHeader ? " lm-stream__line--header" : "");
-  li.textContent = text;
-  // Newest at top, fades up into view.
-  stream.prepend(li);
-  // Cap visible items so the modal doesn't grow without bound.
-  const items = stream.querySelectorAll<HTMLLIElement>(".lm-stream__line");
-  if (items.length > 6) {
-    for (let i = 6; i < items.length; i++) items[i].classList.add("lm-stream__line--fading");
+const MIN_HOLD_MS = 1600;
+const FAST_HOLD_MS = 1200;
+
+const learningQueue: string[] = [];
+let learningTimer: number | null = null;
+
+function seedHostFromUrl(input: string): string | null {
+  const trimmed = input.trim();
+  if (!trimmed) return null;
+  const withScheme = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+  try {
+    const host = new URL(withScheme).host.replace(/^www\./, "");
+    return host ? `Reading ${host}` : null;
+  } catch {
+    return null;
   }
-  if (items.length > 10) {
-    for (let i = 10; i < items.length; i++) items[i].remove();
+}
+
+function resetStage(): void {
+  learningQueue.length = 0;
+  if (learningTimer !== null) {
+    window.clearTimeout(learningTimer);
+    learningTimer = null;
   }
+  const learning = document.getElementById("lm-stage-learning");
+  if (learning) {
+    learning.textContent = "";
+    learning.classList.remove("is-visible");
+  }
+  const phase = document.getElementById("lm-stage-phase");
+  if (phase) phase.textContent = "";
+}
+
+function setStageAction(text: string): void {
+  const el = document.getElementById("lm-stage-action");
+  if (!el || el.textContent === text) return;
+  el.textContent = text;
+}
+
+function setStagePhase(text: string): void {
+  const el = document.getElementById("lm-stage-phase");
+  if (!el) return;
+  if (el.textContent === text) return;
+  el.classList.remove("is-visible");
+  // Reflow then re-add, gives a soft fade for phase changes.
+  void el.offsetWidth;
+  el.textContent = text;
+  el.classList.add("is-visible");
+}
+
+// progress events feed BOTH the action line ("Reading mainelygrass.com") and
+// the phase indicator ("1 of 4 pages" / "drafting"). Heuristics: lines
+// starting with "reading <host>" become the action; pathnames or "read N
+// pages" / "drafting" become phase.
+function applyProgress(text: string): void {
+  const t = text.trim();
+  if (/^reading\s+[a-z0-9.-]+\.[a-z]{2,}$/i.test(t)) {
+    // primary domain → headline action
+    setStageAction(capitalize(t));
+    return;
+  }
+  if (/^reading\s+\//i.test(t)) {
+    // "reading /services" → phase indicator
+    setStagePhase(t);
+    return;
+  }
+  if (/^read\s+\d+\s+pages?/i.test(t)) {
+    setStagePhase("drafting the read");
+    return;
+  }
+  // Fallback: drop into phase.
+  setStagePhase(t);
+}
+
+function enqueueLearning(text: string): void {
+  const trimmed = text.trim();
+  if (!trimmed) return;
+  // Dedupe against the most-recent enqueued/shown line.
+  const tail = learningQueue[learningQueue.length - 1];
+  const stage = document.getElementById("lm-stage-learning");
+  if (tail === trimmed) return;
+  if (!tail && stage?.textContent === trimmed) return;
+  learningQueue.push(trimmed);
+  if (learningTimer === null) tickLearning();
+}
+
+function tickLearning(): void {
+  const next = learningQueue.shift();
+  if (!next) {
+    learningTimer = null;
+    return;
+  }
+  const el = document.getElementById("lm-stage-learning");
+  if (!el) {
+    learningTimer = null;
+    return;
+  }
+  // Crossfade out, swap text, fade in.
+  el.classList.remove("is-visible");
+  window.setTimeout(() => {
+    el.textContent = next;
+    void el.offsetWidth;
+    el.classList.add("is-visible");
+    // Speed up if backlog is large.
+    const hold = learningQueue.length > 2 ? FAST_HOLD_MS : MIN_HOLD_MS;
+    learningTimer = window.setTimeout(tickLearning, hold);
+  }, 180);
+}
+
+function capitalize(s: string): string {
+  return s ? s[0].toUpperCase() + s.slice(1) : s;
 }
 
 // ── Teaser render (unchanged behavior) ──────────────────────────────────
@@ -306,10 +434,14 @@ function paragraphsEl(paragraphs: string[]): HTMLElement {
 function redactedEl(): HTMLElement {
   const wrap = document.createElement("div");
   wrap.className = "lm-section__redacted";
-  for (let i = 0; i < 3; i++) {
+  // Five lines of varying widths — reads as a redacted paragraph, with the
+  // last line shorter (paragraph end). Widths are deterministic-feeling
+  // rather than uniform skeleton bars.
+  const widths = [96, 88, 92, 80, 54];
+  for (const w of widths) {
     const line = document.createElement("span");
     line.className = "lm-redact-line";
-    line.style.width = `${68 + Math.random() * 24}%`;
+    line.style.width = `${w + (Math.random() * 4 - 2)}%`;
     wrap.appendChild(line);
   }
   return wrap;
@@ -363,7 +495,58 @@ async function onGateSubmit(ev: SubmitEvent): Promise<void> {
   }
 }
 
-async function callUnlock(payload: { id: string; email: string; firstName: string }): Promise<UnlockResponse> {
+async function onDialogSubmit(ev: SubmitEvent): Promise<void> {
+  ev.preventDefault();
+  const form = ev.currentTarget as HTMLFormElement;
+  hideError("lm-dialog-error");
+
+  const data = new FormData(form);
+  const email = (data.get("email") as string | null)?.trim() ?? "";
+  const note = (data.get("note") as string | null)?.trim() ?? "";
+
+  if (!isEmail(email)) {
+    showError("lm-dialog-error", "Add your email so we know where to write back.");
+    return;
+  }
+  if (!note) {
+    showError("lm-dialog-error", "Add a line or two so we know what to look at.");
+    return;
+  }
+  if (!memoId) {
+    showError("lm-dialog-error", "Something went wrong. Try again.");
+    return;
+  }
+
+  // Pull firstName from the top-gate field if the user filled it earlier;
+  // bottom dialog deliberately doesn't ask for it again.
+  const topName = (document.getElementById("lm-name") as HTMLInputElement | null)?.value.trim() ?? "";
+
+  setState("unlocking");
+
+  try {
+    const response = await callUnlock({ id: memoId, email, firstName: topName, note });
+    if (!response.ok) {
+      throw new Error(response.message ?? "We couldn't send that. Try again in a moment.");
+    }
+    const headline = document.getElementById("lm-sent-headline");
+    if (headline) {
+      headline.textContent = `Your read is on its way to ${response.sentTo ?? email} — and we got your note.`;
+    }
+    setState("sent");
+    track("lm_unlocked_with_note");
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "We had trouble sending that. Try again.";
+    setState("teaser");
+    showError("lm-dialog-error", message);
+  }
+}
+
+async function callUnlock(payload: {
+  id: string;
+  email: string;
+  firstName: string;
+  note?: string;
+}): Promise<UnlockResponse> {
   if (!API_URL) {
     if (IS_DEV) {
       await delay(900);
@@ -425,57 +608,88 @@ async function mockStream(payload: { url: string }): Promise<CompletePayload> {
   } catch {
     /* keep default */
   }
-  await delay(400);
-  appendStreamLine("A focused operating company in a category where execution discipline still beats hype.");
-  await delay(800);
-  appendStreamLine("01 · What we see in your operation", true);
-  await delay(700);
-  appendStreamLine("What's foregrounded is the work itself — the offer is concrete and the proof points are operational.");
-  await delay(600);
-  appendStreamLine("02 · Where the leverage tends to live", true);
-  await delay(700);
-  appendStreamLine("In operations like this, leverage sits in the seams between teams.");
-  await delay(800);
-  appendStreamLine("03 · Where AI is shifting your numbers", true);
+  // Dev-only mock. Stays category-neutral on purpose: the goal here is to
+  // demo the shape and motion of the experience, not to pretend the model
+  // knows the operator's category. Real backend produces specifics.
+  await delay(260);
+  setStageAction(`Reading ${domain}`);
+  setStagePhase("1 of 4 pages");
   await delay(900);
+  enqueueLearning(`reading the front door of ${domain}`);
+  await delay(700);
+  setStagePhase("2 of 4 pages");
+  await delay(900);
+  enqueueLearning("how they describe what they sell, in their own words");
+  await delay(700);
+  setStagePhase("3 of 4 pages");
+  await delay(900);
+  enqueueLearning("the team page tells you which roles they thought were worth a face");
+  await delay(700);
+  setStagePhase("looking outside the site");
+  await delay(900);
+  enqueueLearning("checking peer-category benchmarks the site won't tell us");
+  await delay(700);
+  setStagePhase("drafting the read");
+  await delay(800);
+  enqueueLearning(`a first-pass operator's read of ${domain} — taking a position, not a summary`);
+  await delay(1300);
+  setStagePhase("writing 01 · What we'd bet on");
+  await delay(900);
+  enqueueLearning("the margin lives one layer below where the team's attention is right now");
+  await delay(900);
+  setStagePhase("writing 02 · Where the leverage tends to live");
+  await delay(800);
+  enqueueLearning("watch the second-touch — the work that happens between yes and showing up");
+  await delay(700);
+
+  const sections: Section[] = [
+    {
+      index: 1,
+      title: "What we'd bet on",
+      body:
+        `The leverage at ${domain} probably lives one layer below where the team's attention is right now. The work that pays the bills tends to be the most procedural, and the most procedural work is what's getting the fastest cost delta from the current generation of tools — in your category and in every category we look inside.\n\n` +
+        "We'd bet there's one workflow the team would describe as boring that, if it ran 3x faster, would change what the week looks like by Friday. The fact that it's boring is the reason nobody on staff has repriced it yet.",
+    },
+    {
+      index: 2,
+      title: "Where the leverage tends to live",
+      body:
+        "Watch the second-touch. A prospect reaches out, somebody on your team takes the call, the work gets quoted, the prospect says \"send me something in writing\" — and then nothing happens for several days because that person is on the next call. The prospect either buys from somebody else or forgets. The window between yes-in-principle and yes-on-paper is where most of this category leaves money on the table.\n\nThe other place is the handoff between the person who books the work and the team that delivers it. The customer is most willing to add scope in that window — and almost nobody is talking to them in it.",
+    },
+    {
+      index: 3,
+      title: "Where AI is shifting your numbers",
+      body:
+        "The seat that intakes a request, qualifies the buyer, and quotes the work is being repriced — by operators in your category who set this up well — to a fraction of what it cost a year ago. That's not a labor-cost story. That's a top-of-funnel story: you stop losing the buyers who don't want to call you back tomorrow.\n\nThe proposal-writing that takes your senior person several hours per bid is being done in minutes by people doing it well — and the faster version is often sharper, because it pulls from the last forty proposals instead of the bidder's memory of the last four.",
+    },
+    {
+      index: 4,
+      title: "Two questions we'd ask first",
+      body:
+        "If your top three accounts all canceled in the same quarter, how long does the company survive on what's left? Most operators we talk to discover the answer is shorter than they'd guess, and they hadn't run the math.\n\nWhich of your offerings would you stop selling tomorrow if you could? The answer usually points at the lowest-margin, most-emotional thing on the book — and the reason it's still on the book is almost always one specific customer.",
+    },
+    {
+      index: 5,
+      title: "A note on what this can't see",
+      body:
+        "We didn't read your contracts. We didn't read the customer who keeps you up at night. We didn't read the handshake with the vendor who's quietly doing more than the contract says, the one person on the team who really runs the operation, or the conversation you had with your accountant last quarter. The numbers we'd care about — gross margin by line, customer concentration, the real seasonality — aren't on the site, because they shouldn't be.\n\nWhat Here Now sees in two weeks that this memo can't: all of it.",
+    },
+  ];
+
+  const teaserSections: Section[] = sections.map((s) => ({
+    index: s.index,
+    title: s.title,
+    body: s.index === 1 ? s.body : extractFirstSentence(s.body),
+    locked: s.index !== 1,
+  }));
+
   return {
     id: "mock-" + Math.random().toString(36).slice(2, 10),
     cover: {
-      echo: "A focused operating company in a category where execution discipline still beats hype.",
+      echo: `A first-pass read of ${domain} from the outside. The margin probably lives one layer below where the team's attention is right now — and the procedural layer is the layer that's been repriced.`,
       date: new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }),
       domain,
     },
-    sections: [
-      {
-        index: 1,
-        title: "What we see in your operation",
-        body:
-          "What's foregrounded is the work itself — the offer is concrete and the proof points are operational. The voice is steady; you're not reaching for adjectives.\n\nWhat's notably absent is the usual marketing apparatus: no resource center, no gated whitepapers, no promotional banner. That choice tells us something about how the business is run.",
-      },
-      {
-        index: 2,
-        title: "Where the leverage tends to live",
-        body:
-          "In operations like this, leverage sits in two places. The first is the seam between sales and delivery. The second is the judgment-heavy repetitive work that a senior person redoes because the junior version isn't reliable enough.",
-      },
-      {
-        index: 3,
-        title: "Where AI is shifting your numbers",
-        body:
-          "Two shifts are real for businesses of this kind. On the cost side, the work currently being paid for at full price is being repriced fast. On the revenue side, the unit economics of acquisition bend where AI helps a small team punch above its weight.",
-      },
-      {
-        index: 4,
-        title: "Two questions we'd ask first",
-        body:
-          "Where in your operation does a senior person re-do the work of a junior person?\n\nWhich of your customers, if you could serve them twice as quickly, would buy more from you?",
-      },
-      {
-        index: 5,
-        title: "A note on what this can't see",
-        body:
-          "We read what's public. We didn't read your numbers. This memo is patterns, not your specifics. What Here Now does in two weeks is what we can only read in person.",
-      },
-    ],
+    sections: teaserSections,
   };
 }

@@ -231,7 +231,7 @@
           <p class="lm__eyebrow">First Read · Here Now Labs</p>
           <h2 id="lm-title" class="lm__title">A short read on your business.</h2>
           <p class="lm__lede">
-            Tell us your URL. We'll read about your business and send back a memo on where the leverage tends to live.
+            Tell us about the operation. The URL gets us in the door — what you say below steers the read.
           </p>
 
           <form class="lm-form" id="lm-intake-form" novalidate>
@@ -241,8 +241,8 @@
             </div>
 
             <div class="lm-field">
-              <label for="lm-prompting" class="lm-label">What's prompting this? <span class="lm-optional">(optional, helps us focus)</span></label>
-              <textarea id="lm-prompting" name="prompting" rows="2" maxlength="600" placeholder="A line or two — what you're considering, what's on your mind."></textarea>
+              <label for="lm-prompting" class="lm-label">What should we know? <span class="lm-optional">(optional — and the more you say, the sharper the read)</span></label>
+              <textarea id="lm-prompting" name="prompting" rows="3" maxlength="600" placeholder="What's keeping you up at night. Where you're stuck. Who's on the team. Anything we wouldn't find on the site."></textarea>
             </div>
 
             <p class="lm__privacy">We use what you tell us only to write your memo. We don't share it.</p>
@@ -253,16 +253,19 @@
           </form>
         </section>
 
-        <!-- Generating: live observations stream in here -->
+        <!-- Generating: a single rotating learning + phase indicator -->
         <section data-lm-step="generating" class="lm-generating" aria-live="polite" hidden>
-          <div class="lm-stream-header">
-            <div class="lm-pulse" aria-hidden="true"></div>
-            <p class="lm-stream-label" id="lm-stream-label">Reading about your business</p>
+          <div class="lm-stage">
+            <div class="lm-stage-header">
+              <div class="lm-pulse" aria-hidden="true"></div>
+              <p class="lm-stage-action" id="lm-stage-action">Reading about your business</p>
+            </div>
+            <p class="lm-stage-phase" id="lm-stage-phase"></p>
+            <p class="lm-stage-learning" id="lm-stage-learning" aria-live="polite"></p>
           </div>
-          <ul class="lm-stream" id="lm-stream"></ul>
         </section>
 
-        <!-- Memo: cover + Section 01 + redacted preview + email gate -->
+        <!-- Memo: cover + email gate + Section 01 + redacted preview -->
         <article data-lm-step="memo" class="lm-memo" hidden>
           <header class="lm-cover">
             <div class="lm-cover-mark" aria-hidden="true"></div>
@@ -272,12 +275,10 @@
             <p class="lm-cover-echo" id="lm-echo"></p>
           </header>
 
-          <div class="lm-body" id="lm-body"></div>
-
           <aside data-lm-step="gate" class="lm-gate">
             <div class="lm-gate-card">
-              <p class="lm-gate-label">Read the rest</p>
-              <p class="lm-gate-body">We'll send the full memo to your inbox. The rest of this read lives there.</p>
+              <p class="lm-gate-label">The full read is in your inbox</p>
+              <p class="lm-gate-body">Section 01 is below. Sections 02&ndash;05 live in your inbox.</p>
               <form class="lm-gate-form" id="lm-gate-form" novalidate>
                 <div class="lm-field">
                   <label for="lm-email" class="lm-label">Email</label>
@@ -287,10 +288,37 @@
                   <label for="lm-name" class="lm-label">First name</label>
                   <input type="text" id="lm-name" name="firstName" maxlength="80" autocomplete="given-name" />
                 </div>
-                <button type="submit" class="lm__submit">Send the rest</button>
+                <button type="submit" class="lm__submit">Send the read</button>
               </form>
               <p class="lm-form__error" id="lm-gate-error" hidden></p>
             </div>
+          </aside>
+
+          <div class="lm-body" id="lm-body"></div>
+
+          <!-- Bottom CTA: pairs with section 05 "what this can't see." -->
+          <aside data-lm-step="dialog" class="lm-dialog">
+            <p class="lm-dialog__eyebrow">What we couldn't see</p>
+            <p class="lm-dialog__lede">
+              Two weeks inside the operation is a different order of read. If something here landed — or missed — tell us what we'd find. We read every reply.
+            </p>
+            <form class="lm-dialog__form" id="lm-dialog-form" novalidate>
+              <div class="lm-field">
+                <label for="lm-note" class="lm-label">Anything we couldn't see from the outside</label>
+                <textarea id="lm-note" name="note" rows="3" maxlength="1200" placeholder="The customer who keeps you up at night. The handshake with your COO. The numbers we wouldn't find on the site."></textarea>
+              </div>
+              <div class="lm-dialog__row">
+                <div class="lm-field lm-dialog__email">
+                  <label for="lm-dialog-email" class="lm-label">Email</label>
+                  <input type="email" id="lm-dialog-email" name="email" required autocomplete="email" />
+                </div>
+                <button type="submit" class="lm__submit lm__submit--ghost">Send a note</button>
+              </div>
+              <p class="lm-form__error" id="lm-dialog-error" hidden></p>
+            </form>
+            <p class="lm-dialog__alt">
+              Or <a href="https://herenowlabs.xyz/#book" class="lm-dialog__link" target="_blank" rel="noopener" data-lm-close>book two weeks inside &rarr;</a>
+            </p>
           </aside>
         </article>
 
@@ -302,7 +330,7 @@
             It usually arrives within a minute. If you don't see it, check spam — and reply if you find it there.
           </p>
           <p class="lm-sent__cta-row">
-            <a class="block__cta plausible-event-name=lm_to_calendly" href="#book" data-lm-close>Or book time with us now</a>
+            <a class="block__cta plausible-event-name=lm_to_calendly" href="#book" data-lm-close>Book time with us now</a>
           </p>
           <p class="lm-sent__fine">One read per email. We won't email you again unless you reply.</p>
         </section>

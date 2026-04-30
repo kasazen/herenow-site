@@ -30,12 +30,29 @@ export class ScrapeError extends Error {
   }
 }
 
-export async function scrapeBusiness(input: string): Promise<Pages> {
+export type ScrapeProgress =
+  | { type: "primary_start"; domain: string }
+  | { type: "primary_read"; title: string; description: string; words: number }
+  | { type: "secondary_start"; pathname: string }
+  | { type: "secondary_read"; pathname: string; title: string; words: number }
+  | { type: "complete"; pageCount: number };
+
+export async function scrapeBusiness(
+  input: string,
+  onProgress?: (e: ScrapeProgress) => void,
+): Promise<Pages> {
   const rootUrl = normalizeUrl(input);
   const origin = new URL(rootUrl).origin;
   const domain = new URL(rootUrl).host.replace(/^www\./, "");
 
+  onProgress?.({ type: "primary_start", domain });
   const primary = await fetchPage(rootUrl, PRIMARY_TIMEOUT_MS, /* required */ true);
+  onProgress?.({
+    type: "primary_read",
+    title: primary.page.title,
+    description: primary.page.description,
+    words: wordCount(primary.page.body),
+  });
 
   // Find candidate secondary URLs from the primary page's HTML.
   const candidates = extractInteriorLinks(primary.rawHtml ?? "", origin)
@@ -44,6 +61,13 @@ export async function scrapeBusiness(input: string): Promise<Pages> {
 
   const secondary: PageData[] = [];
   if (candidates.length) {
+    for (const c of candidates) {
+      try {
+        onProgress?.({ type: "secondary_start", pathname: new URL(c).pathname || "/" });
+      } catch {
+        /* ignore */
+      }
+    }
     const aggregate = new AbortController();
     const aggTimer = setTimeout(() => aggregate.abort(), SECONDARY_BUDGET_MS);
     try {
@@ -53,6 +77,16 @@ export async function scrapeBusiness(input: string): Promise<Pages> {
       for (const r of results) {
         if (r.status === "fulfilled" && r.value.page.body) {
           secondary.push(r.value.page);
+          try {
+            onProgress?.({
+              type: "secondary_read",
+              pathname: new URL(r.value.page.url).pathname || "/",
+              title: r.value.page.title,
+              words: wordCount(r.value.page.body),
+            });
+          } catch {
+            /* ignore */
+          }
         }
       }
     } finally {
@@ -63,7 +97,14 @@ export async function scrapeBusiness(input: string): Promise<Pages> {
   // Cap total text size — give primary the most, share the rest among secondary.
   const capped = capTotalText(primary.page, secondary);
 
+  onProgress?.({ type: "complete", pageCount: 1 + capped.secondary.length });
+
   return { domain, primary: capped.primary, secondary: capped.secondary };
+}
+
+function wordCount(s: string): number {
+  if (!s) return 0;
+  return s.split(/\s+/).filter(Boolean).length;
 }
 
 // Back-compat alias for any caller that still imports the old name.
