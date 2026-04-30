@@ -200,22 +200,31 @@ function writeEvent(res: VercelResponse, event: string, data: unknown): void {
   res.write(`event: ${event}\ndata: ${payload}\n\n`);
 }
 
-// Compose a short "noted: …" learning line from page meta. Prefer a clean
-// title; fall back to the first chunk of the meta description; finally to
-// just the word count so the user always sees a paired learning per page.
+// Compose a short, human-voiced learning line from page meta. Reads like
+// a person taking notes, not a system logger. Prefer the page's own
+// language (title fragment, then description) over generic stats.
 function pageLearning(
   label: string,
   title: string,
   description: string,
   words: number,
 ): string | null {
-  const wc = words >= 1000 ? `${(words / 1000).toFixed(1)}k` : words ? `${words}` : "";
-  const cleanTitle = title?.replace(/\s+[|·\-—]\s+.*$/, "").trim().slice(0, 70);
-  const cleanDesc = description?.trim().slice(0, 80);
-  if (cleanTitle) return `noted: ${cleanTitle}${wc ? ` · ${wc} words` : ""}`;
-  if (cleanDesc) return `noted: ${cleanDesc}`;
-  if (wc) return `noted: ${label} · ${wc} words`;
+  const wc = formatWords(words);
+  const cleanTitle = title?.replace(/\s+[|·\-—]\s+.*$/, "").trim().slice(0, 80);
+  const cleanDesc = description?.trim().slice(0, 110);
+  if (cleanTitle) {
+    // Quote the page's own language. Feels like a reader noticing.
+    return `“${cleanTitle}”${wc ? ` · ${wc}` : ""}`;
+  }
+  if (cleanDesc) return cleanDesc;
+  if (wc) return `${wc} on the ${label}`;
   return null;
+}
+
+function formatWords(n: number): string {
+  if (!n) return "";
+  if (n >= 1000) return `${(n / 1000).toFixed(1)}k words`;
+  return `${n} words`;
 }
 
 function firstSentence(body: string): string {

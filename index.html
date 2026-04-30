@@ -253,16 +253,19 @@
           </form>
         </section>
 
-        <!-- Generating: live observations stream in here -->
+        <!-- Generating: a single rotating learning + phase indicator -->
         <section data-lm-step="generating" class="lm-generating" aria-live="polite" hidden>
-          <div class="lm-stream-header">
-            <div class="lm-pulse" aria-hidden="true"></div>
-            <p class="lm-stream-label" id="lm-stream-label">Reading about your business</p>
+          <div class="lm-stage">
+            <div class="lm-stage-header">
+              <div class="lm-pulse" aria-hidden="true"></div>
+              <p class="lm-stage-action" id="lm-stage-action">Reading about your business</p>
+            </div>
+            <p class="lm-stage-phase" id="lm-stage-phase"></p>
+            <p class="lm-stage-learning" id="lm-stage-learning" aria-live="polite"></p>
           </div>
-          <ul class="lm-stream" id="lm-stream"></ul>
         </section>
 
-        <!-- Memo: cover + Section 01 + redacted preview + email gate -->
+        <!-- Memo: cover + email gate + Section 01 + redacted preview -->
         <article data-lm-step="memo" class="lm-memo" hidden>
           <header class="lm-cover">
             <div class="lm-cover-mark" aria-hidden="true"></div>
@@ -272,12 +275,10 @@
             <p class="lm-cover-echo" id="lm-echo"></p>
           </header>
 
-          <div class="lm-body" id="lm-body"></div>
-
           <aside data-lm-step="gate" class="lm-gate">
             <div class="lm-gate-card">
-              <p class="lm-gate-label">Read the rest</p>
-              <p class="lm-gate-body">We'll send the full memo to your inbox. The rest of this read lives there.</p>
+              <p class="lm-gate-label">The full read is in your inbox</p>
+              <p class="lm-gate-body">Section 01 is below. Sections 02&ndash;05 live in your inbox.</p>
               <form class="lm-gate-form" id="lm-gate-form" novalidate>
                 <div class="lm-field">
                   <label for="lm-email" class="lm-label">Email</label>
@@ -287,11 +288,13 @@
                   <label for="lm-name" class="lm-label">First name</label>
                   <input type="text" id="lm-name" name="firstName" maxlength="80" autocomplete="given-name" />
                 </div>
-                <button type="submit" class="lm__submit">Send the rest</button>
+                <button type="submit" class="lm__submit">Send the read</button>
               </form>
               <p class="lm-form__error" id="lm-gate-error" hidden></p>
             </div>
           </aside>
+
+          <div class="lm-body" id="lm-body"></div>
         </article>
 
         <!-- Sent: terminal confirmation. Memo is gone; the email is the path. -->

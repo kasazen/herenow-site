@@ -138,10 +138,11 @@ async function onIntakeSubmit(ev: SubmitEvent): Promise<void> {
   }
 
   setState("generating");
-  document.getElementById("lm-stream")?.replaceChildren();
-  // Seed an immediate "reading" line so the modal has motion at t=0,
-  // before the server's first progress event arrives.
-  appendStreamLine(seedHostFromUrl(url) ?? "reading the site", true);
+  resetStage();
+  // Seed an immediate action line so the modal has motion at t=0,
+  // before the server's first event arrives.
+  setStageAction(seedHostFromUrl(url) ?? "Reading the site");
+  setStagePhase("opening the door");
   track("lm_started");
 
   try {
@@ -213,11 +214,11 @@ async function streamGenerate(payload: { url: string; prompting: string }): Prom
       }
 
       if (event === "observation" && data.text) {
-        appendStreamLine(data.text);
+        enqueueLearning(data.text);
       } else if (event === "progress" && data.text) {
-        appendStreamLine(data.text, true);
+        applyProgress(data.text);
       } else if (event === "section_start" && typeof data.index === "number" && data.title) {
-        appendStreamLine(`${String(data.index).padStart(2, "0")} · ${data.title}`, true);
+        setStagePhase(`writing ${String(data.index).padStart(2, "0")} · ${data.title}`);
       } else if (event === "complete") {
         complete = { id: data.id, cover: data.cover, sections: data.sections };
       } else if (event === "error") {
@@ -232,7 +233,22 @@ async function streamGenerate(payload: { url: string; prompting: string }): Prom
   return complete;
 }
 
-// ── Stream-line UI ──────────────────────────────────────────────────────
+// ── Generating-state stage ──────────────────────────────────────────────
+//
+// The generating modal has three zones:
+//   - action header (mono accent, persistent — what we're doing)
+//   - phase indicator (mono faint, updates per page/section — where we are)
+//   - learning line (italic serif, rotates — what we just noticed)
+//
+// Learnings arrive faster than they can be read, so they go through a
+// queue. The current learning displays for at least MIN_HOLD_MS before the
+// next one crossfades in. If the queue is empty, the last learning holds.
+
+const MIN_HOLD_MS = 1600;
+const FAST_HOLD_MS = 1200;
+
+const learningQueue: string[] = [];
+let learningTimer: number | null = null;
 
 function seedHostFromUrl(input: string): string | null {
   const trimmed = input.trim();
@@ -240,32 +256,105 @@ function seedHostFromUrl(input: string): string | null {
   const withScheme = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
   try {
     const host = new URL(withScheme).host.replace(/^www\./, "");
-    return host ? `reading ${host}` : null;
+    return host ? `Reading ${host}` : null;
   } catch {
     return null;
   }
 }
 
-function appendStreamLine(text: string, isHeader = false): void {
-  const stream = document.getElementById("lm-stream");
-  if (!stream) return;
-  // Dedupe: skip if identical to the most-recent line (e.g. the synchronous
-  // seed and the server's primary_start event will often match).
-  const head = stream.firstElementChild as HTMLElement | null;
-  if (head && head.textContent === text) return;
-  const li = document.createElement("li");
-  li.className = "lm-stream__line" + (isHeader ? " lm-stream__line--header" : "");
-  li.textContent = text;
-  // Newest at top, fades up into view.
-  stream.prepend(li);
-  // Cap visible items so the modal doesn't grow without bound.
-  const items = stream.querySelectorAll<HTMLLIElement>(".lm-stream__line");
-  if (items.length > 5) {
-    for (let i = 5; i < items.length; i++) items[i].classList.add("lm-stream__line--fading");
+function resetStage(): void {
+  learningQueue.length = 0;
+  if (learningTimer !== null) {
+    window.clearTimeout(learningTimer);
+    learningTimer = null;
   }
-  if (items.length > 8) {
-    for (let i = 8; i < items.length; i++) items[i].remove();
+  const learning = document.getElementById("lm-stage-learning");
+  if (learning) {
+    learning.textContent = "";
+    learning.classList.remove("is-visible");
   }
+  const phase = document.getElementById("lm-stage-phase");
+  if (phase) phase.textContent = "";
+}
+
+function setStageAction(text: string): void {
+  const el = document.getElementById("lm-stage-action");
+  if (!el || el.textContent === text) return;
+  el.textContent = text;
+}
+
+function setStagePhase(text: string): void {
+  const el = document.getElementById("lm-stage-phase");
+  if (!el) return;
+  if (el.textContent === text) return;
+  el.classList.remove("is-visible");
+  // Reflow then re-add, gives a soft fade for phase changes.
+  void el.offsetWidth;
+  el.textContent = text;
+  el.classList.add("is-visible");
+}
+
+// progress events feed BOTH the action line ("Reading mainelygrass.com") and
+// the phase indicator ("1 of 4 pages" / "drafting"). Heuristics: lines
+// starting with "reading <host>" become the action; pathnames or "read N
+// pages" / "drafting" become phase.
+function applyProgress(text: string): void {
+  const t = text.trim();
+  if (/^reading\s+[a-z0-9.-]+\.[a-z]{2,}$/i.test(t)) {
+    // primary domain → headline action
+    setStageAction(capitalize(t));
+    return;
+  }
+  if (/^reading\s+\//i.test(t)) {
+    // "reading /services" → phase indicator
+    setStagePhase(t);
+    return;
+  }
+  if (/^read\s+\d+\s+pages?/i.test(t)) {
+    setStagePhase("drafting the read");
+    return;
+  }
+  // Fallback: drop into phase.
+  setStagePhase(t);
+}
+
+function enqueueLearning(text: string): void {
+  const trimmed = text.trim();
+  if (!trimmed) return;
+  // Dedupe against the most-recent enqueued/shown line.
+  const tail = learningQueue[learningQueue.length - 1];
+  const stage = document.getElementById("lm-stage-learning");
+  if (tail === trimmed) return;
+  if (!tail && stage?.textContent === trimmed) return;
+  learningQueue.push(trimmed);
+  if (learningTimer === null) tickLearning();
+}
+
+function tickLearning(): void {
+  const next = learningQueue.shift();
+  if (!next) {
+    learningTimer = null;
+    return;
+  }
+  const el = document.getElementById("lm-stage-learning");
+  if (!el) {
+    learningTimer = null;
+    return;
+  }
+  // Crossfade out, swap text, fade in.
+  el.classList.remove("is-visible");
+  window.setTimeout(() => {
+    el.textContent = next;
+    void el.offsetWidth;
+    el.classList.add("is-visible");
+    // Speed up if backlog is large.
+    const hold = learningQueue.length > 2 ? FAST_HOLD_MS : MIN_HOLD_MS;
+    learningTimer = window.setTimeout(tickLearning, hold);
+  }, 180);
+}
+
+function capitalize(s: string): string {
+  return s ? s[0].toUpperCase() + s.slice(1) : s;
 }
 
 // ── Teaser render (unchanged behavior) ──────────────────────────────────
@@ -450,34 +539,34 @@ async function mockStream(payload: { url: string }): Promise<CompletePayload> {
   } catch {
     /* keep default */
   }
-  // Mirror the real backend: action (mono header) paired with a learning
-  // (italic serif observation) for each page read.
-  await delay(280);
-  appendStreamLine(`reading ${domain}`, true);
-  await delay(620);
-  appendStreamLine(`noted: home page · 1,420 words`);
-  await delay(220);
-  appendStreamLine("reading /services", true);
-  await delay(540);
-  appendStreamLine(`noted: programs and pricing`);
-  await delay(200);
-  appendStreamLine("reading /about", true);
-  await delay(560);
-  appendStreamLine(`noted: family-owned, fifteen seasons`);
+  // Mirror the real backend's flow: action stays on the header; phase
+  // indicator updates as we move through pages; learnings rotate through
+  // the italic-serif stage one at a time.
   await delay(260);
-  appendStreamLine("read 3 pages · drafting", true);
-  await delay(520);
-  appendStreamLine("A focused operating company in a category where execution discipline still beats hype.");
+  setStageAction(`Reading ${domain}`);
+  setStagePhase("1 of 4 pages");
+  await delay(900);
+  enqueueLearning("1,420 words on the home page");
   await delay(700);
-  appendStreamLine("01 · What we see in your operation", true);
-  await delay(640);
-  appendStreamLine("What's foregrounded is the work itself — the offer is concrete and the proof points are operational.");
-  await delay(560);
-  appendStreamLine("02 · Where the leverage tends to live", true);
-  await delay(640);
-  appendStreamLine("In operations like this, leverage sits in the seams between teams.");
+  setStagePhase("2 of 4 pages");
+  await delay(900);
+  enqueueLearning("noted: programs and pricing");
   await delay(700);
-  appendStreamLine("03 · Where AI is shifting your numbers", true);
+  setStagePhase("3 of 4 pages");
+  await delay(900);
+  enqueueLearning("family-owned, fifteen seasons");
+  await delay(700);
+  setStagePhase("drafting the read");
+  await delay(800);
+  enqueueLearning("A focused operating company in a category where execution discipline still beats hype.");
+  await delay(1100);
+  setStagePhase("writing 01 · What we see in your operation");
+  await delay(900);
+  enqueueLearning("What's foregrounded is the work itself — the offer is concrete and the proof points are operational.");
+  await delay(900);
+  setStagePhase("writing 02 · Where the leverage tends to live");
+  await delay(800);
+  enqueueLearning("In operations like this, leverage sits in the seams between teams.");
   await delay(700);
 
   const sections: Section[] = [
