@@ -32,7 +32,9 @@ export class ScrapeError extends Error {
 
 export type ScrapeProgress =
   | { type: "primary_start"; domain: string }
+  | { type: "primary_read"; title: string; description: string; words: number }
   | { type: "secondary_start"; pathname: string }
+  | { type: "secondary_read"; pathname: string; title: string; words: number }
   | { type: "complete"; pageCount: number };
 
 export async function scrapeBusiness(
@@ -45,6 +47,12 @@ export async function scrapeBusiness(
 
   onProgress?.({ type: "primary_start", domain });
   const primary = await fetchPage(rootUrl, PRIMARY_TIMEOUT_MS, /* required */ true);
+  onProgress?.({
+    type: "primary_read",
+    title: primary.page.title,
+    description: primary.page.description,
+    words: wordCount(primary.page.body),
+  });
 
   // Find candidate secondary URLs from the primary page's HTML.
   const candidates = extractInteriorLinks(primary.rawHtml ?? "", origin)
@@ -69,6 +77,16 @@ export async function scrapeBusiness(
       for (const r of results) {
         if (r.status === "fulfilled" && r.value.page.body) {
           secondary.push(r.value.page);
+          try {
+            onProgress?.({
+              type: "secondary_read",
+              pathname: new URL(r.value.page.url).pathname || "/",
+              title: r.value.page.title,
+              words: wordCount(r.value.page.body),
+            });
+          } catch {
+            /* ignore */
+          }
         }
       }
     } finally {
@@ -82,6 +100,11 @@ export async function scrapeBusiness(
   onProgress?.({ type: "complete", pageCount: 1 + capped.secondary.length });
 
   return { domain, primary: capped.primary, secondary: capped.secondary };
+}
+
+function wordCount(s: string): number {
+  if (!s) return 0;
+  return s.split(/\s+/).filter(Boolean).length;
 }
 
 // Back-compat alias for any caller that still imports the old name.

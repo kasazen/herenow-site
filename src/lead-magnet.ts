@@ -249,6 +249,10 @@ function seedHostFromUrl(input: string): string | null {
 function appendStreamLine(text: string, isHeader = false): void {
   const stream = document.getElementById("lm-stream");
   if (!stream) return;
+  // Dedupe: skip if identical to the most-recent line (e.g. the synchronous
+  // seed and the server's primary_start event will often match).
+  const head = stream.firstElementChild as HTMLElement | null;
+  if (head && head.textContent === text) return;
   const li = document.createElement("li");
   li.className = "lm-stream__line" + (isHeader ? " lm-stream__line--header" : "");
   li.textContent = text;
@@ -256,11 +260,11 @@ function appendStreamLine(text: string, isHeader = false): void {
   stream.prepend(li);
   // Cap visible items so the modal doesn't grow without bound.
   const items = stream.querySelectorAll<HTMLLIElement>(".lm-stream__line");
-  if (items.length > 6) {
-    for (let i = 6; i < items.length; i++) items[i].classList.add("lm-stream__line--fading");
+  if (items.length > 5) {
+    for (let i = 5; i < items.length; i++) items[i].classList.add("lm-stream__line--fading");
   }
-  if (items.length > 10) {
-    for (let i = 10; i < items.length; i++) items[i].remove();
+  if (items.length > 8) {
+    for (let i = 8; i < items.length; i++) items[i].remove();
   }
 }
 
@@ -446,28 +450,78 @@ async function mockStream(payload: { url: string }): Promise<CompletePayload> {
   } catch {
     /* keep default */
   }
-  // Mirror the real backend's scrape-progress events.
-  await delay(300);
+  // Mirror the real backend: action (mono header) paired with a learning
+  // (italic serif observation) for each page read.
+  await delay(280);
   appendStreamLine(`reading ${domain}`, true);
-  await delay(500);
+  await delay(620);
+  appendStreamLine(`noted: home page · 1,420 words`);
+  await delay(220);
   appendStreamLine("reading /services", true);
-  await delay(400);
+  await delay(540);
+  appendStreamLine(`noted: programs and pricing`);
+  await delay(200);
   appendStreamLine("reading /about", true);
-  await delay(900);
+  await delay(560);
+  appendStreamLine(`noted: family-owned, fifteen seasons`);
+  await delay(260);
   appendStreamLine("read 3 pages · drafting", true);
-  await delay(500);
+  await delay(520);
   appendStreamLine("A focused operating company in a category where execution discipline still beats hype.");
-  await delay(800);
+  await delay(700);
   appendStreamLine("01 · What we see in your operation", true);
-  await delay(700);
+  await delay(640);
   appendStreamLine("What's foregrounded is the work itself — the offer is concrete and the proof points are operational.");
-  await delay(600);
+  await delay(560);
   appendStreamLine("02 · Where the leverage tends to live", true);
-  await delay(700);
+  await delay(640);
   appendStreamLine("In operations like this, leverage sits in the seams between teams.");
-  await delay(800);
+  await delay(700);
   appendStreamLine("03 · Where AI is shifting your numbers", true);
-  await delay(900);
+  await delay(700);
+
+  const sections: Section[] = [
+    {
+      index: 1,
+      title: "What we see in your operation",
+      body:
+        "What's foregrounded is the work itself — the offer is concrete and the proof points are operational. The voice is steady; you're not reaching for adjectives.\n\nWhat's notably absent is the usual marketing apparatus: no resource center, no gated whitepapers, no promotional banner. That choice tells us something about how the business is run.",
+    },
+    {
+      index: 2,
+      title: "Where the leverage tends to live",
+      body:
+        "In operations like this, leverage sits in two places. The first is the seam between sales and delivery. The second is the judgment-heavy repetitive work that a senior person redoes because the junior version isn't reliable enough.",
+    },
+    {
+      index: 3,
+      title: "Where AI is shifting your numbers",
+      body:
+        "Two shifts are real for businesses of this kind. On the cost side, the work currently being paid for at full price is being repriced fast. On the revenue side, the unit economics of acquisition bend where AI helps a small team punch above its weight.",
+    },
+    {
+      index: 4,
+      title: "Two questions we'd ask first",
+      body:
+        "Where in your operation does a senior person re-do the work of a junior person?\n\nWhich of your customers, if you could serve them twice as quickly, would buy more from you?",
+    },
+    {
+      index: 5,
+      title: "A note on what this can't see",
+      body:
+        "We read what's public. We didn't read your numbers. This memo is patterns, not your specifics. What Here Now does in two weeks is what we can only read in person.",
+    },
+  ];
+
+  // Apply the same teaser-shape the real backend applies: section 01
+  // unlocked, sections 02–05 trimmed to their first sentence and locked.
+  const teaserSections: Section[] = sections.map((s) => ({
+    index: s.index,
+    title: s.title,
+    body: s.index === 1 ? s.body : extractFirstSentence(s.body),
+    locked: s.index !== 1,
+  }));
+
   return {
     id: "mock-" + Math.random().toString(36).slice(2, 10),
     cover: {
@@ -475,37 +529,6 @@ async function mockStream(payload: { url: string }): Promise<CompletePayload> {
       date: new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }),
       domain,
     },
-    sections: [
-      {
-        index: 1,
-        title: "What we see in your operation",
-        body:
-          "What's foregrounded is the work itself — the offer is concrete and the proof points are operational. The voice is steady; you're not reaching for adjectives.\n\nWhat's notably absent is the usual marketing apparatus: no resource center, no gated whitepapers, no promotional banner. That choice tells us something about how the business is run.",
-      },
-      {
-        index: 2,
-        title: "Where the leverage tends to live",
-        body:
-          "In operations like this, leverage sits in two places. The first is the seam between sales and delivery. The second is the judgment-heavy repetitive work that a senior person redoes because the junior version isn't reliable enough.",
-      },
-      {
-        index: 3,
-        title: "Where AI is shifting your numbers",
-        body:
-          "Two shifts are real for businesses of this kind. On the cost side, the work currently being paid for at full price is being repriced fast. On the revenue side, the unit economics of acquisition bend where AI helps a small team punch above its weight.",
-      },
-      {
-        index: 4,
-        title: "Two questions we'd ask first",
-        body:
-          "Where in your operation does a senior person re-do the work of a junior person?\n\nWhich of your customers, if you could serve them twice as quickly, would buy more from you?",
-      },
-      {
-        index: 5,
-        title: "A note on what this can't see",
-        body:
-          "We read what's public. We didn't read your numbers. This memo is patterns, not your specifics. What Here Now does in two weeks is what we can only read in person.",
-      },
-    ],
+    sections: teaserSections,
   };
 }

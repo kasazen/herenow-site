@@ -1063,7 +1063,7 @@ body.lm-open {
   position: relative;
   margin: auto;
   width: min(46rem, calc(100vw - 2rem));
-  max-height: calc(100dvh - 2rem);
+  height: min(40rem, calc(100dvh - 2rem));
   background: var(--paper);
   border: 1px solid var(--rule);
   box-shadow: 0 30px 80px -20px rgba(20, 20, 26, 0.4);
@@ -1107,6 +1107,17 @@ body.lm-open {
 .lm__inner {
   padding: clamp(2.5rem, 5vw, 3.5rem) clamp(1.5rem, 4vw, 3rem);
   overflow: auto;
+  position: relative;
+}
+
+/* Each step crossfades in when it becomes visible. */
+.lm__inner > [data-lm-step]:not([hidden]) {
+  animation: lm-step-fade-in 360ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@keyframes lm-step-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ─── Modal: intake state ────────────────────────────────────── */
@@ -1116,6 +1127,8 @@ body.lm-open {
   gap: clamp(1.25rem, 2vw, 1.75rem);
   max-width: 32rem;
   margin: 0 auto;
+  min-height: 100%;
+  align-content: center;
 }
 
 .lm__eyebrow {
@@ -1251,6 +1264,8 @@ body.lm-open {
   padding: clamp(1.5rem, 4vw, 2.25rem) 0;
   max-width: 34rem;
   margin: 0 auto;
+  min-height: 100%;
+  align-content: center;
 }
 
 .lm-stream-header {
@@ -1510,6 +1525,8 @@ body.lm-open {
   padding: clamp(1.5rem, 3vw, 2.5rem) 0;
   text-align: left;
   justify-items: start;
+  min-height: 100%;
+  align-content: center;
 }
 
 .lm-sent__eyebrow {

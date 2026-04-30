@@ -103,8 +103,14 @@ async function handleInner(req: VercelRequest, res: VercelResponse): Promise<voi
       pages = await scrapeBusiness(urlInput, (p) => {
         if (p.type === "primary_start") {
           writeEvent(res, "progress", { text: `reading ${p.domain}` });
+        } else if (p.type === "primary_read") {
+          const learning = pageLearning("home page", p.title, p.description, p.words);
+          if (learning) writeEvent(res, "observation", { text: learning });
         } else if (p.type === "secondary_start") {
           writeEvent(res, "progress", { text: `reading ${p.pathname}` });
+        } else if (p.type === "secondary_read") {
+          const learning = pageLearning(p.pathname, p.title, "", p.words);
+          if (learning) writeEvent(res, "observation", { text: learning });
         } else if (p.type === "complete") {
           writeEvent(res, "progress", { text: `read ${p.pageCount} pages · drafting` });
         }
@@ -192,6 +198,24 @@ async function handleInner(req: VercelRequest, res: VercelResponse): Promise<voi
 function writeEvent(res: VercelResponse, event: string, data: unknown): void {
   const payload = JSON.stringify(data);
   res.write(`event: ${event}\ndata: ${payload}\n\n`);
+}
+
+// Compose a short "noted: …" learning line from page meta. Prefer a clean
+// title; fall back to the first chunk of the meta description; finally to
+// just the word count so the user always sees a paired learning per page.
+function pageLearning(
+  label: string,
+  title: string,
+  description: string,
+  words: number,
+): string | null {
+  const wc = words >= 1000 ? `${(words / 1000).toFixed(1)}k` : words ? `${words}` : "";
+  const cleanTitle = title?.replace(/\s+[|·\-—]\s+.*$/, "").trim().slice(0, 70);
+  const cleanDesc = description?.trim().slice(0, 80);
+  if (cleanTitle) return `noted: ${cleanTitle}${wc ? ` · ${wc} words` : ""}`;
+  if (cleanDesc) return `noted: ${cleanDesc}`;
+  if (wc) return `noted: ${label} · ${wc} words`;
+  return null;
 }
 
 function firstSentence(body: string): string {
