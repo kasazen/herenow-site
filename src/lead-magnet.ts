@@ -48,6 +48,24 @@ export function mountLeadMagnet(): void {
 
   document.getElementById("lm-intake-form")?.addEventListener("submit", onIntakeSubmit);
   document.getElementById("lm-gate-form")?.addEventListener("submit", onGateSubmit);
+  document.getElementById("lm-dialog-form")?.addEventListener("submit", onDialogSubmit);
+
+  // Mirror email between top gate and bottom dialog so the user only has
+  // to type it once if they've engaged with both.
+  const topEmail = document.getElementById("lm-email") as HTMLInputElement | null;
+  const bottomEmail = document.getElementById("lm-dialog-email") as HTMLInputElement | null;
+  if (topEmail && bottomEmail) {
+    topEmail.addEventListener("input", () => {
+      if (!bottomEmail.value || bottomEmail.dataset.fromTop === "1") {
+        bottomEmail.value = topEmail.value;
+        bottomEmail.dataset.fromTop = "1";
+      }
+    });
+    bottomEmail.addEventListener("input", () => {
+      bottomEmail.dataset.fromTop = "";
+      if (!topEmail.value) topEmail.value = bottomEmail.value;
+    });
+  }
 }
 
 // ── Modal show/hide ─────────────────────────────────────────────────────
@@ -477,7 +495,58 @@ async function onGateSubmit(ev: SubmitEvent): Promise<void> {
   }
 }
 
-async function callUnlock(payload: { id: string; email: string; firstName: string }): Promise<UnlockResponse> {
+async function onDialogSubmit(ev: SubmitEvent): Promise<void> {
+  ev.preventDefault();
+  const form = ev.currentTarget as HTMLFormElement;
+  hideError("lm-dialog-error");
+
+  const data = new FormData(form);
+  const email = (data.get("email") as string | null)?.trim() ?? "";
+  const note = (data.get("note") as string | null)?.trim() ?? "";
+
+  if (!isEmail(email)) {
+    showError("lm-dialog-error", "Add your email so we know where to write back.");
+    return;
+  }
+  if (!note) {
+    showError("lm-dialog-error", "Add a line or two so we know what to look at.");
+    return;
+  }
+  if (!memoId) {
+    showError("lm-dialog-error", "Something went wrong. Try again.");
+    return;
+  }
+
+  // Pull firstName from the top-gate field if the user filled it earlier;
+  // bottom dialog deliberately doesn't ask for it again.
+  const topName = (document.getElementById("lm-name") as HTMLInputElement | null)?.value.trim() ?? "";
+
+  setState("unlocking");
+
+  try {
+    const response = await callUnlock({ id: memoId, email, firstName: topName, note });
+    if (!response.ok) {
+      throw new Error(response.message ?? "We couldn't send that. Try again in a moment.");
+    }
+    const headline = document.getElementById("lm-sent-headline");
+    if (headline) {
+      headline.textContent = `Your read is on its way to ${response.sentTo ?? email} — and we got your note.`;
+    }
+    setState("sent");
+    track("lm_unlocked_with_note");
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "We had trouble sending that. Try again.";
+    setState("teaser");
+    showError("lm-dialog-error", message);
+  }
+}
+
+async function callUnlock(payload: {
+  id: string;
+  email: string;
+  firstName: string;
+  note?: string;
+}): Promise<UnlockResponse> {
   if (!API_URL) {
     if (IS_DEV) {
       await delay(900);
@@ -539,66 +608,68 @@ async function mockStream(payload: { url: string }): Promise<CompletePayload> {
   } catch {
     /* keep default */
   }
-  // Mirror the real backend's flow: action stays on the header; phase
-  // indicator updates as we move through pages; learnings rotate through
-  // the italic-serif stage one at a time.
+  // The website is the entry point; the read is about the BUSINESS.
+  // Phase 1 learnings: brief page-meta noticings as we scrape.
+  // Phase 2 learnings: pivot to operational thinking — the reader's
+  // attention shifts from "what's on the site" to "what kind of operation
+  // is this and where does the margin live."
   await delay(260);
   setStageAction(`Reading ${domain}`);
   setStagePhase("1 of 4 pages");
   await delay(900);
-  enqueueLearning("1,420 words on the home page");
+  enqueueLearning("residential lawn care, four trucks, New England seasonal swing");
   await delay(700);
   setStagePhase("2 of 4 pages");
   await delay(900);
-  enqueueLearning("noted: programs and pricing");
+  enqueueLearning("programs and pricing — looks like bundled service plans, not á la carte");
   await delay(700);
   setStagePhase("3 of 4 pages");
   await delay(900);
-  enqueueLearning("family-owned, fifteen seasons");
+  enqueueLearning("family-owned, fifteen seasons — that's a lot of customer history nobody's mining yet");
   await delay(700);
   setStagePhase("drafting the read");
   await delay(800);
-  enqueueLearning("A focused operating company in a category where execution discipline still beats hype.");
-  await delay(1100);
-  setStagePhase("writing 01 · What we see in your operation");
+  enqueueLearning("A regional residential lawn-care operator, four trucks, season-driven cash. The growth ceiling is the dispatcher's working memory — and that's repriceable now.");
+  await delay(1300);
+  setStagePhase("writing 01 · What we'd bet on");
   await delay(900);
-  enqueueLearning("What's foregrounded is the work itself — the offer is concrete and the proof points are operational.");
+  enqueueLearning("Your margin lives in route density, not customer count.");
   await delay(900);
   setStagePhase("writing 02 · Where the leverage tends to live");
   await delay(800);
-  enqueueLearning("In operations like this, leverage sits in the seams between teams.");
+  enqueueLearning("Watch the second-touch follow-up — it's where most of this category leaves money on the table.");
   await delay(700);
 
   const sections: Section[] = [
     {
       index: 1,
-      title: "What we see in your operation",
+      title: "What we'd bet on",
       body:
-        "What's foregrounded is the work itself — the offer is concrete and the proof points are operational. The voice is steady; you're not reaching for adjectives.\n\nWhat's notably absent is the usual marketing apparatus: no resource center, no gated whitepapers, no promotional banner. That choice tells us something about how the business is run.",
+        "Your margin lives in route density, not customer count. The crews running tight afternoon routes — three jobs in a six-block radius — are the ones hitting the daily number. The ones chasing a stray fourth job across town eat the gas, the windshield time, and the missed start at job five. The pattern shows up at every multi-truck residential operator we've looked inside.\n\nWe'd bet two of your crews are running 70% denser routes than your other crews, and that nobody on staff can tell you which two without picking up the phone and asking the dispatcher. That asymmetry is where the next twelve points of margin live.",
     },
     {
       index: 2,
       title: "Where the leverage tends to live",
       body:
-        "In operations like this, leverage sits in two places. The first is the seam between sales and delivery. The second is the judgment-heavy repetitive work that a senior person redoes because the junior version isn't reliable enough.",
+        "Watch the second-touch follow-up. The lead calls in, your CSR prices the property, the homeowner says \"send me something in writing,\" and the proposal goes out — then nothing happens for nine days because the CSR is on the next call and Bob is in the field. The lead either books a competitor or forgets about the work. We've seen one regional operator turn a 19% close rate into 34% by automating that nine-day window with a sequence the owner could write in an afternoon.\n\nThe other place is the gap between the salesperson taking the work and the install crew showing up. The customer is most willing to add the application, the aerate, the late-season fert in that window — and almost nobody is talking to them in it.",
     },
     {
       index: 3,
       title: "Where AI is shifting your numbers",
       body:
-        "Two shifts are real for businesses of this kind. On the cost side, the work currently being paid for at full price is being repriced fast. On the revenue side, the unit economics of acquisition bend where AI helps a small team punch above its weight.",
+        "The $24/hr CSR seat that prices a property and quotes a job is being repriced to about $0.40 per conversation by operators who set this up well — and the conversation is happening at 9pm on a Tuesday when the homeowner is actually thinking about their yard. That's not a labor-cost story. That's a top-of-funnel story: you stop losing the leads who don't want to call you back tomorrow.\n\nThe proposal-writing that takes your sales lead three hours per commercial bid is being done in twelve minutes by people doing it well — and the twelve-minute version is sharper, because the model is pulling from your last forty bids instead of the bidder's memory of the last four.",
     },
     {
       index: 4,
       title: "Two questions we'd ask first",
       body:
-        "Where in your operation does a senior person re-do the work of a junior person?\n\nWhich of your customers, if you could serve them twice as quickly, would buy more from you?",
+        "If your top three commercial accounts all canceled in the same quarter, how long does the company survive on what's left? Most lawn-care operators we talk to discover the answer is \"about ninety days,\" and they hadn't run the math.\n\nWhich of your services would you stop selling tomorrow if you could? The answer usually points at the lowest-margin, most-emotional offering in the book — and the reason it's still on the book is almost always one specific customer.",
     },
     {
       index: 5,
       title: "A note on what this can't see",
       body:
-        "We read what's public. We didn't read your numbers. This memo is patterns, not your specifics. What Here Now does in two weeks is what we can only read in person.",
+        "We didn't read your contracts. We didn't read the customer who keeps you up at night. We didn't read the handshake with the supplier who keeps your fert priced under the spot market, the one crew chief who really runs the operation, or the conversation you had with your accountant in March. The numbers we'd care about — gross margin by route, customer concentration, the seasonal swing — aren't on the site, because they shouldn't be.\n\nWhat Here Now sees in two weeks that this memo can't: all of it.",
     },
   ];
 
@@ -614,7 +685,7 @@ async function mockStream(payload: { url: string }): Promise<CompletePayload> {
   return {
     id: "mock-" + Math.random().toString(36).slice(2, 10),
     cover: {
-      echo: "A focused operating company in a category where execution discipline still beats hype.",
+      echo: "A regional residential lawn-care operator, four trucks, season-driven cash. The growth ceiling is the dispatcher's working memory — and that's repriceable now.",
       date: new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }),
       domain,
     },
