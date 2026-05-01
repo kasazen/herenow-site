@@ -6,11 +6,13 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:og-assets": "node scripts/og-assets/render.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.19.17",
     "@vercel/node": "^5.7.13",
+    "tsx": "^4.21.0",
     "typescript": "^5.6.3",
     "vite": "^6.0.3"
   }

@@ -4,18 +4,47 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Here Now Labs</title>
-  <meta name="description" content="Action Plan at the Speed of AI. An advisory firm for operators of established, profitable companies — two weeks inside the operation, every recommendation tied to a dollar figure." />
-  <meta name="theme-color" content="#faf9f5" />
-  <meta property="og:title" content="Here Now Labs — Action Plan at the Speed of AI" />
-  <meta property="og:description" content="Action Plan at the Speed of AI. An advisory firm for operators of established, profitable companies — two weeks inside the operation, every recommendation tied to a dollar figure." />
+  <meta name="description" content="An AI-accelerated advisory firm. Two weeks inside the operation. Every recommendation tied to a dollar figure — and the systems we'd build next." />
+  <meta name="theme-color" content="#faf9f5" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#14141a" media="(prefers-color-scheme: dark)" />
+  <meta property="og:title" content="Here Now Labs — Two weeks inside the operation." />
+  <meta property="og:description" content="An AI-accelerated advisory firm. Two weeks inside the operation. Every recommendation tied to a dollar figure — and the systems we'd build next." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://herenowlabs.xyz" />
+  <meta property="og:image" content="https://herenowlabs.xyz/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Here Now Labs — a short read on your business." />
+  <meta property="og:site_name" content="Here Now Labs" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Here Now Labs — A short read on your business." />
+  <meta name="twitter:description" content="Two weeks inside the operation. Every recommendation tied to a dollar figure — and the systems we'd build next." />
+  <meta name="twitter:image" content="https://herenowlabs.xyz/og-image.png" />
+  <meta name="twitter:image:alt" content="Here Now Labs — a short read on your business." />
   <link rel="canonical" href="https://herenowlabs.xyz/" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23faf9f5'/%3E%3Crect x='6' y='6' width='5' height='5' fill='%2315803d'/%3E%3Crect x='13' y='6' width='5' height='5' fill='%2315803d'/%3E%3Crect x='20' y='6' width='5' height='5' fill='%2315803d'/%3E%3Crect x='6' y='13' width='5' height='5' fill='%2315803d'/%3E%3Crect x='13' y='13' width='5' height='5' fill='%2315803d'/%3E%3Crect x='20' y='13' width='5' height='5' fill='%2315803d'/%3E%3C/svg%3E" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Fraunces:opsz,wght@9..144,300..600&family=Geist+Mono:wght@400;500&display=swap" />
   <script type="module" src="/src/main.ts"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Here Now Labs",
+    "url": "https://herenowlabs.xyz",
+    "logo": "https://herenowlabs.xyz/apple-touch-icon.png",
+    "image": "https://herenowlabs.xyz/og-image.png",
+    "description": "AI-accelerated advisory for operators of established, profitable companies.",
+    "email": "team@herenowlabs.xyz",
+    "areaServed": "US",
+    "priceRange": "$$$$"
+  }
+  </script>
 </head>
 <body>
   <header class="topbar">
@@ -46,7 +75,7 @@
         Curious what we'd see?
       </h2>
       <p class="invite__body">
-        Tell us your URL. We'll read about your business and send back a short memo on where the leverage tends to live, where AI is shifting your numbers, and the two questions we'd ask first.
+        Tell us your URL. We'll send back a short memo — where the leverage tends to live, where AI is shifting your numbers, and the two questions we'd ask first. Same read we'd do inside, just from the outside.
       </p>
       <p class="invite__cta-row">
         <button type="button" class="invite__cta plausible-event-name=lm_open_invite" data-lm-open>
@@ -54,7 +83,7 @@
           <span class="invite__cta-arrow" aria-hidden="true">→</span>
         </button>
       </p>
-      <p class="invite__note">Takes about ten seconds. We email the full memo. No list, no follow-up.</p>
+      <p class="invite__note">Form takes ten seconds. We do the read, then email the memo.</p>
     </section>
 
     <section class="premise" aria-label="Premise">
@@ -114,7 +143,7 @@
       </div>
       <div class="block__body">
         <p>
-          We spend two weeks inside the operation. You leave with three or four high-value moves that hit the bottom line.
+          We spend two weeks inside the operation — contracts, vendors, processes. You leave with three or four high-value moves that hit the bottom line.
         </p>
       </div>
     </section>
@@ -245,7 +274,7 @@
               <textarea id="lm-prompting" name="prompting" rows="3" maxlength="600" placeholder="What's keeping you up at night. Where you're stuck. Who's on the team. Anything we wouldn't find on the site."></textarea>
             </div>
 
-            <p class="lm__privacy">We use what you tell us only to write your memo. We don't share it.</p>
+            <p class="lm__privacy">We use this only to write your read. We don't share it.</p>
 
             <p class="lm-form__error" id="lm-intake-error" hidden></p>
 
@@ -277,7 +306,7 @@
 
           <aside data-lm-step="gate" class="lm-gate">
             <div class="lm-gate-card">
-              <p class="lm-gate-label">The full read is in your inbox</p>
+              <p class="lm-gate-label">Your full read goes to your inbox.</p>
               <p class="lm-gate-body">Section 01 is below. Sections 02&ndash;05 live in your inbox.</p>
               <form class="lm-gate-form" id="lm-gate-form" novalidate>
                 <div class="lm-field">

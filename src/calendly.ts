@@ -28,23 +28,42 @@ export function mountCalendly(container: HTMLElement, fallback: HTMLElement | nu
 
   container.setAttribute("data-url", themedUrl(raw));
 
-  const css = document.createElement("link");
-  css.rel = "stylesheet";
-  css.href = CALENDLY_CSS;
-  document.head.appendChild(css);
+  const load = (): void => {
+    const css = document.createElement("link");
+    css.rel = "stylesheet";
+    css.href = CALENDLY_CSS;
+    document.head.appendChild(css);
 
-  const script = document.createElement("script");
-  script.src = CALENDLY_SCRIPT;
-  script.async = true;
-  document.body.appendChild(script);
+    const script = document.createElement("script");
+    script.src = CALENDLY_SCRIPT;
+    script.async = true;
+    document.body.appendChild(script);
 
-  // Calendly emits postMessage events for lifecycle. Track booking confirmation
-  // so we can measure the hypothesis end-to-end.
-  window.addEventListener("message", (e) => {
-    if (typeof e.data !== "object" || e.data == null) return;
-    const ev = (e.data as { event?: string }).event;
-    if (typeof ev !== "string" || !ev.startsWith("calendly.")) return;
-    if (ev === "calendly.event_scheduled") track("calendly_booked");
-    else if (ev === "calendly.event_type_viewed") track("calendly_viewed");
-  });
+    // Calendly emits postMessage events for lifecycle. Track booking confirmation
+    // so we can measure the hypothesis end-to-end.
+    window.addEventListener("message", (e) => {
+      if (typeof e.data !== "object" || e.data == null) return;
+      const ev = (e.data as { event?: string }).event;
+      if (typeof ev !== "string" || !ev.startsWith("calendly.")) return;
+      if (ev === "calendly.event_scheduled") track("calendly_booked");
+      else if (ev === "calendly.event_type_viewed") track("calendly_viewed");
+    });
+  };
+
+  // Defer the Calendly bundle until the booking section is near the viewport.
+  // Saves ~40 KB and two third-party requests for users who never scroll to #book.
+  if ("IntersectionObserver" in window) {
+    const obs = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          obs.disconnect();
+          load();
+        }
+      },
+      { rootMargin: "400px 0px" },
+    );
+    obs.observe(container);
+  } else {
+    load();
+  }
 }
