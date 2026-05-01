@@ -380,95 +380,76 @@ main {
   font-weight: 500;
 }
 
-/* ─── Audit animation ────────────────────────────────────────── */
+/* ─── Workshop animation ─────────────────────────────────────── */
 
-.audit__scan {
-  stroke: var(--rule-strong);
-  stroke-width: 1;
-}
-
-.audit__ledger {
-  fill: none;
-  stroke: var(--rule);
-  stroke-width: 1;
-}
-
-.audit__count {
-  fill: var(--fg-faint);
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  opacity: 0;
-  animation: audit-count 9s linear infinite;
-}
-
-.audit__count--end {
-  animation-delay: 0.2s;
-}
-
-.audit__doc-bg {
+.ws__seat {
   fill: var(--paper);
   stroke: var(--rule-strong);
   stroke-width: 1;
 }
 
-.audit__doc-line {
-  stroke: var(--fg-faint);
+.ws__line {
+  stroke: var(--rule-strong);
   stroke-width: 1;
-  opacity: 0.5;
-}
-
-.audit__doc {
+  stroke-dasharray: 240;
+  stroke-dashoffset: 240;
   opacity: 0;
-  animation: audit-doc 9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: ws-stroke 8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite;
 }
 
-.audit__doc--1 { animation-delay: 0s; }
-.audit__doc--2 { animation-delay: 1s; }
-.audit__doc--3 { animation-delay: 2s; }
-.audit__doc--4 { animation-delay: 3s; }
+.ws__line--1 { animation-delay: 0.4s; }
+.ws__line--2 { animation-delay: 1.0s; }
+.ws__line--3 { animation-delay: 1.6s; }
+.ws__line--4 { animation-delay: 2.2s; }
 
-.audit__token {
+.ws__find {
+  fill: var(--accent);
   opacity: 0;
-  animation: audit-token 9s linear infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: ws-pop 8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite;
 }
 
-.audit__token--g { fill: var(--accent); }
-.audit__token--r { fill: var(--red); }
+.ws__find--1 { animation-delay: 3.0s; }
+.ws__find--2 { animation-delay: 3.6s; }
+.ws__find--3 { animation-delay: 4.2s; }
 
-.audit__token--1 { animation-delay: 1.4s; }
-.audit__token--2 { animation-delay: 2.4s; }
-.audit__token--3 { animation-delay: 3.4s; }
-.audit__token--4 { animation-delay: 4.4s; }
-.audit__token--5 { animation-delay: 4.8s; }
-.audit__token--6 { animation-delay: 5.2s; }
-.audit__token--7 { animation-delay: 5.6s; }
-.audit__token--8 { animation-delay: 6.0s; }
-
-@keyframes audit-doc {
-  0%   { opacity: 0; transform: translateY(0); }
-  3%   { opacity: 1; transform: translateY(0); }
-  35%  { opacity: 1; transform: translateY(228px); }
-  40%  { opacity: 0; transform: translateY(232px); }
-  100% { opacity: 0; transform: translateY(232px); }
+.ws__consol {
+  fill: var(--accent);
+  opacity: 0;
+  transform-origin: left center;
+  transform-box: fill-box;
+  animation: ws-consol 8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite;
+  animation-delay: 5.5s;
 }
 
-@keyframes audit-token {
+@keyframes ws-stroke {
+  0%   { stroke-dashoffset: 240; opacity: 0; }
+  3%   { stroke-dashoffset: 240; opacity: 0; }
+  10%  { opacity: 0.55; }
+  16%  { stroke-dashoffset: 0; opacity: 0.55; }
+  82%  { stroke-dashoffset: 0; opacity: 0.55; }
+  92%  { stroke-dashoffset: 0; opacity: 0; }
+  100% { stroke-dashoffset: 240; opacity: 0; }
+}
+
+@keyframes ws-pop {
   0%   { opacity: 0; transform: scale(0.4); }
-  4%   { opacity: 1; transform: scale(1.1); }
-  8%   { transform: scale(1); }
-  85%  { opacity: 1; transform: scale(1); }
-  93%  { opacity: 0; }
+  3%   { opacity: 0; transform: scale(0.4); }
+  8%   { opacity: 1; transform: scale(1.15); }
+  14%  { opacity: 1; transform: scale(1); }
+  82%  { opacity: 1; transform: scale(1); }
+  92%  { opacity: 0; }
   100% { opacity: 0; }
 }
 
-@keyframes audit-count {
-  0%   { opacity: 0; }
-  72%  { opacity: 0; }
-  78%  { opacity: 1; }
-  90%  { opacity: 1; }
-  96%  { opacity: 0; }
+@keyframes ws-consol {
+  0%   { opacity: 0; transform: scaleX(0.2); }
+  3%   { opacity: 0; transform: scaleX(0.2); }
+  8%   { opacity: 1; transform: scaleX(1.05); }
+  14%  { opacity: 1; transform: scaleX(1); }
+  82%  { opacity: 1; transform: scaleX(1); }
+  92%  { opacity: 0; }
   100% { opacity: 0; }
 }
 
@@ -572,142 +553,120 @@ main {
   100% { stroke-dashoffset: 240; opacity: 0; }
 }
 
-/* ─── Wedge animation ────────────────────────────────────────── */
+/* ─── Implementation animation ───────────────────────────────── */
 
-.wedge__edge {
-  stroke: var(--rule-strong);
-  stroke-width: 1;
-  stroke-dasharray: 200;
-  stroke-dashoffset: 200;
-  animation: wedge-stroke 8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite;
-}
-
-.wedge__edge--1 { animation-delay: 0.6s; }
-.wedge__edge--2 { animation-delay: 0.9s; }
-.wedge__edge--3 { animation-delay: 1.2s; }
-.wedge__edge--4 { animation-delay: 2.0s; }
-.wedge__edge--5 { animation-delay: 2.3s; }
-.wedge__edge--6 { animation-delay: 2.6s; }
-.wedge__edge--7 { animation-delay: 2.9s; }
-.wedge__edge--8 { animation-delay: 3.2s; }
-
-.wedge__node {
-  opacity: 0;
-  transform-origin: center;
-  transform-box: fill-box;
-}
-
-.wedge__node--source {
-  fill: var(--accent);
-  opacity: 1;
-  animation: wedge-pulse 8s ease-in-out infinite;
-}
-
-.wedge__node--mid {
-  fill: var(--paper);
-  stroke: var(--accent);
-  stroke-width: 1.5;
-  animation: wedge-pop 8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite;
-}
-
-.wedge__node--m1 { animation-delay: 0.85s; }
-.wedge__node--m2 { animation-delay: 1.15s; }
-.wedge__node--m3 { animation-delay: 1.45s; }
-
-.wedge__node--leaf {
-  fill: var(--paper);
-  stroke: var(--fg-faint);
-  stroke-width: 1;
-  animation: wedge-pop 8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite;
-}
-
-.wedge__node--l1 { animation-delay: 2.25s; }
-.wedge__node--l2 { animation-delay: 2.55s; }
-.wedge__node--l3 { animation-delay: 2.85s; }
-.wedge__node--l4 { animation-delay: 3.15s; }
-.wedge__node--l5 { animation-delay: 3.45s; }
-
-.wedge__label {
-  fill: var(--fg-muted);
+.impl__bar-label,
+.impl__menu-label {
+  fill: var(--fg-faint);
   font-family: var(--font-mono);
   font-size: 9px;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.impl__bar-track {
+  fill: none;
+  stroke: var(--rule-strong);
+  stroke-width: 1;
+}
+
+.impl__bar-fill {
+  fill: var(--accent);
+  transform-origin: left center;
+  transform-box: fill-box;
+  transform: scaleX(0);
+  animation: impl-bar-grow 9s linear infinite;
+}
+
+.impl__chip {
+  fill: transparent;
+  stroke: var(--rule-strong);
+  stroke-width: 1;
+}
+
+.impl__chip-fill {
+  fill: var(--accent);
+  transform-origin: left center;
+  transform-box: fill-box;
+  transform: scaleX(0);
   opacity: 0;
-  dominant-baseline: middle;
-  animation: wedge-fade 8s ease-out infinite;
+  animation: impl-fill 9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
-.wedge__label--source {
+.impl__row--1 .impl__chip-fill { animation-delay: 1.0s; }
+.impl__row--2 .impl__chip-fill { animation-delay: 2.5s; }
+.impl__row--3 .impl__chip-fill { animation-delay: 4.0s; }
+.impl__row--4 .impl__chip-fill { animation-delay: 5.5s; }
+.impl__row--5 .impl__chip-fill { animation-delay: 7.0s; }
+
+.impl__chip-label {
   fill: var(--fg);
+  font-family: var(--font-mono);
   font-size: 10px;
-  text-anchor: middle;
-  dominant-baseline: hanging;
-  animation: wedge-fade 8s ease-out infinite;
-  animation-delay: 0.2s;
+  letter-spacing: 0.04em;
+  opacity: 0.8;
+  animation: impl-label-fade 9s ease-in-out infinite;
 }
 
-.wedge__label--m1 { animation-delay: 1.0s; }
-.wedge__label--m2 { animation-delay: 1.3s; }
-.wedge__label--m3 { animation-delay: 1.6s; }
-.wedge__label--l1 { animation-delay: 2.4s; }
-.wedge__label--l2 { animation-delay: 2.7s; }
-.wedge__label--l3 { animation-delay: 3.0s; }
-.wedge__label--l4 { animation-delay: 3.3s; }
-.wedge__label--l5 { animation-delay: 3.6s; }
+.impl__row--1 .impl__chip-label { animation-delay: 1.0s; }
+.impl__row--2 .impl__chip-label { animation-delay: 2.5s; }
+.impl__row--3 .impl__chip-label { animation-delay: 4.0s; }
+.impl__row--4 .impl__chip-label { animation-delay: 5.5s; }
+.impl__row--5 .impl__chip-label { animation-delay: 7.0s; }
 
-@keyframes wedge-stroke {
-  0%   { stroke-dashoffset: 200; opacity: 0.85; }
-  3%   { stroke-dashoffset: 200; opacity: 0.85; }
-  16%  { stroke-dashoffset: 0; opacity: 0.85; }
-  82%  { stroke-dashoffset: 0; opacity: 0.85; }
-  92%  { stroke-dashoffset: 0; opacity: 0; }
-  100% { stroke-dashoffset: 200; opacity: 0; }
+@keyframes impl-fill {
+  0%   { transform: scaleX(0); opacity: 0; }
+  3%   { transform: scaleX(0); opacity: 0; }
+  6%   { transform: scaleX(0.05); opacity: 1; }
+  10%  { transform: scaleX(1); opacity: 1; }
+  82%  { transform: scaleX(1); opacity: 1; }
+  92%  { transform: scaleX(1); opacity: 0; }
+  100% { transform: scaleX(0); opacity: 0; }
 }
 
-@keyframes wedge-pop {
-  0%   { opacity: 0; transform: scale(0.4); }
-  3%   { opacity: 0; transform: scale(0.4); }
-  10%  { opacity: 1; transform: scale(1.2); }
-  16%  { opacity: 1; transform: scale(1); }
-  82%  { opacity: 1; transform: scale(1); }
+@keyframes impl-label-fade {
+  0%   { opacity: 0.8; }
+  6%   { opacity: 0.8; }
+  10%  { opacity: 0; }
+  82%  { opacity: 0; }
   92%  { opacity: 0; }
-  100% { opacity: 0; }
+  100% { opacity: 0.8; }
 }
 
-@keyframes wedge-pulse {
-  0%, 100% { transform: scale(1); }
-  50%      { transform: scale(1.1); }
-}
-
-@keyframes wedge-fade {
-  0%   { opacity: 0; }
-  3%   { opacity: 0; }
-  14%  { opacity: 0.85; }
-  82%  { opacity: 0.85; }
-  92%  { opacity: 0; }
-  100% { opacity: 0; }
+@keyframes impl-bar-grow {
+  0%   { transform: scaleX(0); opacity: 1; }
+  10%  { transform: scaleX(0); opacity: 1; }
+  20%  { transform: scaleX(0.2); }
+  37%  { transform: scaleX(0.4); }
+  53%  { transform: scaleX(0.6); }
+  70%  { transform: scaleX(0.8); }
+  82%  { transform: scaleX(1); opacity: 1; }
+  92%  { transform: scaleX(1); opacity: 0; }
+  100% { transform: scaleX(0); opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .audit__doc,
-  .audit__token,
-  .audit__count,
+  .ws__line,
+  .ws__find,
+  .ws__consol,
   .memo__mark,
   .memo__meta,
   .memo__title,
   .memo__field,
   .memo__divider,
   .memo__toc,
-  .wedge__edge,
-  .wedge__node,
-  .wedge__label {
+  .impl__chip-fill,
+  .impl__chip-label,
+  .impl__bar-fill {
     animation: none;
     opacity: 1;
   }
-  .audit__doc { display: none; }
+  .ws__line { stroke-dashoffset: 0; }
+  .ws__find { transform: scale(1); }
+  .ws__consol { transform: scaleX(1); }
   .memo__divider { stroke-dashoffset: 0; }
-  .wedge__edge { stroke-dashoffset: 0; }
-  .wedge__node { transform: scale(1); }
+  .impl__chip-fill { transform: scaleX(1); }
+  .impl__bar-fill { transform: scaleX(1); }
 }
 
 /* ─── Block CTA (reused inside the modal's post-memo footer) ─── */

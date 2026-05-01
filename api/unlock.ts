@@ -99,7 +99,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   // so a human can pick up the conversation. Fire-and-forget — failure here
   // shouldn't block the user's success state.
   if (note) {
-    sendTeamNote({ from: email, firstName, note, domain: stored.intake.domain }).catch((err) => {
+    sendTeamNote({
+      from: email,
+      firstName,
+      note,
+      domain: stored.intake.domain,
+      businessName: stored.memo.business_name ?? "",
+    }).catch((err) => {
       console.error("team_note_send_failed", (err as Error)?.message?.slice(0, 200));
     });
   }
@@ -112,15 +118,17 @@ async function sendTeamNote(input: {
   firstName: string;
   note: string;
   domain: string;
+  businessName: string;
 }): Promise<void> {
   const resendKey = process.env.RESEND_API_KEY;
   const fromAddr = process.env.EMAIL_FROM ?? "Here Now Labs <team@herenowlabs.xyz>";
   const teamAddr = process.env.TEAM_NOTE_TO ?? "team@herenowlabs.xyz";
   if (!resendKey) return;
 
-  const subject = `First Read note · ${input.domain}`;
+  const subject = `First Read note · ${input.businessName || input.domain}`;
   const lines = [
     `From: ${input.from}${input.firstName ? ` (${input.firstName})` : ""}`,
+    `Business: ${input.businessName || "(unknown)"}`,
     `Domain: ${input.domain}`,
     "",
     "Note:",

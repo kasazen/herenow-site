@@ -233,6 +233,10 @@ async function streamGenerate(payload: { url: string; prompting: string }): Prom
 
       if (event === "observation" && data.text) {
         enqueueLearning(data.text);
+      } else if (event === "business_name" && data.text) {
+        // The model has named the business. Swap the action headline so
+        // the modal shows the company by name instead of the domain.
+        setStageAction(`Reading ${data.text}`);
       } else if (event === "progress" && data.text) {
         applyProgress(data.text);
       } else if (event === "section_start" && typeof data.index === "number" && data.title) {
@@ -262,8 +266,8 @@ async function streamGenerate(payload: { url: string; prompting: string }): Prom
 // queue. The current learning displays for at least MIN_HOLD_MS before the
 // next one crossfades in. If the queue is empty, the last learning holds.
 
-const MIN_HOLD_MS = 1600;
-const FAST_HOLD_MS = 1200;
+const MIN_HOLD_MS = 1200;
+const FAST_HOLD_MS = 800;
 
 const learningQueue: string[] = [];
 let learningTimer: number | null = null;
@@ -672,7 +676,7 @@ async function mockStream(payload: { url: string }): Promise<CompletePayload> {
       index: 5,
       title: "A note on what this can't see",
       body:
-        "We didn't read your contracts. We didn't read the customer who keeps you up at night. We didn't read the handshake with the vendor who's quietly doing more than the contract says, the one person on the team who really runs the operation, or the conversation you had with your accountant last quarter. The numbers we'd care about — gross margin by line, customer concentration, the real seasonality — aren't on the site, because they shouldn't be.\n\nWhat Here Now sees in two weeks that this memo can't: all of it.",
+        "We didn't read your contracts. We didn't read the customer who keeps you up at night. We didn't read the handshake with the vendor who's quietly doing more than the contract says, the one person on the team who really runs the operation, or the conversation you had with your accountant last quarter. The numbers we'd care about — gross margin by line, customer concentration, the real seasonality — aren't on the site, because they shouldn't be.\n\nWhat a workshop day inside surfaces that this memo can't: all of it.",
     },
   ];
 

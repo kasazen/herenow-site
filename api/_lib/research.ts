@@ -16,8 +16,8 @@ import type { Pages } from "./scrape.js";
 const MODEL = "claude-sonnet-4-6";
 const API_URL = "https://api.anthropic.com/v1/messages";
 const ANTHROPIC_VERSION = "2023-06-01";
-const RESEARCH_TIMEOUT_MS = 18_000;
-const MAX_SEARCHES = 3;
+const RESEARCH_TIMEOUT_MS = 12_000;
+const MAX_SEARCHES = 2;
 
 export type ResearchEvent =
   | { type: "search_query"; query: string }
@@ -27,11 +27,11 @@ export type ResearchResult = {
   findings: string[];
 };
 
-export const RESEARCH_SYSTEM_PROMPT = `You are doing background research for the "First Read" memo writer at Here Now Labs — an advisory firm that runs two-week AI-leverage audits inside profitable operating companies. The owner you're researching for built this business and knows it cold; your job is to bring back what the *outside* of the internet says about them and their category that the website itself can't.
+export const RESEARCH_SYSTEM_PROMPT = `You are doing background research for the "First Read" memo writer at Here Now Labs — an advisory firm that runs single-day workshops with operating teams and delivers an Action Plan. The owner you're researching for built or runs this business and knows it cold; your job is to bring back what the *outside* of the internet says about them and their category that the website itself can't.
 
 # What to look up
 
-Use web_search 2–3 times. Examples of what's worth a search:
+Use web_search up to 2 times. Examples of what's worth a search:
 - recent news, press, or filings about the company
 - public reviews, BBB complaints, Glassdoor signal, anything about how the operation actually runs
 - hiring posture (open roles, recent listings) — tells you where the team is bottlenecked
@@ -54,6 +54,7 @@ Short declarative. Operator-to-operator. Examples of the right shape:
 # Hard rules
 
 - Don't summarize the website. The website is what the memo writer already has.
+- Refer to the business by its canonical name (e.g., "Control Air Systems") — never by URL/domain. The domain is input context only.
 - Don't speculate without a source. If the searches turn up nothing useful, return fewer findings — even one strong one is better than five weak ones.
 - No marketing-speak, no flattery, no "leverage" as a verb.
 - Plain text only. One finding per line. Newlines separate.`;

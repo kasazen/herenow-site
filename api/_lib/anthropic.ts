@@ -11,6 +11,7 @@ export type MemoSection = {
 };
 
 export type MemoResult = {
+  business_name: string;
   cover_echo: string;
   sections: MemoSection[];
 };
@@ -18,6 +19,7 @@ export type MemoResult = {
 export type StreamEvent =
   | { type: "observation"; text: string }
   | { type: "section_start"; index: number; title: string }
+  | { type: "business_name"; text: string }
   | { type: "warning"; message: string };
 
 const MODEL = "claude-sonnet-4-6";
@@ -120,7 +122,7 @@ function baseRequestBody(
 ) {
   return {
     model: MODEL,
-    max_tokens: 3000,
+    max_tokens: 2500,
     stream,
     system: [{ type: "text", text: SYSTEM_PROMPT, cache_control: { type: "ephemeral" } }],
     tools: [MEMO_TOOL],
@@ -141,6 +143,11 @@ function validateMemo(input: unknown): MemoResult {
   const m = input as MemoResult;
   if (!m?.cover_echo || !Array.isArray(m.sections) || m.sections.length !== 5) {
     throw new Error("anthropic_bad_shape");
+  }
+  if (typeof m.business_name !== "string" || !m.business_name.trim()) {
+    // Soft fallback so a missing field doesn't abort the run; render layers
+    // already handle empty business_name by deriving from the domain.
+    m.business_name = "";
   }
   m.sections.sort((a, b) => a.index - b.index);
   return m;
@@ -164,6 +171,7 @@ type AnthropicStreamEvent =
 // be a strict JSON parser — uses simple position-based pattern matching.
 
 type WatcherState = {
+  emittedBusinessName: boolean;
   emittedCover: boolean;
   emittedTitles: Set<number>;
   emittedFirstSentence: Set<number>;
@@ -171,12 +179,20 @@ type WatcherState = {
 
 function createObservationWatcher(onEvent: (e: StreamEvent) => void) {
   const state: WatcherState = {
+    emittedBusinessName: false,
     emittedCover: false,
     emittedTitles: new Set(),
     emittedFirstSentence: new Set(),
   };
 
   function scan(buf: string): void {
+    if (!state.emittedBusinessName) {
+      const name = extractStringValue(buf, "business_name");
+      if (name !== null && name.trim()) {
+        state.emittedBusinessName = true;
+        onEvent({ type: "business_name", text: name.trim() });
+      }
+    }
     if (!state.emittedCover) {
       const cover = extractStringValue(buf, "cover_echo");
       if (cover !== null) {
