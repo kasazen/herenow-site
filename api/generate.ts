@@ -187,10 +187,12 @@ async function handleInner(req: VercelRequest, res: VercelResponse): Promise<voi
         emit(e.type, e);
       });
     } catch (err) {
-      console.error("generate_failed", err);
+      const detail = (err as Error)?.message?.slice(0, 300) ?? "unknown";
+      console.error("generate_failed", detail, (err as Error)?.stack?.slice(0, 600));
       emit("error", {
         code: "generation_failed",
         message: "We had trouble generating your read. Try again in a moment.",
+        detail: process.env.NODE_ENV === "development" ? detail : undefined,
       });
       res.end();
       return;

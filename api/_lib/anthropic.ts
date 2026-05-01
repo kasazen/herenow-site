@@ -107,6 +107,14 @@ export async function generateMemoStreaming(
   try {
     parsed = JSON.parse(toolJsonBuffer);
   } catch (err) {
+    // Surface the truncation point so we can see which field/section ran out
+    // of tokens. Helps debugging when the model hits max_tokens mid-output.
+    const tail = toolJsonBuffer.slice(-200);
+    console.error("anthropic_bad_tool_json", {
+      bufferLen: toolJsonBuffer.length,
+      tail,
+      err: (err as Error)?.message?.slice(0, 200),
+    });
     throw new Error(`anthropic_bad_tool_json: ${(err as Error).message?.slice(0, 200) ?? "parse failed"}`);
   }
   return validateMemo(parsed);
@@ -122,7 +130,7 @@ function baseRequestBody(
 ) {
   return {
     model: MODEL,
-    max_tokens: 2500,
+    max_tokens: 3500,
     stream,
     system: [{ type: "text", text: SYSTEM_PROMPT, cache_control: { type: "ephemeral" } }],
     tools: [MEMO_TOOL],
