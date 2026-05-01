@@ -130,7 +130,7 @@ function baseRequestBody(
 ) {
   return {
     model: MODEL,
-    max_tokens: 3500,
+    max_tokens: 4000,
     stream,
     system: [{ type: "text", text: SYSTEM_PROMPT, cache_control: { type: "ephemeral" } }],
     tools: [MEMO_TOOL],
@@ -148,17 +148,50 @@ function headers(apiKey: string): Record<string, string> {
 }
 
 function validateMemo(input: unknown): MemoResult {
-  const m = input as MemoResult;
-  if (!m?.cover_echo || !Array.isArray(m.sections) || m.sections.length !== 5) {
+  const m = input as Partial<MemoResult> | null | undefined;
+  // Log the actual shape on the way in so any downstream issue is diagnosable
+  // from production logs without re-running.
+  const shape = {
+    keys: m && typeof m === "object" ? Object.keys(m as object) : null,
+    sectionCount: Array.isArray(m?.sections) ? m!.sections!.length : null,
+    hasCover: typeof m?.cover_echo === "string" && Boolean(m!.cover_echo!.trim()),
+    hasName: typeof m?.business_name === "string" && Boolean(m!.business_name!.trim()),
+  };
+  console.log("memo_parsed_shape", shape);
+
+  // Hard floor: we need *something* — at least an object with a sections array.
+  if (!m || typeof m !== "object" || !Array.isArray(m.sections) || m.sections.length === 0) {
+    console.error("anthropic_bad_shape_hard", { shape, raw: JSON.stringify(m).slice(0, 500) });
     throw new Error("anthropic_bad_shape");
   }
-  if (typeof m.business_name !== "string" || !m.business_name.trim()) {
-    // Soft fallback so a missing field doesn't abort the run; render layers
-    // already handle empty business_name by deriving from the domain.
-    m.business_name = "";
+
+  // Soft-fallback for everything else so a slightly-off model output still
+  // produces a deliverable instead of an error message to the user.
+  const out: MemoResult = {
+    business_name: typeof m.business_name === "string" ? m.business_name.trim() : "",
+    cover_echo:
+      typeof m.cover_echo === "string" && m.cover_echo.trim()
+        ? m.cover_echo.trim()
+        : "A short read on the operation.",
+    sections: m.sections.slice(0, 5).map((s, i) => ({
+      index: typeof s?.index === "number" ? s.index : i + 1,
+      title: typeof s?.title === "string" && s.title.trim() ? s.title : `Section ${i + 1}`,
+      body: typeof s?.body === "string" ? s.body : "",
+    })),
+  };
+
+  // Pad to exactly 5 sections so the teaser and email render consistently.
+  while (out.sections.length < 5) {
+    const idx = out.sections.length + 1;
+    out.sections.push({
+      index: idx,
+      title: idx === 5 ? "A note on what this can't see" : `Section ${idx}`,
+      body: "",
+    });
   }
-  m.sections.sort((a, b) => a.index - b.index);
-  return m;
+
+  out.sections.sort((a, b) => a.index - b.index);
+  return out;
 }
 
 // ── Anthropic stream event types (just what we use) ────────────────────
