@@ -8,13 +8,7 @@
 
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
-import {
-  getMemo,
-  hasUnlockedEmail,
-  markEmailUnlocked,
-  markIdUnlocked,
-  type StoredMemo,
-} from "./_lib/storage.js";
+import { getMemo, type StoredMemo } from "./_lib/storage.js";
 import { renderEmail } from "./_lib/email-template.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
@@ -63,22 +57,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     return;
   }
 
-  try {
-    const idClaimed = await markIdUnlocked(id);
-    const emailAlreadyUsed = await hasUnlockedEmail(email);
-    if (!idClaimed && emailAlreadyUsed) {
-      res
-        .status(409)
-        .json({ ok: false, error: "already_unlocked", message: "We've already sent one to that address." });
-      return;
-    }
-    await markEmailUnlocked(email);
-  } catch (err) {
-    console.error("kv_unlock_marks_failed", err);
-    res.status(503).json({ ok: false, error: "kv_unavailable", message: "Our storage isn't reachable right now." });
-    return;
-  }
-
   // Inbox-only: await the send and surface failures.
   try {
     await sendEmail(email, firstName || undefined, stored);
@@ -95,20 +73,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     return;
   }
 
-  // Note from the bottom dialog: send a separate notification to the team
-  // so a human can pick up the conversation. Fire-and-forget — failure here
-  // shouldn't block the user's success state.
-  if (note) {
-    sendTeamNote({
-      from: email,
-      firstName,
-      note,
-      domain: stored.intake.domain,
-      businessName: stored.memo.business_name ?? "",
-    }).catch((err) => {
-      console.error("team_note_send_failed", (err as Error)?.message?.slice(0, 200));
-    });
-  }
+  // Notify the team on every successful send so a human can pick up the
+  // conversation. Fire-and-forget — failure here shouldn't block the user's
+  // success state.
+  sendTeamNote({
+    from: email,
+    firstName,
+    note: note || undefined,
+    domain: stored.intake.domain,
+    businessName: stored.memo.business_name ?? "",
+    prompting: stored.intake.prompting,
+  }).catch((err) => {
+    console.error("team_note_send_failed", (err as Error)?.message?.slice(0, 200));
+  });
 
   res.status(200).json({ ok: true, sentTo: email });
 }
@@ -116,24 +93,30 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
 async function sendTeamNote(input: {
   from: string;
   firstName: string;
-  note: string;
+  note?: string;
   domain: string;
   businessName: string;
+  prompting?: string;
 }): Promise<void> {
   const resendKey = process.env.RESEND_API_KEY;
   const fromAddr = process.env.EMAIL_FROM ?? "Here Now Labs <team@herenowlabs.xyz>";
   const teamAddr = process.env.TEAM_NOTE_TO ?? "team@herenowlabs.xyz";
   if (!resendKey) return;
 
-  const subject = `First Read note · ${input.businessName || input.domain}`;
-  const lines = [
+  const label = input.businessName || input.domain;
+  const subject = input.note ? `First Read note · ${label}` : `First Read sent · ${label}`;
+
+  const lines: string[] = [
     `From: ${input.from}${input.firstName ? ` (${input.firstName})` : ""}`,
     `Business: ${input.businessName || "(unknown)"}`,
     `Domain: ${input.domain}`,
-    "",
-    "Note:",
-    input.note,
   ];
+  if (input.prompting && input.prompting.trim()) {
+    lines.push("", "What they told us at intake:", input.prompting.trim());
+  }
+  if (input.note && input.note.trim()) {
+    lines.push("", "Note from the post-memo dialog:", input.note.trim());
+  }
   const text = lines.join("\n");
 
   await fetch("https://api.resend.com/emails", {

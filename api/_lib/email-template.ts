@@ -84,6 +84,11 @@ export function renderEmail(input: RenderInput): RenderOutput {
   @media (prefers-color-scheme: dark) {
     body { background: ${COLORS.bg} !important; color: ${COLORS.fg} !important; }
   }
+  /* Tighten side padding on mobile so the read isn't crammed against narrow margins */
+  @media only screen and (max-width: 540px) {
+    .px { padding-left: 18px !important; padding-right: 18px !important; }
+    .outer { padding-left: 8px !important; padding-right: 8px !important; }
+  }
 </style>
 </head>
 <body style="margin:0;padding:0;background:${COLORS.bg};color:${COLORS.fg};">
@@ -93,12 +98,12 @@ export function renderEmail(input: RenderInput): RenderOutput {
 
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${COLORS.bg};">
     <tr>
-      <td align="center" style="padding:40px 16px;">
+      <td align="center" class="outer" style="padding:40px 16px;">
         <table role="presentation" width="640" cellpadding="0" cellspacing="0" border="0" style="width:640px;max-width:640px;background:${COLORS.bg};">
 
           <!-- ── Cover ─────────────────────────────────────────────── -->
           <tr>
-            <td style="padding:8px 44px 32px 44px;border-bottom:1px solid ${COLORS.rule};">
+            <td class="px" style="padding:8px 44px 32px 44px;border-bottom:1px solid ${COLORS.rule};">
               <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                   <td style="padding-bottom:18px;vertical-align:middle;">
@@ -131,7 +136,7 @@ export function renderEmail(input: RenderInput): RenderOutput {
 
           <!-- ── Greeting ──────────────────────────────────────────── -->
           <tr>
-            <td style="padding:32px 44px 0 44px;font-family:${FONTS.sans};font-size:15px;line-height:1.65;color:${COLORS.fg};">
+            <td class="px" style="padding:32px 44px 0 44px;font-family:${FONTS.sans};font-size:15px;line-height:1.65;color:${COLORS.fg};">
               <p style="margin:0 0 14px 0;">${greeting}</p>
               <p style="margin:0;">Here is the short read. Five sections, about three minutes.</p>
             </td>
@@ -141,7 +146,7 @@ export function renderEmail(input: RenderInput): RenderOutput {
 
           <!-- ── Sign-off + CTA ────────────────────────────────────── -->
           <tr>
-            <td style="padding:8px 44px 36px 44px;border-top:1px solid ${COLORS.rule};">
+            <td class="px" style="padding:8px 44px 36px 44px;border-top:1px solid ${COLORS.rule};">
               <p style="margin:28px 0 12px 0;font-family:${FONTS.serif};font-style:italic;font-size:18px;color:${COLORS.fg};">— Here Now Labs</p>
               <p style="margin:0;font-family:${FONTS.serif};font-style:italic;font-size:15px;line-height:1.55;color:${COLORS.fgMuted};">
                 If you'd like the read specific to your operation, <a href="${escapeAttr(calendlyHref)}" style="color:${COLORS.accent};text-decoration:none;font-style:italic;">book a workshop day &rarr;</a>
@@ -151,7 +156,7 @@ export function renderEmail(input: RenderInput): RenderOutput {
 
           <!-- ── Footer ────────────────────────────────────────────── -->
           <tr>
-            <td style="padding:20px 44px 36px 44px;border-top:1px solid ${COLORS.rule};font-family:${FONTS.mono};font-size:10px;letter-spacing:0.06em;color:${COLORS.fgFaint};text-transform:uppercase;">
+            <td class="px" style="padding:20px 44px 36px 44px;border-top:1px solid ${COLORS.rule};font-family:${FONTS.mono};font-size:10px;letter-spacing:0.06em;color:${COLORS.fgFaint};text-transform:uppercase;">
               Here Now Labs, Inc. &middot; A Delaware corporation &middot; team@herenowlabs.xyz
               <p style="margin:14px 0 0 0;text-transform:none;letter-spacing:0.01em;font-family:${FONTS.serif};font-style:italic;font-size:13px;color:${COLORS.fgFaint};">We won't email you again unless you reply.</p>
             </td>
@@ -181,7 +186,7 @@ function sectionBlock(index: number, title: string, body: string, isClosing: boo
     // matches the site's voice for closing notes.
     return `
       <tr>
-        <td style="padding:32px 44px 0 44px;">
+        <td class="px" style="padding:32px 44px 0 44px;">
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td style="border-left:2px solid ${COLORS.accent};padding:4px 0 4px 22px;">
@@ -202,7 +207,7 @@ function sectionBlock(index: number, title: string, body: string, isClosing: boo
 
   return `
     <tr>
-      <td style="padding:36px 44px 0 44px;">
+      <td class="px" style="padding:36px 44px 0 44px;">
         <p style="margin:0 0 14px 0;font-family:${FONTS.mono};font-size:14px;font-weight:500;letter-spacing:0.06em;color:${COLORS.accent};">${num}</p>
         <p style="margin:0 0 18px 0;font-family:${FONTS.serif};font-style:italic;font-size:24px;font-weight:500;line-height:1.22;color:${COLORS.fg};letter-spacing:-0.014em;">${escapeHtml(title)}</p>
         ${paragraphs
