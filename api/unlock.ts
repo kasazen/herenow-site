@@ -74,18 +74,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   }
 
   // Notify the team on every successful send so a human can pick up the
-  // conversation. Fire-and-forget — failure here shouldn't block the user's
+  // conversation. Awaited so the serverless runtime doesn't tear down the
+  // invocation mid-fetch; failures are logged but do not affect the user
   // success state.
-  sendTeamNote({
-    from: email,
-    firstName,
-    note: note || undefined,
-    domain: stored.intake.domain,
-    businessName: stored.memo.business_name ?? "",
-    prompting: stored.intake.prompting,
-  }).catch((err) => {
+  try {
+    await sendTeamNote({
+      from: email,
+      firstName,
+      note: note || undefined,
+      domain: stored.intake.domain,
+      businessName: stored.memo.business_name ?? "",
+      prompting: stored.intake.prompting,
+    });
+  } catch (err) {
     console.error("team_note_send_failed", (err as Error)?.message?.slice(0, 200));
-  });
+  }
 
   res.status(200).json({ ok: true, sentTo: email });
 }
