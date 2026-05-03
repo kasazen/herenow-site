@@ -119,7 +119,7 @@ async function sendTeamNote(input: {
   }
   const text = lines.join("\n");
 
-  await fetch("https://api.resend.com/emails", {
+  const r = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { "content-type": "application/json", authorization: `Bearer ${resendKey}` },
     body: JSON.stringify({
@@ -130,6 +130,11 @@ async function sendTeamNote(input: {
       text,
     }),
   });
+
+  if (!r.ok) {
+    const errBody = await r.text();
+    throw new Error(`resend_${r.status}: ${errBody.slice(0, 300)}`);
+  }
 }
 
 async function sendEmail(to: string, firstName: string | undefined, stored: StoredMemo): Promise<void> {
