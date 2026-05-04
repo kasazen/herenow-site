@@ -13,7 +13,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     ANTHROPIC_API_KEY: present("ANTHROPIC_API_KEY"),
     RESEND_API_KEY: present("RESEND_API_KEY"),
     EMAIL_FROM: present("EMAIL_FROM"),
-    CALENDLY_HREF: present("CALENDLY_HREF"),
+    MEETING_HREF: present("MEETING_HREF"),
     KV_REST_API_URL: present("KV_REST_API_URL"),
     KV_REST_API_TOKEN: present("KV_REST_API_TOKEN"),
     UPSTASH_REDIS_REST_URL: present("UPSTASH_REDIS_REST_URL"),

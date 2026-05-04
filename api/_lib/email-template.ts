@@ -12,7 +12,7 @@ type RenderInput = {
   firstName?: string;
   /** Domain is for fallback only; never displayed to the reader. */
   domain: string;
-  calendlyHref: string;
+  meetingHref: string;
 };
 
 type RenderOutput = {
@@ -40,7 +40,7 @@ const FONTS_HREF =
   "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..600&family=Inter:wght@400;500&family=Geist+Mono:wght@500&display=swap";
 
 export function renderEmail(input: RenderInput): RenderOutput {
-  const { memo, firstName, domain, calendlyHref } = input;
+  const { memo, firstName, domain, meetingHref } = input;
 
   const businessName = (memo.business_name ?? "").trim();
   // Refer to the business by name. If the model couldn't extract one,
@@ -149,7 +149,7 @@ export function renderEmail(input: RenderInput): RenderOutput {
             <td class="px" style="padding:8px 44px 36px 44px;border-top:1px solid ${COLORS.rule};">
               <p style="margin:28px 0 12px 0;font-family:${FONTS.serif};font-style:italic;font-size:18px;color:${COLORS.fg};">— Here Now Labs</p>
               <p style="margin:0;font-family:${FONTS.serif};font-style:italic;font-size:15px;line-height:1.55;color:${COLORS.fgMuted};">
-                If you'd like the read specific to your operation, <a href="${escapeAttr(calendlyHref)}" style="color:${COLORS.accent};text-decoration:none;font-style:italic;">book a workshop day &rarr;</a>
+                If you'd like the read specific to your operation, <a href="${escapeAttr(meetingHref)}" style="color:${COLORS.accent};text-decoration:none;font-style:italic;">book an intro call &rarr;</a>
               </p>
             </td>
           </tr>
@@ -169,7 +169,7 @@ export function renderEmail(input: RenderInput): RenderOutput {
 </body>
 </html>`;
 
-  const text = renderText(memo, firstName, businessLabel, calendlyHref, date);
+  const text = renderText(memo, firstName, businessLabel, meetingHref, date);
 
   return { html, text, subject };
 }
@@ -224,7 +224,7 @@ function renderText(
   memo: MemoResult,
   firstName: string | undefined,
   businessLabel: string,
-  calendlyHref: string,
+  meetingHref: string,
   date: string,
 ): string {
   const greeting = firstName ? `${firstName} —` : "—";
@@ -255,7 +255,7 @@ function renderText(
     "",
     "— Here Now Labs",
     "",
-    `If you'd like the read specific to your operation, book a workshop day: ${calendlyHref}`,
+    `If you'd like the read specific to your operation, book an intro call: ${meetingHref}`,
     "",
     "Here Now Labs, Inc. — A Delaware corporation",
     "team@herenowlabs.xyz",

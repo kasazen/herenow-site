@@ -1,6 +1,5 @@
 import "./styles.css";
 import { mountHero } from "./animations/hero";
-import { mountCalendly } from "./calendly";
 import { mountAnalytics, observeScrollDepth } from "./analytics";
 import { mountLeadMagnet } from "./lead-magnet";
 
@@ -14,10 +13,6 @@ ready(() => {
 
   const hero = document.getElementById("hero-svg") as SVGSVGElement | null;
   if (hero) mountHero(hero);
-
-  const calendly = document.getElementById("calendly");
-  const calendlyFallback = document.getElementById("calendly-fallback");
-  if (calendly) mountCalendly(calendly, calendlyFallback);
 
   mountLeadMagnet();
 

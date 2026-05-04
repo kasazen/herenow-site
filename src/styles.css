@@ -741,35 +741,33 @@ main {
   max-width: 32rem;
 }
 
-.calendly-inline-widget {
-  width: 100%;
-  min-width: 320px;
-  height: 720px;
-  background: var(--paper);
-  border: 1px solid var(--rule);
+.waitlist__lede {
+  margin: 0 0 clamp(1.75rem, 3.5vw, 2.5rem) 0;
+  font-size: clamp(1rem, 1.3vw, 1.0625rem);
+  line-height: 1.65;
+  color: var(--fg-muted);
+  max-width: 32rem;
 }
 
-@media (max-width: 32rem) {
-  .calendly-inline-widget {
-    height: 920px;
-  }
+.waitlist__cta-row {
+  margin: 0 0 clamp(1.5rem, 3vw, 2rem) 0;
 }
 
-.waitlist__fallback {
+.waitlist__alt {
   margin: 0;
-  font-size: 1rem;
+  font-size: 0.9375rem;
   color: var(--fg-muted);
   line-height: 1.55;
 }
 
-.waitlist__fallback a {
+.waitlist__alt a {
   color: var(--fg);
   text-decoration: none;
   border-bottom: 1px solid var(--rule);
   transition: border-color 150ms ease;
 }
 
-.waitlist__fallback a:hover {
+.waitlist__alt a:hover {
   border-bottom-color: var(--accent);
 }
 

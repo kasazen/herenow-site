@@ -13,12 +13,12 @@ npm run build    # → dist/
 npm run preview  # serves dist/ for sanity check
 ```
 
-## Configuration (set as GitHub repo Variables for deploy)
+## Configuration
 
-- `VITE_CALENDLY_URL` — your Calendly event URL (e.g. `https://calendly.com/joe-herenow/intake`). The intake questionnaire lives on the Calendly side; configure those questions in the event's Booking Page → Invitee Questions. Theming params (dark background, green primary) are appended automatically. Until set, the embed hides itself and a `team@herenowlabs.xyz` fallback line shows instead.
-- `VITE_PLAUSIBLE_DOMAIN` — Plausible domain (e.g. `herenowlabs.xyz`). Until set, no analytics are loaded.
+- `VITE_PLAUSIBLE_DOMAIN` *(client-side build var)* — Plausible domain (e.g. `herenowlabs.xyz`). Until set, no analytics are loaded.
+- `MEETING_HREF` *(server-side, optional)* — meeting URL injected into outgoing First Read emails. Defaults to `https://cal.com/herenowlabs/intro`. Override only if you want emails to point at a different link than the public site.
 
-In GitHub: **Settings → Secrets and variables → Actions → Variables tab**.
+The public meeting link on the site itself is hard-coded in `index.html` — it's the canonical URL, not a per-environment secret. Set Vercel project env vars in **Project → Settings → Environment Variables**.
 
 ## Deploy
 
@@ -39,7 +39,6 @@ One-time setup:
 - `index.html` — page structure, the seven moments.
 - `src/main.ts` — entry; wires animation, form, analytics.
 - `src/animations/hero.ts` — Canvas pixel-sort animation.
-- `src/calendly.ts` — Calendly inline embed loader + booking event tracking.
 - `src/analytics.ts` — Plausible loader + scroll-depth events.
 - `src/styles.css` — design tokens and layout.
 - `public/` — files served at the site root (CNAME, robots, sitemap).

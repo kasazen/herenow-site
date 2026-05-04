@@ -143,7 +143,7 @@ async function sendTeamNote(input: {
 async function sendEmail(to: string, firstName: string | undefined, stored: StoredMemo): Promise<void> {
   const resendKey = process.env.RESEND_API_KEY;
   const from = process.env.EMAIL_FROM ?? "Here Now Labs <team@herenowlabs.xyz>";
-  const calendlyHref = process.env.CALENDLY_HREF ?? "https://herenowlabs.xyz/#book";
+  const meetingHref = process.env.MEETING_HREF ?? "https://cal.com/herenowlabs/intro";
 
   if (!resendKey) {
     throw new Error("resend_not_configured: RESEND_API_KEY env var is missing");
@@ -153,7 +153,7 @@ async function sendEmail(to: string, firstName: string | undefined, stored: Stor
     memo: stored.memo,
     firstName,
     domain: stored.intake.domain,
-    calendlyHref,
+    meetingHref,
   });
 
   const r = await fetch("https://api.resend.com/emails", {
