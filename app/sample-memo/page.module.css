@@ -1,0 +1,156 @@
+.memo {
+  padding-block: var(--section-y);
+}
+
+.eyebrow {
+  letter-spacing: 0.005em;
+}
+
+.title {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  margin-top: 0.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.018em;
+}
+
+.dek {
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--muted);
+  font-style: italic;
+  font-family: var(--font-serif);
+  margin-top: 1rem;
+  max-width: 38rem;
+}
+
+.meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin: 2rem 0 0;
+  padding: 1.25rem 1.5rem;
+  background: var(--paper-tint);
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+@media (min-width: 36rem) {
+  .meta {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.meta div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.meta dt {
+  color: var(--faint);
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  margin: 0;
+}
+
+.meta dd {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.memo h2 {
+  font-size: clamp(1.5rem, 2.6vw, 1.875rem);
+  margin-top: 3em;
+  margin-bottom: 0.75em;
+  letter-spacing: -0.012em;
+  line-height: 1.25;
+}
+
+.memo p {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+.memo p + p {
+  margin-top: 1.1em;
+}
+
+.findings {
+  list-style: none;
+  counter-reset: finding;
+  padding: 0;
+  margin: 1.25rem 0;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.findings li {
+  counter-increment: finding;
+  position: relative;
+  padding-left: 2.5rem;
+  border-left: 2px solid var(--accent-soft);
+  padding-block: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.findings li::before {
+  content: counter(finding) ".";
+  position: absolute;
+  left: 0.75rem;
+  top: 0.5rem;
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--accent);
+  font-size: 1.05rem;
+}
+
+.findings p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.signoff {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--muted);
+  margin-top: 2.5rem;
+  font-size: 1.05rem;
+}
+
+.cta {
+  background: var(--paper-tint);
+  padding: 2rem 1.75rem;
+  border-radius: 6px;
+  margin-top: 2rem;
+}
+
+.cta h2 {
+  font-size: 1.5rem;
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+.cta p {
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+  color: var(--muted);
+}
+
+.ctaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.disclaimer {
+  margin-top: 1.25rem;
+  font-size: 0.85rem;
+  color: var(--faint);
+}
