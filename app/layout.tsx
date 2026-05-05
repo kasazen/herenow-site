@@ -12,11 +12,11 @@ export const metadata: Metadata = {
     template: "%s · Here Now Labs",
   },
   description:
-    "An AI-accelerated read of where money is leaking inside mid-market operations — and what to do about it before competitors notice the same things.",
+    "AI inside your operation. We find where margin is leaking, where growth is waiting, and we build the AI to act on both.",
   openGraph: {
     title: "Here Now Labs",
     description:
-      "An AI-accelerated read of where money is leaking inside mid-market operations.",
+      "AI inside your operation. Find what is leaking. See where growth is waiting. Build the AI to act on both.",
     url: SITE_URL,
     siteName: "Here Now Labs",
     type: "website",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Here Now Labs",
     description:
-      "An AI-accelerated read of where money is leaking inside mid-market operations.",
+      "AI inside your operation. Find what is leaking. See where growth is waiting. Build the AI to act on both.",
     images: ["/og-image.png"],
   },
   icons: {
@@ -143,7 +143,7 @@ function SiteFooter() {
             <strong style={{ color: "var(--ink)", fontWeight: 500 }}>Here Now Labs</strong>
           </p>
           <p style={{ marginTop: "0.5rem", maxWidth: "28rem" }}>
-            A clear-eyed read of where money is leaking inside mid-market operations — and what to do about it before competitors notice the same things.
+            AI inside your operation. Find what is leaking. See where growth is waiting. Build the AI to act on both.
           </p>
         </div>
         <div>
@@ -159,7 +159,7 @@ function SiteFooter() {
               <Link href="/ai-action-plan">AI Action Plan (sample)</Link>
             </li>
             <li>
-              <Link href="/read-your-business">Read your business</Link>
+              <Link href="/ai-action-plan-lite">AI Action Plan (Lite)</Link>
             </li>
           </ul>
         </div>

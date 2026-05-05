@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./page.module.css";
 
-type Phase = "idle" | "reading" | "teaser" | "unlocking" | "sent" | "error";
+type Phase = "idle" | "parsing" | "teaser" | "unlocking" | "sent" | "error";
 
 type Section = {
   index: number;
@@ -25,7 +25,7 @@ type Stream = {
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL?.trim() || "/api";
 
-export default function ReadTool() {
+export default function LiteTool() {
   const [phase, setPhase] = useState<Phase>("idle");
   const [stream, setStream] = useState<Stream>({ observations: [] });
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -56,7 +56,7 @@ export default function ReadTool() {
       return;
     }
 
-    setPhase("reading");
+    setPhase("parsing");
     abortRef.current?.abort();
     abortRef.current = new AbortController();
 
@@ -72,7 +72,7 @@ export default function ReadTool() {
         const json = await res.json().catch(() => null);
         throw new Error(
           (json as { message?: string } | null)?.message ??
-            "We had trouble reading that URL. Try again.",
+            "We had trouble parsing that URL. Try again.",
         );
       }
 
@@ -115,7 +115,7 @@ export default function ReadTool() {
           } else if (eventLine === "error") {
             throw new Error(
               (data.message as string | undefined) ??
-                "We had trouble reading that URL. Try again.",
+                "We had trouble parsing that URL. Try again.",
             );
           }
         }
@@ -130,7 +130,7 @@ export default function ReadTool() {
     } catch (err) {
       if ((err as Error).name === "AbortError") return;
       setErrorMessage(
-        err instanceof Error ? err.message : "We had trouble reading that URL. Try again.",
+        err instanceof Error ? err.message : "We had trouble parsing that URL. Try again.",
       );
       setPhase("error");
     }
@@ -219,15 +219,15 @@ export default function ReadTool() {
             </p>
           ) : null}
           <button type="submit" className="btn">
-            Read my business
+            Generate Plan
           </button>
         </form>
       ) : null}
 
-      {phase === "reading" ? (
+      {phase === "parsing" ? (
         <div className={styles.reading} role="status" aria-live="polite">
           <p className={styles.readingHead}>
-            <em>Reading.</em>{" "}
+            <em>Parsing.</em>{" "}
             <span style={{ color: "var(--muted)" }}>
               {stream.progress ?? "Opening the door"}
             </span>
@@ -243,7 +243,7 @@ export default function ReadTool() {
       {phase === "teaser" || phase === "unlocking" ? memo ? (
         <div className={styles.teaser}>
           <header className={styles.teaserHeader}>
-            <p className="eyebrow">A short read on your business</p>
+            <p className="eyebrow">An AI Action Plan, in miniature</p>
             <h2 className={styles.teaserTitle}>
               {memo.cover.businessName || memo.cover.domain}
             </h2>

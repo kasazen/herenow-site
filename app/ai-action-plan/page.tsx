@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import HeroImage from "../_components/HeroImage";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -19,6 +20,13 @@ export default function AIActionPlanPage() {
         A fully de-identified sample. <em>Northshore is fictional.</em> The figures, clauses, and account counts are invented. The structure, density, and voice are exactly how a real Action Plan arrives in the executive&rsquo;s inbox.
       </p>
 
+      <HeroImage
+        src="/images/hero/ai-action-plan.jpg"
+        alt=""
+        className={styles.heroImage}
+      />
+
+
       <dl className={styles.meta}>
         <div>
           <dt>Subject</dt>
@@ -37,7 +45,7 @@ export default function AIActionPlanPage() {
       <div className={styles.aiBanner} data-print-hide="true">
         <p className={styles.aiBannerLabel}>What AI did to produce this document</p>
         <p className={styles.aiBannerBody}>
-          Read 93 maintenance contracts, 18 months of vendor invoices, 12 months of dispatch tickets, and the full software inventory in nine business days. Surfaced ~40 anomalies. We weighed which ones mattered. Every line below is human judgment, compressed by AI.
+          Parsed 93 maintenance contracts, 18 months of vendor invoices, 12 months of dispatch tickets, and the full software inventory in nine business days. Surfaced ~40 anomalies. We weighed which ones mattered. Every line below is human judgment — the volume is what AI handled.
         </p>
       </div>
 
@@ -56,7 +64,7 @@ export default function AIActionPlanPage() {
       <section>
         <h2>ii. Where the leak is</h2>
         <p>
-          Across the contracts, vendor records, dispatch logs, and software inventory read during the engagement, four pools of leakage are large enough to act on this quarter. The order is by estimated annualized impact, not by ease.
+          Across the contracts, vendor records, dispatch logs, and software inventory parsed during the engagement, four pools of leakage are large enough to act on this quarter. The order is by estimated annualized impact, not by ease.
         </p>
         <ol className={styles.findings}>
           <li>
@@ -99,16 +107,16 @@ export default function AIActionPlanPage() {
           iii. What AI changes about this, today
         </h2>
         <p>
-          The four findings above were surfaced in nine days of reading. Three years ago the same engagement would have taken four months of consultant time and a meaningful multiple of the fee. The change is not that AI generated the insight. The change is that AI made it economical to read the entire corpus in volume — every agreement, every escalator clause, every renewal date, every ticket time-stamp, every line item on every invoice — and surface the anomalies for a human to weigh.
+          The four findings above were surfaced in nine business days. Three years ago the same engagement would have taken four months of consultant time and a meaningful multiple of the fee. The change is not that AI generated the insight. The change is that AI made it economical to parse the entire corpus in volume — every agreement, every escalator clause, every renewal date, every ticket time-stamp, every line item on every invoice — and surface the anomalies for a human to weigh.
         </p>
         <p>
-          Inside Northshore, the same pattern is sitting in two specific places this quarter. The first is the estimating function, where the senior estimator and one assistant spend two to three days per week assembling proposals that draw from the same forty-odd component patterns. A small AI tool that drafts the estimate from the prospect&rsquo;s scope document and pre-populates the labor and parts mix would compress that work by an estimated 60–70% and free the senior estimator to do what only the senior estimator can do — which is sit with the customer and qualify the bid. We have built two of these inside comparable contractors; the build is four to six weeks and the running cost is under $400 a month.
+          Inside Northshore, the same pattern sits in two specific places this quarter. The first is the estimating function, where the senior estimator and one assistant spend two to three days per week assembling proposals that draw from the same forty-odd component patterns. A small AI proposal generator — drafting from the prospect&rsquo;s scope document, pre-populating labor and parts from the last forty winning bids — compresses that work by an estimated 60–70%. <mark>Senior-estimator time recovered: ~14 hours per week.</mark> Proposal-to-quote cycle: 3 days → 4 hours. Estimated revenue lift from faster turnaround: <mark>+8–12%</mark>. We have built two of these inside comparable contractors; the build is four to six weeks and the running cost is under $400 a month.
         </p>
         <p>
-          The second is service-contract review at anniversary. The sixty-one missed escalators identified above were not flagged in the last cycle because the review owner had five other priorities and the contracts arrive in the queue in no particular order. AI-assisted review at anniversary, fed the standard- and legacy-form contracts and the labor-rate baseline, would have surfaced all sixty-one in approximately ninety minutes of analyst time. This is a workflow change rather than a build: it requires standardizing how anniversaries enter the queue and applying a tool that already exists.
+          The second is service-contract review at anniversary. The sixty-one missed escalators identified above were not flagged in the last cycle because the review owner had five other priorities and contracts arrived in the queue in no particular order. An anniversary review agent — fed the standard- and legacy-form contracts and the labor-rate baseline — surfaces all sixty-one in approximately ninety minutes of analyst time. This is a workflow change rather than a build; the technology already exists.
         </p>
         <p className={styles.aiPunchline}>
-          What AI does not do is generate the strategy. <em>It compresses the reading.</em> The reading is the part that, until two years ago, was the rate-limiting step.
+          What AI does not do is generate the strategy. <em>It collapses the rate-limiting step.</em> The volume of reading was, until recently, the part of the work that priced consulting out of mid-market budgets.
         </p>
       </section>
 
@@ -151,7 +159,7 @@ export default function AIActionPlanPage() {
       <section className={styles.methodology}>
         <h2>Methodology</h2>
         <p>
-          Over the ten business days of the engagement we read: the standard- and legacy-form maintenance contracts and amendments for all ninety-three active commercial accounts; the trailing eighteen months of vendor invoices from the four supply houses; the dispatch logs and ticket time-stamps for the trailing twelve months; the licensed-software inventory and renewal calendar; the public-facing site, the proposal templates, and the policy handbook. We held a two-hour executive alignment session at the start and four short calls during the discovery — with the VP Service, the VP Install, the senior estimator, and the dispatch coordinator. AI was used to read in volume and to flag anomalies; every finding above was reviewed and weighted by us before it entered this document. No client information used in the engagement appears in this Action Plan or this footnote.
+          Over the ten business days of the engagement we worked through: the standard- and legacy-form maintenance contracts and amendments for all ninety-three active commercial accounts; the trailing eighteen months of vendor invoices from the four supply houses; the dispatch logs and ticket time-stamps for the trailing twelve months; the licensed-software inventory and renewal calendar; the public-facing site, the proposal templates, and the policy handbook. We held a two-hour executive alignment session at the start and four short calls during discovery — with the VP Service, the VP Install, the senior estimator, and the dispatch coordinator. AI handled the volume and flagged anomalies; every finding above was weighted by us before it entered this document. No client information used in the engagement appears in this Action Plan or this footnote.
         </p>
       </section>
 

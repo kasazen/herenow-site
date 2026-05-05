@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
     return [
       { source: "/sample-memo", destination: "/ai-action-plan", permanent: true },
       { source: "/sample-memo.pdf", destination: "/ai-action-plan.pdf", permanent: true },
+      { source: "/read-your-business", destination: "/ai-action-plan-lite", permanent: true },
     ];
   },
 };

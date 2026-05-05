@@ -15,7 +15,7 @@ export default function ContactPage() {
         <p className="eyebrow">Contact</p>
         <h1 className={styles.title}>Two ways in.</h1>
         <p className="lead" style={{ marginTop: "1rem" }}>
-          We take a small number of engagements at a time. Everything coming through these channels is read carefully.
+          We take a small number of engagements at a time. Everything coming through these channels is reviewed carefully.
         </p>
       </header>
 
