@@ -124,6 +124,30 @@
   font-size: 1.05rem;
 }
 
+.methodology {
+  margin-top: 1rem;
+}
+
+.methodology h2 {
+  font-size: 1.25rem;
+  margin-top: 2.5em;
+  margin-bottom: 0.6em;
+}
+
+.methodology p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.confidentiality {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--faint);
+  letter-spacing: 0.02em;
+  font-family: var(--font-sans);
+}
+
 .cta {
   background: var(--paper-tint);
   padding: 2rem 1.75rem;
