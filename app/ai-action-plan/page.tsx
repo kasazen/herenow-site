@@ -110,32 +110,51 @@ export default function AIActionPlanPage() {
           The four findings above were surfaced in nine business days. Three years ago the same engagement would have taken four months of consultant time and a meaningful multiple of the fee. The change is not that AI generated the insight. The change is that AI made it economical to parse the entire corpus in volume — every agreement, every escalator clause, every renewal date, every ticket time-stamp, every line item on every invoice — and surface the anomalies for a human to weigh.
         </p>
         <p>
-          Inside Northshore, the same pattern sits in two specific places this quarter. The first is the estimating function, where the senior estimator and one assistant spend two to three days per week assembling proposals that draw from the same forty-odd component patterns. A small AI proposal generator — drafting from the prospect&rsquo;s scope document, pre-populating labor and parts from the last forty winning bids — compresses that work by an estimated 60–70%. <mark>Senior-estimator time recovered: ~14 hours per week.</mark> Proposal-to-quote cycle: 3 days → 4 hours. Estimated revenue lift from faster turnaround: <mark>+8–12%</mark>. We have built two of these inside comparable contractors; the build is four to six weeks and the running cost is under $400 a month.
+          Inside Northshore, two AI builds compound directly with the findings above.
         </p>
-        <p>
-          The second is service-contract review at anniversary. The sixty-one missed escalators identified above were not flagged in the last cycle because the review owner had five other priorities and contracts arrived in the queue in no particular order. An anniversary review agent — fed the standard- and legacy-form contracts and the labor-rate baseline — surfaces all sixty-one in approximately ninety minutes of analyst time. This is a workflow change rather than a build; the technology already exists.
-        </p>
+        <div className={styles.aiBuildBlock}>
+          <p className={styles.findingTagSoftware}>AI software · build · 4–6 weeks</p>
+          <p>
+            <strong>Proposal generator for the senior estimator.</strong> The senior estimator and one assistant spend two to three days per week assembling proposals from the same forty-odd component patterns. A small generator drafts from the prospect&rsquo;s scope document and pre-populates labor and parts from the last forty winning bids. <mark>Senior-estimator time recovered: ~14 hrs/week.</mark> Quote cycle: 3 days → 4 hours. Estimated revenue lift: <mark>+8–12%</mark>. Run cost under $400/month.
+          </p>
+        </div>
+        <div className={styles.aiBuildBlock}>
+          <p className={styles.findingTagAgent}>AI agent · build · 2–4 weeks</p>
+          <p>
+            <strong>Anniversary review agent.</strong> The sixty-one missed escalators identified in Section ii were not flagged because the review owner had five other priorities and contracts arrived in the queue in no particular order. An agent watches the contract calendar; at each anniversary it parses the rate-card escalator clauses, checks the labor-rate baseline, and drafts the renewal letter for human sign-off. <mark>93 contracts reviewed in 90 minutes</mark> instead of three weeks. Captured margin: <mark>$1.4M – $1.8M / yr</mark>. Human time: sign-off only.
+          </p>
+        </div>
         <p className={styles.aiPunchline}>
           What AI does not do is generate the strategy. <em>It collapses the rate-limiting step.</em> The volume of reading was, until recently, the part of the work that priced consulting out of mid-market budgets.
         </p>
       </section>
 
       <section>
-        <h2>iv. Two to three moves to make first</h2>
+        <h2>iv. What to build first</h2>
+        <p>
+          Three moves, ranked by impact. Each tagged with the kind of work it implies, so the executive team can sequence resources accordingly.
+        </p>
         <ol className={styles.findings}>
           <li>
+            <p className={styles.findingTagAgent}>AI agent · build · 2–4 weeks</p>
             <p>
-              <strong>Run the service-contract repricing now.</strong> Six to eight weeks of senior-account-manager effort, one outside specialist for the legal review of the rate-card escalator language, and a single executive sponsor with the authority to set the tone of the customer conversations. Estimated capture: <mark>$1.4M to $1.8M annual.</mark> This is the single largest piece of unattended margin in the operation. If only one move is made this quarter, this is the one. The risk we would name in advance: two or three of the largest accounts will renegotiate hard. Plan for it; do not be surprised by it.
+              <strong>Anniversary review agent.</strong> Watches the contract calendar. At each anniversary, parses the rate-card escalator clauses (<em>Schedule B</em>, <em>Section 4.2</em>), checks the current labor-rate baseline, and drafts the renewal letter for human sign-off. Captures the sixty-one missed escalators identified in Section ii without adding headcount.{" "}
+              <strong>Estimated capture: <mark>$1.4M to $1.8M annual.</mark></strong>{" "}
+              Risk we would name in advance: two or three of the largest accounts will push back hard at the first cycle. Plan for it; do not be surprised.
             </p>
           </li>
           <li>
+            <p className={styles.findingTagWorkflow}>Workflow change · 6–8 weeks</p>
             <p>
-              <strong>Consolidate parts purchasing to two preferred distributors.</strong> Estimated capture: <mark>$520K to $740K annual.</mark> Lower lift than the repricing and can run in parallel under a different sponsor. The technician resistance is real — the existing supply-house relationships are personal and several of them predate the current GM&rsquo;s tenure — and is best handled by paying close attention to the on-counter experience and credit-line behavior for the two preferred houses, not by mandate. A clean rebate program with one of the parent organizations behind two of the four current suppliers is the cleanest path; the parent has indicated as much in the standard intro deck.
+              <strong>Consolidate parts purchasing to two preferred distributors.</strong> Procurement effort, not a software build. Lower lift than the agent and can run in parallel. The technician resistance is real — the existing supply-house relationships are personal — and is best handled by paying close attention to the on-counter experience and credit-line behavior for the two preferred houses, not by mandate.{" "}
+              <strong>Estimated capture: <mark>$520K to $740K annual.</mark></strong>
             </p>
           </li>
           <li>
+            <p className={styles.findingTagSoftware}>AI software · build · 4–6 weeks</p>
             <p>
-              <strong>Build the estimate-drafting tool.</strong> Estimated capture in time recovered: roughly two FTE-equivalents of senior estimator attention. We would not lead with this on the income-statement basis — the dollar value is meaningful but smaller than the two above. We would lead with it because it is the fastest way to demonstrate, inside Northshore, that AI can be useful in concrete and unglamorous ways. That demonstration matters here. The appetite for AI is real and the trust is unproven, and the gap will be closed by one credible internal example, not by an external presentation.
+              <strong>Proposal generator for the senior estimator.</strong> Drafts from the prospect&rsquo;s scope document; pre-populates labor and parts from the last forty winning bids. We would not lead with this on the income-statement basis — the dollar value is smaller than the agent above. We lead with it because it is the fastest way to demonstrate, inside Northshore, that AI can be useful in concrete and unglamorous ways. That demonstration matters when the appetite for AI is real and the trust is unproven.{" "}
+              <strong>Estimated capture: <mark>+8–12% revenue from faster turnaround</mark>; senior-estimator time recovered ~14 hrs/week.</strong>
             </p>
           </li>
         </ol>

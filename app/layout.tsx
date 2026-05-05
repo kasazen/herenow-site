@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import Script from "next/script";
+import SiteNav from "./_components/SiteNav";
 import "./globals.css";
 
 const SITE_URL = "https://herenowlabs.xyz";
@@ -119,14 +120,7 @@ function SiteHeader() {
         <Link href="/" className="wordmark" aria-label="Here Now Labs — home">
           Here Now Labs
         </Link>
-        <nav className="nav" aria-label="Primary">
-          <Link href="/how-we-work">How we work</Link>
-          <Link href="/working-sessions">Sessions</Link>
-          <Link href="/ai-action-plan">Action Plan</Link>
-          <Link href="/contact" className="nav__cta">
-            Contact
-          </Link>
-        </nav>
+        <SiteNav />
       </div>
     </header>
   );

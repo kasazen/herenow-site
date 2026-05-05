@@ -105,14 +105,35 @@
   border-radius: 6px;
 }
 
-.continuationLabel {
+.continuationLabel,
+.continuationLabelAgent,
+.continuationLabelRetainer {
   font-family: var(--font-sans);
   font-size: 0.7rem;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   font-weight: 600;
+  margin: 0 0 0.6rem;
+  display: inline-block;
+  width: fit-content;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+}
+
+.continuationLabel {
   color: var(--accent);
-  margin: 0 0 0.4rem;
+  background: var(--accent-soft);
+}
+
+.continuationLabelAgent {
+  color: var(--bg);
+  background: var(--accent);
+}
+
+.continuationLabelRetainer {
+  color: var(--muted);
+  background: var(--paper-tint);
+  border: 1px solid var(--rule);
 }
 
 .continuationList h3 {

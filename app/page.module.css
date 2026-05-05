@@ -1,5 +1,7 @@
+/* ─── Hero ────────────────────────────────────────────────────── */
+
 .hero {
-  padding-block: clamp(4rem, 10vw, 7rem);
+  padding-block: clamp(3.5rem, 8vw, 6rem);
   position: relative;
   overflow: hidden;
 }
@@ -14,9 +16,9 @@
 
 .heroLine {
   font-family: var(--font-serif);
-  font-size: clamp(2.5rem, 6vw, 4.25rem);
-  line-height: 1.06;
-  letter-spacing: -0.028em;
+  font-size: clamp(2.25rem, 5.6vw, 3.875rem);
+  line-height: 1.08;
+  letter-spacing: -0.026em;
   font-weight: 400;
   margin: 0;
   max-width: 18ch;
@@ -26,6 +28,7 @@
   font-style: italic;
   font-feature-settings: "kern", "liga", "ss01", "onum";
   display: block;
+  color: var(--ink);
 }
 
 .heroAccent {
@@ -49,8 +52,8 @@
 }
 
 .heroLead {
-  font-size: clamp(1.125rem, 1.7vw, 1.35rem);
-  line-height: 1.4;
+  font-size: clamp(1.0625rem, 1.6vw, 1.25rem);
+  line-height: 1.45;
   color: var(--muted);
   max-width: 36rem;
   margin: 0.25rem 0 0;
@@ -63,7 +66,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
-  margin-top: 0.75rem;
+  margin-top: 0.85rem;
 }
 
 .heroImage {
@@ -75,131 +78,71 @@
   height: auto;
 }
 
-/* Long game */
+/* ─── Opening (where engagements begin) ───────────────────────── */
 
-.longgameHead {
-  max-width: 40rem;
-  margin-bottom: 2rem;
+.opening {
 }
 
-.longgameHead h2 {
-  font-size: clamp(1.75rem, 3vw, 2.25rem);
-  margin-top: 0.5rem;
-  letter-spacing: -0.018em;
-}
-
-.longgameLead {
-  margin-top: 1rem;
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: clamp(1.125rem, 1.6vw, 1.3rem);
-  line-height: 1.5;
-  color: var(--muted);
-}
-
-.longgameGrid {
+.openingGrid {
   display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
   grid-template-columns: 1fr;
-  gap: 1.5rem;
 }
 
 @media (min-width: 56rem) {
-  .longgameGrid {
-    grid-template-columns: repeat(3, 1fr);
+  .openingGrid {
+    grid-template-columns: 5fr 7fr;
+    align-items: start;
   }
 }
 
-.buildCard {
-  background: var(--paper);
-  border: 1px solid var(--rule);
-  border-radius: 6px;
-  padding: 1.4rem 1.4rem 1.6rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
+.openingHeadline {
+  font-size: clamp(1.625rem, 3vw, 2.125rem);
+  line-height: 1.2;
+  letter-spacing: -0.018em;
+  max-width: 18ch;
 }
 
-.buildLabel {
-  font-family: var(--font-sans);
-  font-size: 0.7rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  font-weight: 600;
-  color: var(--accent);
-  margin: 0;
-}
-
-.buildCard h3 {
-  font-family: var(--font-serif);
-  font-style: normal;
-  font-weight: 400;
-  font-size: 1.2rem;
-  line-height: 1.3;
-  letter-spacing: -0.012em;
+.openingBody p {
+  font-size: 1.0625rem;
+  line-height: 1.6;
   color: var(--ink);
-  margin: 0;
 }
 
-.buildOutcome {
-  margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.55;
-  color: var(--muted);
+.openingBody p + p {
+  margin-top: 1.1em;
 }
 
-.buildMetrics {
-  list-style: none;
-  padding: 0;
-  margin: 0.4rem 0 0;
-  border-top: 1px solid var(--rule);
+.openingPunch {
+  font-family: var(--font-serif) !important;
+  font-size: 1.25rem !important;
+  line-height: 1.4 !important;
+  margin-top: 1.5em !important;
 }
 
-.buildMetrics li {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 0.75rem;
-  align-items: baseline;
-  padding: 0.6rem 0;
-  border-bottom: 1px solid var(--rule);
-  font-size: 0.85rem;
-}
-
-.buildMetrics li:last-child {
-  border-bottom: 0;
-}
-
-.buildMetrics li span {
-  color: var(--muted);
-}
-
-.buildMetrics li strong {
-  font-family: var(--font-serif);
+.openingPunch strong {
   font-weight: 400;
-  color: var(--ink);
-  font-size: 0.95rem;
-  text-align: right;
-}
-
-.longgameFoot {
-  margin-top: 1.5rem;
-  font-size: 0.85rem;
-  color: var(--faint);
   font-style: italic;
-  font-family: var(--font-serif);
-  max-width: 44rem;
 }
 
-/* Differentiator panel */
+/* ─── Differentiator ──────────────────────────────────────────── */
 
 .diff {
-  padding-block: clamp(3rem, 6vw, 5rem);
+}
+
+.diffHeadline {
+  font-size: clamp(1.5rem, 2.6vw, 1.875rem);
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+  max-width: 28ch;
+  line-height: 1.25;
+  letter-spacing: -0.014em;
 }
 
 .diffGrid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
-  margin-top: 1.5rem;
 }
 
 @media (min-width: 56rem) {
@@ -213,7 +156,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  padding-right: 1rem;
+  padding-right: 0.5rem;
   border-left: 2px solid var(--rule);
   padding-left: 1.25rem;
 }
@@ -223,7 +166,8 @@
   font-size: 0.9rem;
   color: var(--faint);
   text-decoration: line-through;
-  text-decoration-color: var(--rule-strong);
+  text-decoration-color: var(--faint);
+  text-decoration-thickness: 1.5px;
   margin: 0;
   letter-spacing: -0.005em;
 }
@@ -254,86 +198,334 @@
   color: var(--muted);
 }
 
-/* What we do */
+/* ─── The Here Now Method ─────────────────────────────────────── */
 
-.whatGrid {
+.method {
+}
+
+.methodHead {
+  max-width: 44rem;
+  margin-bottom: 2.5rem;
+}
+
+.methodHead h2 {
+  font-size: clamp(1.75rem, 3.2vw, 2.375rem);
+  margin-top: 0.5rem;
+  letter-spacing: -0.018em;
+}
+
+.methodLead {
+  margin-top: 1rem;
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.methodList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 1.25rem;
+  max-width: 56rem;
+}
+
+.methodList li {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  gap: 1.25rem;
+  align-items: start;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.methodList li:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.methodNum {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.4rem;
+  color: var(--accent);
+  line-height: 1;
+  padding-top: 0.15rem;
+}
+
+.methodList h3 {
+  font-family: var(--font-serif);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.25rem;
+  color: var(--ink);
+  margin-bottom: 0.4rem;
+  line-height: 1.3;
+  letter-spacing: -0.012em;
+}
+
+.methodList p {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.methodFoot {
+  margin-top: 2rem;
+  font-size: 0.95rem;
+}
+
+/* ─── Deliverable preview ─────────────────────────────────────── */
+
+.deliverable {
+}
+
+.deliverableGrid {
   display: grid;
   gap: clamp(2rem, 5vw, 4rem);
   grid-template-columns: 1fr;
 }
 
 @media (min-width: 56rem) {
-  .whatGrid {
+  .deliverableGrid {
     grid-template-columns: 5fr 7fr;
     align-items: start;
   }
 }
 
-.whatHeadline {
-  font-size: clamp(1.5rem, 2.6vw, 2rem);
-  max-width: 22ch;
-  line-height: 1.2;
+.deliverableGrid h2 {
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  margin-top: 0.5rem;
 }
 
-.whatBody p {
-  font-size: 1.0625rem;
+.deliverableLead {
+  margin-top: 1rem;
+  font-size: 1rem;
   line-height: 1.6;
+  color: var(--muted);
+  max-width: 22rem;
+}
+
+.deliverableSections {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--rule);
+}
+
+.deliverableSections li {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  gap: 1rem;
+  align-items: start;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.deliverableNum {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--accent);
+  line-height: 1;
+  padding-top: 0.1rem;
+}
+
+.deliverableSections h4 {
+  font-family: var(--font-serif);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.0625rem;
+  color: var(--ink);
+  margin: 0 0 0.25rem;
+  letter-spacing: -0.008em;
+  line-height: 1.3;
+}
+
+.deliverableSections p {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.deliverableCta {
+  margin-top: 1.5rem;
+}
+
+/* ─── Long game (after the Plan) ──────────────────────────────── */
+
+.longgame {
+}
+
+.longgameHead {
+  max-width: 42rem;
+  margin-bottom: 2.5rem;
+}
+
+.longgameHead h2 {
+  font-size: clamp(1.75rem, 3.2vw, 2.375rem);
+  margin-top: 0.5rem;
+  letter-spacing: -0.018em;
+}
+
+.longgameLead {
+  margin-top: 1rem;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.125rem, 1.6vw, 1.3rem);
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.longgameGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 64rem) {
+  .longgameGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.buildCard {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 1.5rem 1.5rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.buildLabel,
+.buildLabelAgent,
+.buildLabelRetainer {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin: 0;
+  display: inline-block;
+  width: fit-content;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+}
+
+.buildLabel {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.buildLabelAgent {
+  color: var(--bg);
+  background: var(--accent);
+}
+
+.buildLabelRetainer {
+  color: var(--muted);
+  background: var(--paper-tint);
+  border: 1px solid var(--rule);
+}
+
+.buildCard h3 {
+  font-family: var(--font-serif);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.25rem;
+  line-height: 1.25;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+  margin: 0;
+}
+
+.buildOutcome {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.buildExampleHead {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--faint);
+  margin: 0.4rem 0 0;
+}
+
+.buildExample {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
   color: var(--ink);
 }
 
-.whatBody p + p {
-  margin-top: 1.1em;
+.buildExample strong {
+  font-weight: 600;
 }
 
-.whatBig {
-  font-family: var(--font-serif);
-  font-size: 1.3rem !important;
-  line-height: 1.35 !important;
-  margin-top: 1.5em !important;
-  color: var(--ink) !important;
+.buildMetrics {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+  border-top: 1px solid var(--rule);
 }
 
-.whatBig strong {
-  font-weight: 400;
-}
-
-/* Proof */
-
-.proofGrid {
+.buildMetrics li {
   display: grid;
-  gap: clamp(2rem, 5vw, 4rem);
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr auto;
+  gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 0.85rem;
 }
 
-@media (min-width: 56rem) {
-  .proofGrid {
-    grid-template-columns: 5fr 7fr;
-    align-items: start;
-  }
+.buildMetrics li:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
 }
 
-.proofGrid h2 {
-  max-width: 14ch;
+.buildMetrics li span {
+  color: var(--muted);
 }
 
-.proofBody p {
-  font-size: 1.0625rem;
-  line-height: 1.6;
+.buildMetrics li strong {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  color: var(--ink);
+  font-size: 0.95rem;
+  text-align: right;
+  letter-spacing: -0.005em;
 }
 
-.proofBody p + p {
-  margin-top: 1.1em;
+.longgameFoot {
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  color: var(--faint);
+  font-style: italic;
+  font-family: var(--font-serif);
+  max-width: 48rem;
 }
 
-/* Late section */
+/* ─── Late section ───────────────────────────────────────────── */
 
 .late {
-  padding-block: clamp(3rem, 6vw, 5rem);
+  padding-block: clamp(2.5rem, 6vw, 5rem);
 }
 
 .lateLine {
   font-family: var(--font-serif);
-  font-size: clamp(1.75rem, 3.4vw, 2.5rem);
+  font-size: clamp(1.625rem, 3.2vw, 2.375rem);
   font-weight: 400;
   line-height: 1.3;
   letter-spacing: -0.018em;
@@ -357,7 +549,10 @@
   line-height: 1.6;
 }
 
-/* CTA */
+/* ─── CTA ─────────────────────────────────────────────────────── */
+
+.cta {
+}
 
 .ctaHeadline {
   font-size: clamp(1.75rem, 3vw, 2.25rem);
