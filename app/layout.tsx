@@ -111,6 +111,7 @@ function SiteHeader() {
         </Link>
         <nav className="nav" aria-label="Primary">
           <Link href="/how-we-work">How we work</Link>
+          <Link href="/working-sessions">Sessions</Link>
           <Link href="/sample-memo">Sample memo</Link>
           <Link href="/contact" className="nav__cta">
             Contact
@@ -140,6 +141,9 @@ function SiteFooter() {
           <ul>
             <li>
               <Link href="/how-we-work">How we work</Link>
+            </li>
+            <li>
+              <Link href="/working-sessions">Working sessions</Link>
             </li>
             <li>
               <Link href="/sample-memo">Sample memo</Link>

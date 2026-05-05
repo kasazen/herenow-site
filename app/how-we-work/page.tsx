@@ -90,6 +90,10 @@ export default function HowWeWorkPage() {
         <p>
           We sit with the executive team and walk every finding. Questions land in the room. The walkthrough is roughly ninety minutes. We bring printed copies — the memo is meant to be read on paper at least once. From there, the work either stops or continues. The natural continuations are an advisory retainer (we stay close, we do not run the work) or a custom build (we ship the AI tool the memo identified). You decide.
         </p>
+        <p>
+          For the room itself — who is there, how long, what is on the table, and what you walk out with each time — the{" "}
+          <Link href="/working-sessions">working sessions page</Link> describes every session in the engagement, including the intro call, the alignment session, the mid-discovery check-in, and the walkthrough.
+        </p>
       </section>
 
       <hr />

@@ -102,6 +102,8 @@ export default function HomePage() {
           </ol>
           <p className={styles.stepsFooter}>
             <Link href="/how-we-work">Read the full method →</Link>
+            {"  ·  "}
+            <Link href="/working-sessions">See what each session looks like →</Link>
           </p>
         </div>
       </section>
