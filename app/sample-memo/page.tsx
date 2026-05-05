@@ -166,24 +166,21 @@ export default function SampleMemoPage() {
         Here Now Labs · Confidential to the executive team named above. Not for circulation outside the company without consent.
       </p>
 
-      <hr />
+      <hr data-print-hide="true" />
 
-      <section className={styles.cta}>
+      <section className={styles.cta} data-print-hide="true">
         <h2>If you would like the printable version.</h2>
         <p>
-          A typeset PDF of this memo, suitable for printing and circulation, will be available shortly. It runs to nine pages including the cover and the methodology footnote above. The HTML above is the canonical sample until the PDF lands.
+          A typeset PDF of this memo, suitable for printing and circulation, runs to nine pages including the cover and the methodology footnote above.
         </p>
         <div className={styles.ctaRow}>
-          <a href="/sample-memo.pdf" className="btn">
-            Download PDF (placeholder)
+          <a href="/sample-memo.pdf" className="btn" download>
+            Download PDF
           </a>
           <Link href="/contact" className="btn btn--ghost">
             Talk to us about your operation
           </Link>
         </div>
-        <p className={styles.disclaimer}>
-          The PDF is a placeholder while the typeset version is being prepared.
-        </p>
       </section>
     </article>
   );

@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "build:og-assets": "node scripts/og-assets/render.mjs"
+    "build:og-assets": "node scripts/og-assets/render.mjs",
+    "build:memo-pdf": "bash scripts/build-memo-pdf.sh"
   },
   "dependencies": {
     "next": "^16.2.4",

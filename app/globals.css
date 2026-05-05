@@ -442,3 +442,82 @@ textarea {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ─── Print styles ────────────────────────────────────────────── */
+/* Used to render the canonical /sample-memo page as a typeset PDF
+   via Chrome --print-to-pdf. Hides site chrome, drops the CTA,
+   tightens layout for US Letter, and inserts page breaks where the
+   document would naturally fold. */
+
+@page {
+  size: letter;
+  margin: 0.85in 0.95in;
+}
+
+@media print {
+  html,
+  body {
+    background: #fff !important;
+    color: #14141a !important;
+    font-size: 11pt !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .site-header,
+  .site-footer {
+    display: none !important;
+  }
+
+  main {
+    padding: 0 !important;
+  }
+
+  .article {
+    max-width: 100% !important;
+    padding: 0 !important;
+    padding-block: 0 !important;
+  }
+
+  hr {
+    margin: 1.25rem 0 !important;
+    background: #c8c5b8 !important;
+  }
+
+  /* Avoid orphan headlines */
+  h1, h2, h3 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  /* Each top-level memo section starts on a fresh page after the cover */
+  article > section {
+    break-before: page;
+    page-break-before: always;
+  }
+
+  /* The first section (and methodology, signoff) flow naturally */
+  article > section:first-of-type {
+    break-before: auto;
+    page-break-before: auto;
+  }
+
+  /* Hide the on-page download CTA from the printed deliverable */
+  [data-print-hide="true"] {
+    display: none !important;
+  }
+
+  mark {
+    background: #d8ecdf !important;
+    color: #14141a !important;
+    padding: 0.05em 0.18em !important;
+  }
+
+  a {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+
+  /* Footer page numbers via @page is fragile across engines.
+     We rely on Chrome's built-in footer template via --print-to-pdf. */
+}
