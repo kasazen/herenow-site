@@ -3,40 +3,75 @@
 }
 
 .title {
-  font-size: clamp(2rem, 4.4vw, 3rem);
+  font-size: clamp(2.25rem, 5.2vw, 3.5rem);
   margin-top: 0.5rem;
   max-width: 22ch;
-  line-height: 1.18;
+  line-height: 1.12;
+  letter-spacing: -0.024em;
+  font-weight: 400;
 }
 
-.memoSections {
-  list-style: none;
-  counter-reset: section;
-  padding: 0;
-  margin: 1.5rem 0 1.25rem;
-  display: grid;
-  gap: 1.1rem;
-}
-
-.memoSections li {
-  counter-increment: section;
-  position: relative;
-  padding-left: 2.5rem;
-  font-size: 1.0625rem;
-  line-height: 1.6;
-}
-
-.memoSections li::before {
-  content: counter(section, lower-roman) ".";
-  position: absolute;
-  left: 0;
-  top: 0;
-  font-family: var(--font-serif);
+.title em {
   font-style: italic;
+}
+
+.titleAccent {
   color: var(--accent);
-  font-size: 1.05rem;
-  width: 2rem;
-  text-align: left;
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* "Without AI / With AI" comparison block, used below each step */
+
+.diff {
+  margin: 1.5rem 0 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.6rem;
+  padding: 1.1rem 1.25rem;
+  background: var(--paper-tint);
+  border-left: 2px solid var(--accent-soft);
+  border-radius: 4px;
+}
+
+.diffRow {
+  display: grid;
+  grid-template-columns: 7rem 1fr;
+  align-items: baseline;
+  gap: 0.85rem;
+}
+
+.diffLabel,
+.diffLabelOn {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.diffLabel {
+  color: var(--faint);
+}
+
+.diffLabelOn {
+  color: var(--accent);
+}
+
+.diffWithout,
+.diffWith {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.diffWithout {
+  color: var(--muted);
+}
+
+.diffWith {
+  color: var(--ink);
+  font-weight: 500;
 }
 
 .cta {
@@ -44,17 +79,21 @@
 }
 
 .cta h2 {
-  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-size: clamp(1.5rem, 3vw, 2rem);
 }
 
 .cta p {
-  margin-top: 0.75rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
   color: var(--muted);
+  font-style: italic;
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
 }
 
 .ctaRow {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
-  margin-top: 1.25rem;
+  margin-top: 0.5rem;
 }

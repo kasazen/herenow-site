@@ -3,48 +3,43 @@ import Link from "next/link";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
-  title: "Sample memo",
+  title: "AI Action Plan",
   description:
-    "A fully de-identified strategic memo from a Here Now Labs engagement — five sections, every recommendation tied to a dollar figure.",
+    "A fully de-identified AI Action Plan from a Here Now Labs engagement — five sections, every recommendation tied to a dollar figure.",
 };
 
-export default function SampleMemoPage() {
+export default function AIActionPlanPage() {
   return (
     <article className={`article ${styles.memo}`}>
-      <p className={`eyebrow ${styles.eyebrow}`}>Sample memo · fictionalized</p>
+      <p className={`eyebrow ${styles.eyebrow}`}>AI Action Plan · sample</p>
       <h1 className={styles.title}>
-        Strategic Read · Northshore Mechanical Services
+        Northshore Mechanical Services
       </h1>
       <p className={styles.dek}>
-        Northshore Mechanical Services is a fictional company. The figures, clauses, account counts, and decisions described below are invented for this sample. The structure, density, voice, and the kind of work the document represents are exactly how a real Here Now Labs strategic memo arrives in the executive&rsquo;s inbox at the end of an engagement.
+        A fully de-identified sample. <em>Northshore is fictional.</em> The figures, clauses, and account counts are invented. The structure, density, and voice are exactly how a real Action Plan arrives in the executive&rsquo;s inbox.
       </p>
 
       <dl className={styles.meta}>
-        <div>
-          <dt>Prepared for</dt>
-          <dd>The Northshore Mechanical executive team</dd>
-        </div>
         <div>
           <dt>Subject</dt>
           <dd>$24.8M commercial mechanical contractor · eastern MA / southern NH · founder-led, second generation · 108 staff</dd>
         </div>
         <div>
-          <dt>Engagement window</dt>
+          <dt>Engagement</dt>
           <dd>Ten business days · audit only</dd>
-        </div>
-        <div>
-          <dt>Delivered</dt>
-          <dd>End of Q1 · printed and digital</dd>
-        </div>
-        <div>
-          <dt>Authored by</dt>
-          <dd>The partners at Here Now Labs</dd>
         </div>
         <div>
           <dt>Read time</dt>
           <dd>Approx. nine minutes</dd>
         </div>
       </dl>
+
+      <div className={styles.aiBanner} data-print-hide="true">
+        <p className={styles.aiBannerLabel}>What AI did to produce this document</p>
+        <p className={styles.aiBannerBody}>
+          Read 93 maintenance contracts, 18 months of vendor invoices, 12 months of dispatch tickets, and the full software inventory in nine business days. Surfaced ~40 anomalies. We weighed which ones mattered. Every line below is human judgment, compressed by AI.
+        </p>
+      </div>
 
       <hr />
 
@@ -98,8 +93,11 @@ export default function SampleMemoPage() {
         </p>
       </section>
 
-      <section>
-        <h2>iii. What AI changes about that, today</h2>
+      <section className={styles.aiSection}>
+        <h2>
+          <span className={styles.aiSectionLabel}>How AI fits</span>
+          iii. What AI changes about this, today
+        </h2>
         <p>
           The four findings above were surfaced in nine days of reading. Three years ago the same engagement would have taken four months of consultant time and a meaningful multiple of the fee. The change is not that AI generated the insight. The change is that AI made it economical to read the entire corpus in volume — every agreement, every escalator clause, every renewal date, every ticket time-stamp, every line item on every invoice — and surface the anomalies for a human to weigh.
         </p>
@@ -109,8 +107,8 @@ export default function SampleMemoPage() {
         <p>
           The second is service-contract review at anniversary. The sixty-one missed escalators identified above were not flagged in the last cycle because the review owner had five other priorities and the contracts arrive in the queue in no particular order. AI-assisted review at anniversary, fed the standard- and legacy-form contracts and the labor-rate baseline, would have surfaced all sixty-one in approximately ninety minutes of analyst time. This is a workflow change rather than a build: it requires standardizing how anniversaries enter the queue and applying a tool that already exists.
         </p>
-        <p>
-          What AI does not do, in the engagement we just completed or in the two moves above, is generate the strategy. It does not replace the conversation we are about to have at the walkthrough. It compresses the reading — and the reading is the part of the work that, until two years ago, was the rate-limiting step. Neither of the moves above is the future of AI. They are the present. They are also the kind of move that is uninteresting at the conference and decisive on the income statement.
+        <p className={styles.aiPunchline}>
+          What AI does not do is generate the strategy. <em>It compresses the reading.</em> The reading is the part that, until two years ago, was the rate-limiting step.
         </p>
       </section>
 
@@ -153,15 +151,13 @@ export default function SampleMemoPage() {
       <section className={styles.methodology}>
         <h2>Methodology</h2>
         <p>
-          Over the ten business days of the engagement we read: the standard- and legacy-form maintenance contracts and amendments for all ninety-three active commercial accounts; the trailing eighteen months of vendor invoices from the four supply houses; the dispatch logs and ticket time-stamps for the trailing twelve months; the licensed-software inventory and renewal calendar; the public-facing site, the proposal templates, and the policy handbook. We held a two-hour executive alignment session at the start and four short calls during the discovery — with the VP Service, the VP Install, the senior estimator, and the dispatch coordinator. AI was used to read in volume and to flag anomalies; every finding above was reviewed and weighted by us before it entered this document. No client information used in the engagement appears in the memo or this footnote.
+          Over the ten business days of the engagement we read: the standard- and legacy-form maintenance contracts and amendments for all ninety-three active commercial accounts; the trailing eighteen months of vendor invoices from the four supply houses; the dispatch logs and ticket time-stamps for the trailing twelve months; the licensed-software inventory and renewal calendar; the public-facing site, the proposal templates, and the policy handbook. We held a two-hour executive alignment session at the start and four short calls during the discovery — with the VP Service, the VP Install, the senior estimator, and the dispatch coordinator. AI was used to read in volume and to flag anomalies; every finding above was reviewed and weighted by us before it entered this document. No client information used in the engagement appears in this Action Plan or this footnote.
         </p>
       </section>
 
       <hr />
 
-      <p className={styles.signoff}>
-        — The partners at Here Now Labs
-      </p>
+      <p className={styles.signoff}>— The partners at Here Now Labs</p>
       <p className={styles.confidentiality}>
         Here Now Labs · Confidential to the executive team named above. Not for circulation outside the company without consent.
       </p>
@@ -169,12 +165,12 @@ export default function SampleMemoPage() {
       <hr data-print-hide="true" />
 
       <section className={styles.cta} data-print-hide="true">
-        <h2>If you would like the printable version.</h2>
+        <h2>The printable Action Plan.</h2>
         <p>
-          A typeset PDF of this memo, suitable for printing and circulation, runs to nine pages including the cover and the methodology footnote above.
+          Nine pages including cover and methodology. Suitable for printing and circulation.
         </p>
         <div className={styles.ctaRow}>
-          <a href="/sample-memo.pdf" className="btn" download>
+          <a href="/ai-action-plan.pdf" className="btn" download>
             Download PDF
           </a>
           <Link href="/contact" className="btn btn--ghost">

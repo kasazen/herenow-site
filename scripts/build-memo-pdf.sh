@@ -12,8 +12,8 @@ ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT_DIR"
 
 PORT=4150
-URL="http://localhost:${PORT}/sample-memo"
-OUT="public/sample-memo.pdf"
+URL="http://localhost:${PORT}/ai-action-plan"
+OUT="public/ai-action-plan.pdf"
 CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
 if [[ ! -x "$CHROME" ]]; then

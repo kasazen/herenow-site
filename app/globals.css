@@ -444,7 +444,7 @@ textarea {
 }
 
 /* ─── Print styles ────────────────────────────────────────────── */
-/* Used to render the canonical /sample-memo page as a typeset PDF
+/* Used to render the canonical /ai-action-plan page as a typeset PDF
    via Chrome --print-to-pdf. Hides site chrome, drops the CTA,
    tightens layout for US Letter, and inserts page breaks where the
    document would naturally fold. */
