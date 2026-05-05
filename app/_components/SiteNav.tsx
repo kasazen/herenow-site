@@ -19,9 +19,11 @@ export default function SiteNav() {
     };
     document.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
+    document.body.classList.add("nav-open");
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
+      document.body.classList.remove("nav-open");
     };
   }, [open]);
 

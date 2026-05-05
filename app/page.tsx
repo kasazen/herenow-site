@@ -7,11 +7,10 @@ export default function HomePage() {
     <>
       <section className={styles.hero}>
         <div className={`container ${styles.heroInner}`}>
-          <p className="eyebrow">Here Now Labs</p>
           <h1 className={styles.heroLine}>
-            <em>AI inside your operation.</em>
+            <em>AI action planning</em>
             <br />
-            Built by people who have run one.
+            for operators.
           </h1>
           <p className={styles.heroLead}>
             We start with a conversation. Then we aim AI at the work that has been waiting for someone&rsquo;s attention.

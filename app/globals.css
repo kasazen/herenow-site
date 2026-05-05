@@ -227,11 +227,21 @@ hr {
 .site-header {
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 40;
   background: color-mix(in srgb, var(--bg) 92%, transparent);
   backdrop-filter: saturate(140%) blur(8px);
   -webkit-backdrop-filter: saturate(140%) blur(8px);
   border-bottom: 1px solid color-mix(in srgb, var(--rule) 60%, transparent);
+}
+
+/* When the mobile drawer is open, the header background goes fully
+   opaque so the toggle button sits on a solid surface that matches the
+   drawer behind it. */
+body.nav-open .site-header {
+  background: var(--bg);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  z-index: 60;
 }
 
 .site-header__inner {
@@ -333,18 +343,23 @@ hr {
   position: fixed;
   inset: 0;
   background: var(--bg);
-  z-index: 9;
+  background-color: #faf9f5;
+  z-index: 50;
   padding: 5rem var(--gutter) 3rem;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  transform: translateY(-0.5rem);
-  transition: opacity 180ms ease, transform 180ms ease;
+  overflow-y: auto;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  transition: opacity 180ms ease, visibility 0s linear 180ms;
 }
 
 .nav-mobile--open {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
-  transform: translateY(0);
+  transition: opacity 180ms ease, visibility 0s linear 0s;
 }
 
 .nav-mobile ul {
@@ -580,7 +595,8 @@ textarea {
   body {
     background: #fff !important;
     color: #14141a !important;
-    font-size: 11pt !important;
+    font-size: 10.5pt !important;
+    line-height: 1.45 !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
@@ -601,26 +617,51 @@ textarea {
   }
 
   hr {
-    margin: 1.25rem 0 !important;
+    margin: 1rem 0 !important;
     background: #c8c5b8 !important;
   }
 
+  /* Tighten section spacing for print */
+  article > section {
+    margin-block: 0 !important;
+    padding-block: 0.4rem 0.6rem !important;
+  }
+
   /* Avoid orphan headlines */
-  h1, h2, h3 {
+  h1, h2, h3, h4 {
     break-after: avoid;
     page-break-after: avoid;
+    break-inside: avoid;
+    page-break-inside: avoid;
   }
 
-  /* Each top-level memo section starts on a fresh page after the cover */
-  article > section {
-    break-before: page;
-    page-break-before: always;
+  h2 {
+    margin-top: 1.2em !important;
+    margin-bottom: 0.4em !important;
+    font-size: 16pt !important;
   }
 
-  /* The first section (and methodology, signoff) flow naturally */
-  article > section:first-of-type {
-    break-before: auto;
-    page-break-before: auto;
+  h3 {
+    margin-top: 0.8em !important;
+    margin-bottom: 0.3em !important;
+  }
+
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* Keep cohesive units together: findings, build blocks, comparison
+     panels should not split mid-content. Pagination flows naturally
+     between them rather than being forced. */
+  ol li, ul li,
+  [class*="findings"] li,
+  [class*="aiBuildBlock"],
+  [class*="aiBanner"],
+  [class*="diff"],
+  [class*="meta"] {
+    break-inside: avoid;
+    page-break-inside: avoid;
   }
 
   /* Hide the on-page download CTA from the printed deliverable */
@@ -638,7 +679,4 @@ textarea {
     color: inherit !important;
     text-decoration: none !important;
   }
-
-  /* Footer page numbers via @page is fragile across engines.
-     We rely on Chrome's built-in footer template via --print-to-pdf. */
 }
