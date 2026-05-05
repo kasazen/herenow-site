@@ -1,0 +1,219 @@
+.hero {
+  padding-block: clamp(4rem, 10vw, 7rem);
+}
+
+.heroInner {
+  max-width: 60rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+.heroLine {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4.6vw, 3.25rem);
+  line-height: 1.2;
+  letter-spacing: -0.022em;
+  font-weight: 400;
+  margin: 0;
+  max-width: 30ch;
+}
+
+.heroLine em {
+  font-style: italic;
+  font-feature-settings: "kern", "liga", "ss01", "onum";
+}
+
+.heroLead {
+  font-size: clamp(1.0625rem, 1.5vw, 1.2rem);
+  line-height: 1.55;
+  color: var(--muted);
+  max-width: 38rem;
+  margin: 0;
+}
+
+.heroCtaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+/* What we do */
+
+.what {
+}
+
+.whatGrid {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 56rem) {
+  .whatGrid {
+    grid-template-columns: 5fr 7fr;
+    align-items: start;
+  }
+}
+
+.whatHeadline {
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  max-width: 22ch;
+}
+
+.whatBody p {
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.whatBody p + p {
+  margin-top: 1.1em;
+}
+
+/* Steps */
+
+.steps {
+}
+
+.stepsList {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  display: grid;
+  gap: 2rem;
+  max-width: 50rem;
+}
+
+.stepsList li {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 1.25rem;
+  align-items: start;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.stepsList li:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.stepNum {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.5rem;
+  color: var(--accent);
+  line-height: 1;
+  padding-top: 0.2rem;
+}
+
+.stepsList h3 {
+  font-family: var(--font-serif);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.25rem;
+  color: var(--ink);
+  margin-bottom: 0.4rem;
+  line-height: 1.3;
+  letter-spacing: -0.012em;
+}
+
+.stepsList p {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.stepsFooter {
+  margin-top: 2.5rem;
+  font-size: 0.95rem;
+}
+
+/* Proof */
+
+.proof {
+}
+
+.proofGrid {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 56rem) {
+  .proofGrid {
+    grid-template-columns: 5fr 7fr;
+    align-items: start;
+  }
+}
+
+.proofGrid h2 {
+  max-width: 14ch;
+}
+
+.proofBody p {
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+.proofBody p + p {
+  margin-top: 1.1em;
+}
+
+/* Late section */
+
+.late {
+  padding-block: clamp(3rem, 6vw, 5rem);
+}
+
+.lateLine {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.018em;
+  margin: 0;
+  max-width: 36rem;
+}
+
+.lateLine em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.lateBody {
+  margin-top: 1.25rem;
+  max-width: 38rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* CTA */
+
+.cta {
+}
+
+.ctaHeadline {
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+}
+
+.ctaBody {
+  margin-top: 1rem;
+  max-width: 38rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.ctaTry {
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
+  color: var(--faint);
+}
+
+.ctaTry a {
+  color: var(--accent);
+}

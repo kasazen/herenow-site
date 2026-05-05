@@ -1,8 +1,8 @@
 // Anthropic Messages API client. Supports streaming with tool_use so the
 // frontend can surface mini-observations as the model writes the memo.
 
-import { SYSTEM_PROMPT, MEMO_TOOL, buildUserMessage } from "./prompt.js";
-import type { Pages } from "./scrape.js";
+import { SYSTEM_PROMPT, MEMO_TOOL, buildUserMessage } from "./prompt";
+import type { Pages } from "./scrape";
 
 export type MemoSection = {
   index: number;

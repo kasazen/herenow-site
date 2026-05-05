@@ -11,7 +11,7 @@
 // Findings are also accumulated and returned, so the structured memo
 // call can use them as additional grounding via buildUserMessage().
 
-import type { Pages } from "./scrape.js";
+import type { Pages } from "./scrape";
 
 const MODEL = "claude-sonnet-4-6";
 const API_URL = "https://api.anthropic.com/v1/messages";

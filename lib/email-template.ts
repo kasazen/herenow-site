@@ -5,7 +5,7 @@
 // fallbacks match site palette and intent. Single cream surface throughout —
 // structure comes from hairline rules, not nested boxes.
 
-import type { MemoResult } from "./anthropic.js";
+import type { MemoResult } from "./anthropic";
 
 type RenderInput = {
   memo: MemoResult;

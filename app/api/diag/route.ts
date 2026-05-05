@@ -1,11 +1,11 @@
-// Diagnostic endpoint. Reports env-var presence (no values) and the KV
-// host. Optionally pings Resend with a tiny test send when called as
-//   GET /api/diag?send=<email>&secret=<DIAG_SECRET>
-// — gated by a shared secret so it can't be abused.
+// GET /api/diag — diagnostic. Reports env-var presence (no values) and KV host.
+// Optional Resend ping with ?send=<email>&secret=<DIAG_SECRET>.
 
-import type { VercelRequest, VercelResponse } from "@vercel/node";
+export const runtime = "nodejs";
 
-export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
+export async function GET(request: Request) {
+  const url = new URL(request.url);
+
   const present = (key: string): "set" | "missing" =>
     typeof process.env[key] === "string" && process.env[key]!.length > 0 ? "set" : "missing";
 
@@ -29,13 +29,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     kvHost = "(invalid url)";
   }
 
-  // Optional Resend ping.
   let resendPing: { attempted: boolean; ok?: boolean; status?: number; body?: string; error?: string } = {
     attempted: false,
   };
 
-  const sendTo = typeof req.query.send === "string" ? req.query.send.trim() : "";
-  const givenSecret = typeof req.query.secret === "string" ? req.query.secret : "";
+  const sendTo = url.searchParams.get("send")?.trim() ?? "";
+  const givenSecret = url.searchParams.get("secret") ?? "";
   const expectedSecret = process.env.DIAG_SECRET ?? "";
 
   if (sendTo) {
@@ -53,7 +52,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     }
   }
 
-  res.status(200).json({ env, kvHost, resendPing, ts: new Date().toISOString() });
+  return Response.json({ env, kvHost, resendPing, ts: new Date().toISOString() });
 }
 
 async function pingResend(to: string): Promise<{ ok: boolean; status: number; body: string }> {

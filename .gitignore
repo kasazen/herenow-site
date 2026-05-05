@@ -7,3 +7,14 @@ dist
 .wrangler/
 _feedback_*.png
 .vercel
+
+# Next.js
+.next/
+next-env.d.ts
+*.tsbuildinfo
+.env*.local
+
+# Loose dev media
+IMG_*.png
+Screen\ Recording*.mov
+_frames/

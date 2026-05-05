@@ -4,7 +4,7 @@
 // + redacted previews + email gate) → unlocking → sent. The "sent"
 // state hides the memo entirely; the email is the only path to the rest.
 
-import { track } from "./analytics";
+import { track } from "./_analytics";
 
 type State = "intake" | "generating" | "teaser" | "unlocking" | "sent" | "soft-launch";
 
@@ -23,10 +23,11 @@ type CompletePayload = {
 
 type UnlockResponse = { ok: boolean; sentTo?: string; message?: string };
 
-const IS_DEV = import.meta.env.DEV;
-const API_OVERRIDE = (import.meta.env.VITE_API_URL as string | undefined)?.trim() ?? "";
-const API_URL = API_OVERRIDE || (IS_DEV ? "" : "/api");
-const API_OK = API_URL.length > 0 || IS_DEV;
+const IS_DEV = typeof process !== "undefined" && process.env.NODE_ENV === "development";
+const API_OVERRIDE =
+  typeof process !== "undefined" ? (process.env.NEXT_PUBLIC_API_URL ?? "").trim() : "";
+const API_URL = API_OVERRIDE || "/api";
+const API_OK = true;
 
 let memoId: string | null = null;
 let lastFocused: HTMLElement | null = null;

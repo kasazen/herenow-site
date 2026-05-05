@@ -1,47 +1,49 @@
-// POST /api/unlock — Vercel Node serverless function.
-// Accepts { id, email, firstName? }, looks up the stored memo, marks
-// email unlocked, and sends the typeset HTML email via Resend.
+// POST /api/unlock — Next.js App Router route handler.
+// Accepts { id, email, firstName?, note? }, looks up the stored memo,
+// and sends the typeset HTML email via Resend.
 //
 // Inbox-only delivery: the response does NOT include the memo sections.
 // The email is the only path to the full memo, so we await the send
-// and surface failures to the user instead of fire-and-forget.
+// and surface failures to the user.
 
-import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { getMemo, type StoredMemo } from "@/lib/storage";
+import { renderEmail } from "@/lib/email-template";
 
-import { getMemo, type StoredMemo } from "./_lib/storage.js";
-import { renderEmail } from "./_lib/email-template.js";
+export const runtime = "nodejs";
+export const maxDuration = 60;
 
-export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
-  setCors(res);
-  if (req.method === "OPTIONS") {
-    res.status(204).end();
-    return;
+const CORS_HEADERS = {
+  "access-control-allow-origin": "*",
+  "access-control-allow-methods": "POST, OPTIONS",
+  "access-control-allow-headers": "content-type",
+  "access-control-max-age": "86400",
+};
+
+export function OPTIONS() {
+  return new Response(null, { status: 204, headers: CORS_HEADERS });
+}
+
+export async function POST(request: Request): Promise<Response> {
+  type UnlockBody = { id?: string; email?: string; firstName?: string; note?: string };
+  let body: UnlockBody | null = null;
+  try {
+    body = (await request.json()) as UnlockBody;
+  } catch {
+    return json(400, { ok: false, error: "invalid_json" });
   }
-  if (req.method !== "POST") {
-    res.status(405).json({ ok: false, error: "method_not_allowed" });
-    return;
-  }
 
-  const body = (typeof req.body === "string" ? safeParseJson(req.body) : req.body) as
-    | { id?: string; email?: string; firstName?: string; note?: string }
-    | null;
-  if (!body) {
-    res.status(400).json({ ok: false, error: "invalid_json" });
-    return;
-  }
+  const id = (body?.id ?? "").trim();
+  const email = (body?.email ?? "").trim().toLowerCase();
+  const firstName = (body?.firstName ?? "").trim();
+  const note = (body?.note ?? "").trim().slice(0, 1500);
 
-  const id = (body.id ?? "").trim();
-  const email = (body.email ?? "").trim().toLowerCase();
-  const firstName = (body.firstName ?? "").trim();
-  const note = (body.note ?? "").trim().slice(0, 1500);
-
-  if (!id) {
-    res.status(400).json({ ok: false, error: "missing_id" });
-    return;
-  }
+  if (!id) return json(400, { ok: false, error: "missing_id" });
   if (!isEmail(email)) {
-    res.status(400).json({ ok: false, error: "invalid_email", message: "That doesn't look like an email address." });
-    return;
+    return json(400, {
+      ok: false,
+      error: "invalid_email",
+      message: "That doesn't look like an email address.",
+    });
   }
 
   let stored: StoredMemo | null;
@@ -49,34 +51,34 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     stored = await getMemo(id);
   } catch (err) {
     console.error("kv_get_failed", err);
-    res.status(503).json({ ok: false, error: "kv_unavailable", message: "Our storage isn't reachable right now." });
-    return;
+    return json(503, {
+      ok: false,
+      error: "kv_unavailable",
+      message: "Our storage isn't reachable right now.",
+    });
   }
   if (!stored) {
-    res.status(404).json({ ok: false, error: "memo_not_found", message: "That read has expired. Generate a new one." });
-    return;
+    return json(404, {
+      ok: false,
+      error: "memo_not_found",
+      message: "That read has expired. Generate a new one.",
+    });
   }
 
-  // Inbox-only: await the send and surface failures.
   try {
     await sendEmail(email, firstName || undefined, stored);
   } catch (err) {
     const msg = (err as Error)?.message?.slice(0, 300) ?? "unknown";
     console.error("email_send_failed", msg);
-    res.status(502).json({
+    return json(502, {
       ok: false,
       error: "email_send_failed",
       message:
         "We couldn't deliver the email. Drop us a note at team@herenowlabs.xyz and we'll send it by hand.",
       detail: process.env.NODE_ENV === "development" ? msg : undefined,
     });
-    return;
   }
 
-  // Notify the team on every successful send so a human can pick up the
-  // conversation. Awaited so the serverless runtime doesn't tear down the
-  // invocation mid-fetch; failures are logged but do not affect the user
-  // success state.
   try {
     await sendTeamNote({
       from: email,
@@ -90,7 +92,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     console.error("team_note_send_failed", (err as Error)?.message?.slice(0, 200));
   }
 
-  res.status(200).json({ ok: true, sentTo: email });
+  return json(200, { ok: true, sentTo: email });
 }
 
 async function sendTeamNote(input: {
@@ -140,7 +142,11 @@ async function sendTeamNote(input: {
   }
 }
 
-async function sendEmail(to: string, firstName: string | undefined, stored: StoredMemo): Promise<void> {
+async function sendEmail(
+  to: string,
+  firstName: string | undefined,
+  stored: StoredMemo,
+): Promise<void> {
   const resendKey = process.env.RESEND_API_KEY;
   const from = process.env.EMAIL_FROM ?? "Here Now Labs <team@herenowlabs.xyz>";
   const meetingHref = process.env.MEETING_HREF ?? "https://cal.com/herenowlabs/intro";
@@ -158,10 +164,7 @@ async function sendEmail(to: string, firstName: string | undefined, stored: Stor
 
   const r = await fetch("https://api.resend.com/emails", {
     method: "POST",
-    headers: {
-      "content-type": "application/json",
-      authorization: `Bearer ${resendKey}`,
-    },
+    headers: { "content-type": "application/json", authorization: `Bearer ${resendKey}` },
     body: JSON.stringify({ from, to, subject, html, text }),
   });
 
@@ -175,17 +178,6 @@ function isEmail(s: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 }
 
-function safeParseJson(s: string): unknown {
-  try {
-    return JSON.parse(s);
-  } catch {
-    return null;
-  }
-}
-
-function setCors(res: VercelResponse): void {
-  res.setHeader("access-control-allow-origin", "*");
-  res.setHeader("access-control-allow-methods", "POST, OPTIONS");
-  res.setHeader("access-control-allow-headers", "content-type");
-  res.setHeader("access-control-max-age", "86400");
+function json(status: number, body: unknown): Response {
+  return Response.json(body, { status, headers: CORS_HEADERS });
 }

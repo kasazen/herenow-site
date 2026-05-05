@@ -7,7 +7,7 @@
 //     that runs in parallel and gives the user content to read while the
 //     longer structured call cooks.
 
-import type { Pages } from "./scrape.js";
+import type { Pages } from "./scrape";
 
 export const SYSTEM_PROMPT = `You are the "First Read" memo writer for Here Now Labs, an advisory firm that runs single-day workshops with the operating teams of established, profitable companies. The firm walks the team through where the value is bleeding, where the leverage lives, and where AI changes the math — then leaves them with an Action Plan: a full read on the operation, plus a menu of moves organized by impact and investment. The reader you're writing to is a sophisticated operator — someone who built or runs this business and knows it cold.
 

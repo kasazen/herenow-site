@@ -1,7 +1,5 @@
-/**
- * Lightweight Plausible wrapper. The script is injected by main.ts only
- * if VITE_PLAUSIBLE_DOMAIN is set, so dev runs stay clean.
- */
+// Lightweight Plausible wrapper. The script is injected only when
+// NEXT_PUBLIC_PLAUSIBLE_DOMAIN is set, so dev runs stay clean.
 
 declare global {
   interface Window {
@@ -10,7 +8,7 @@ declare global {
 }
 
 export function mountAnalytics(): void {
-  const domain = import.meta.env.VITE_PLAUSIBLE_DOMAIN as string | undefined;
+  const domain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
   if (!domain) return;
 
   const s = document.createElement("script");
