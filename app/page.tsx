@@ -1,6 +1,5 @@
 import Link from "next/link";
 import HeroImage from "./_components/HeroImage";
-import ForwardArrow from "./_components/Arrow";
 import OperationsDiagram from "./_components/OperationsDiagram";
 import BranchingMark from "./_components/BranchingMark";
 import BuildsCarousel from "./_components/BuildsCarousel";
@@ -20,7 +19,7 @@ export default function HomePage() {
             <em>Build what compounds.</em>
           </h1>
           <p className={styles.heroLead}>
-            Ten days to find yours. Months to build what compounds for years.
+            Ten days to find yours. Months to build it.
           </p>
           <div className={styles.heroCtaRow}>
             <Link href="/ai-action-plan" className="btn">
@@ -34,68 +33,9 @@ export default function HomePage() {
         </div>
         <div className={`container ${styles.heroDiagramWrap}`}>
           <OperationsDiagram />
-        </div>
-      </section>
-
-      <section className={`section section--paper rule-top ${styles.opening}`}>
-        <div className="container">
-          <div className={styles.openingGrid}>
-            <div>
-              <p className="eyebrow">Where it begins</p>
-              <h2 className={styles.openingHeadline}>
-                A conversation. Then ten days.
-              </h2>
-            </div>
-            <div className={styles.openingBody}>
-              <p>
-                Our partners sit with you before anything is signed. We listen the way operators listen — for what&rsquo;s annoying, what&rsquo;s compounding, what would matter changed.
-              </p>
-              <p className={styles.openingPunch}>
-                <strong>Operators set the bets. AI gives them reach.</strong>
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className={`section rule-top ${styles.diff}`}>
-        <div className="container">
-          <p className="eyebrow">Why us</p>
-          <h2 className={styles.diffHeadline}>
-            Most consulting compresses your calendar. We compound your operation.
-          </h2>
-          <div className={styles.diffGrid}>
-            <article className={styles.diffCell}>
-              <p className={styles.diffOldLabel}>The old way</p>
-              <p className={styles.diffOld}>Three months of consultants</p>
-              <p className={styles.diffArrow} aria-hidden="true"><ForwardArrow /></p>
-              <p className={styles.diffNewLabel}>What we do</p>
-              <p className={styles.diffNew}>Ten business days</p>
-              <p className={styles.diffNote}>
-                AI reads the whole corpus at speed. We weigh the bets.
-              </p>
-            </article>
-            <article className={styles.diffCell}>
-              <p className={styles.diffOldLabel}>The old way</p>
-              <p className={styles.diffOld}>A 60-page deck</p>
-              <p className={styles.diffArrow} aria-hidden="true"><ForwardArrow /></p>
-              <p className={styles.diffNewLabel}>What we do</p>
-              <p className={styles.diffNew}>An AI Action Plan</p>
-              <p className={styles.diffNote}>
-                Five sections. Every line tied to a dollar. Read in one sitting.
-              </p>
-            </article>
-            <article className={styles.diffCell}>
-              <p className={styles.diffOldLabel}>The old way</p>
-              <p className={styles.diffOld}>Generic AI advice</p>
-              <p className={styles.diffArrow} aria-hidden="true"><ForwardArrow /></p>
-              <p className={styles.diffNewLabel}>What we do</p>
-              <p className={styles.diffNew}>AI built into the work</p>
-              <p className={styles.diffNote}>
-                We ship the AI the Plan identified. Tools and agents that run.
-              </p>
-            </article>
-          </div>
+          <p className={styles.diagramCaption}>
+            <em>Operators set the bets. AI gives them reach.</em>
+          </p>
         </div>
       </section>
 
@@ -103,10 +43,7 @@ export default function HomePage() {
         <div className="container">
           <div className={styles.methodHead}>
             <p className="eyebrow">The Here Now Method</p>
-            <h2>What makes the work proprietary.</h2>
-            <p className={styles.methodLead}>
-              Five stages, every engagement. AI tooling tuned to mid-market operations — not what SaaS tools wish they were.
-            </p>
+            <h2>Five stages. Ten days.</h2>
           </div>
 
           <ol className={styles.methodList}>
@@ -149,59 +86,16 @@ export default function HomePage() {
 
       <section className={`section ${styles.deliverable}`}>
         <div className="container">
-          <div className={styles.deliverableGrid}>
-            <div>
-              <p className="eyebrow">The deliverable</p>
-              <h2>The AI Action Plan.</h2>
-              <p className={styles.deliverableLead}>
-                Five sections. One sitting. Every line tagged with a dollar.
-              </p>
-            </div>
-            <div className={styles.deliverableBody}>
-              <ul className={styles.deliverableSections}>
-                <li>
-                  <span className={styles.deliverableNum}><em>i.</em></span>
-                  <div>
-                    <h4>Where the margin actually lives</h4>
-                    <p>The bet. One falsifiable hypothesis about the operation.</p>
-                  </div>
-                </li>
-                <li>
-                  <span className={styles.deliverableNum}><em>ii.</em></span>
-                  <div>
-                    <h4>Where the margin&rsquo;s been waiting</h4>
-                    <p>Specific margin you weren&rsquo;t reaching. Ranked, named, sourced.</p>
-                  </div>
-                </li>
-                <li>
-                  <span className={styles.deliverableNum}><em>iii.</em></span>
-                  <div>
-                    <h4>Where growth is waiting</h4>
-                    <p>Revenue we would pursue first. Each tied to the operation.</p>
-                  </div>
-                </li>
-                <li>
-                  <span className={styles.deliverableNum}><em>iv.</em></span>
-                  <div>
-                    <h4>What to build first</h4>
-                    <p>Software. Agents. Workflow changes. Each tagged, scoped, priced.</p>
-                  </div>
-                </li>
-                <li>
-                  <span className={styles.deliverableNum}><em>v.</em></span>
-                  <div>
-                    <h4>Two questions for next quarter</h4>
-                    <p>The kind a board member would ask. We propose ours.</p>
-                  </div>
-                </li>
-              </ul>
-              <p className={styles.deliverableCta}>
-                <Link href="/ai-action-plan" className="btn btn--ghost">
-                  Read the sample Plan →
-                </Link>
-              </p>
-            </div>
-          </div>
+          <p className="eyebrow">The deliverable</p>
+          <h2 className={styles.deliverableHeadline}>The AI Action Plan.</h2>
+          <p className={styles.deliverableLead}>
+            Five sections. One sitting. Every line tied to a dollar.
+          </p>
+          <p className={styles.deliverableCta}>
+            <Link href="/ai-action-plan" className="btn btn--ghost">
+              Read a sample Plan →
+            </Link>
+          </p>
         </div>
       </section>
 
@@ -212,9 +106,6 @@ export default function HomePage() {
           <div className={styles.longgameHead}>
             <p className="eyebrow">After the Plan</p>
             <h2>The work that compounds.</h2>
-            <p className={styles.longgameLead}>
-              Most engagements continue. Custom software, autonomous agents, ongoing advisory.
-            </p>
           </div>
 
           <BuildsCarousel
@@ -226,12 +117,12 @@ export default function HomePage() {
                 content: (
                   <article className={styles.buildCard}>
                     <p className={styles.buildLabel}>AI software · 4–6 weeks</p>
-                    <h3>Tools your team uses every day</h3>
+                    <h3>Tools your team uses</h3>
                     <p className={styles.buildOutcome}>
-                      Built for a specific role. Measurable in hours and dollars.
+                      Built for a specific role.
                     </p>
                     <div className={styles.buildExampleBlock}>
-                      <p className={styles.buildExampleHead}>From a recent engagement</p>
+                      <p className={styles.buildExampleHead}>Recent build</p>
                       <p className={styles.buildExample}>
                         <strong>AI proposal generator.</strong> Drafts from a prospect&rsquo;s scope; pulls labor and parts from past wins.
                       </p>
@@ -259,14 +150,14 @@ export default function HomePage() {
                 content: (
                   <article className={styles.buildCard}>
                     <p className={styles.buildLabel}>AI agent · 2–4 weeks</p>
-                    <h3>Autonomous, on a schedule or trigger</h3>
+                    <h3>Autonomous workers</h3>
                     <p className={styles.buildOutcome}>
-                      No one invokes them. They watch the calendar; act when conditions fire. Human review is sign-off.
+                      No one invokes them. They watch; act when conditions fire.
                     </p>
                     <div className={styles.buildExampleBlock}>
-                      <p className={styles.buildExampleHead}>From a recent engagement</p>
+                      <p className={styles.buildExampleHead}>Recent build</p>
                       <p className={styles.buildExample}>
-                        <strong>Anniversary review agent.</strong> At each maintenance anniversary, reviews escalator clauses and drafts the renewal letter.
+                        <strong>Anniversary review agent.</strong> Drafts the renewal letter at each contract anniversary.
                       </p>
                       <ul className={styles.buildMetrics}>
                         <li>
@@ -292,9 +183,9 @@ export default function HomePage() {
                 content: (
                   <article className={styles.buildCard}>
                     <p className={styles.buildLabel}>Advisory · ongoing</p>
-                    <h3>Quarterly AI working group</h3>
+                    <h3>Quarterly working group</h3>
                     <p className={styles.buildOutcome}>
-                      Two partners with the executive team. Review what shipped. Rank what to build next. Retire what isn&rsquo;t pulling weight.
+                      Two partners with the executive team.
                     </p>
                     <div className={styles.buildExampleBlock}>
                       <p className={styles.buildExampleHead}>How it runs</p>
@@ -322,9 +213,6 @@ export default function HomePage() {
             ]}
           />
 
-          <p className={styles.longgameFoot}>
-            Representative builds. Specifics depend on the diagnostic.
-          </p>
         </div>
       </section>
 
@@ -333,9 +221,6 @@ export default function HomePage() {
           <p className={styles.lateLine}>
             <em>The operators who move on AI this year</em>{" "}
             <span className={styles.lateAccent}>compound for the next ten.</span>
-          </p>
-          <p className={styles.lateBody}>
-            Small, specific, quiet — and it stacks every quarter.
           </p>
         </div>
       </section>

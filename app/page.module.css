@@ -88,6 +88,25 @@
   margin-top: clamp(1.5rem, 4vw, 3rem);
 }
 
+.diagramCaption {
+  font-family: var(--font-serif);
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  font-style: italic;
+  color: var(--muted);
+  text-align: center;
+  margin: clamp(1.25rem, 3vw, 2rem) 0 0;
+  letter-spacing: -0.005em;
+}
+
+.diagramCaption em {
+  font-style: italic;
+}
+
+.deliverableHeadline {
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  margin-top: 0.5rem;
+}
+
 /* ─── Opening (where engagements begin) ───────────────────────── */
 
 .opening {
