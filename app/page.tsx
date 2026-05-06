@@ -1,5 +1,7 @@
 import Link from "next/link";
 import HeroImage from "./_components/HeroImage";
+import ForwardArrow from "./_components/Arrow";
+import BrandSpine from "./_components/BrandSpine";
 import styles from "./page.module.css";
 
 export default function HomePage() {
@@ -7,13 +9,13 @@ export default function HomePage() {
     <>
       <section className={styles.hero}>
         <div className={`container ${styles.heroInner}`}>
+          <p className={`eyebrow ${styles.heroEyebrow}`}>AI Action Planning · for operators</p>
           <h1 className={styles.heroLine}>
-            <em>AI action planning</em>
-            <br />
-            for operators.
+            Find the AI in your operation.
+            <em>Build what compounds.</em>
           </h1>
           <p className={styles.heroLead}>
-            We start with a conversation. Then we aim AI at the work that has been waiting for someone&rsquo;s attention.
+            Most operations have an AI advantage waiting inside them. We find yours in ten days. Then we build the software and agents that compound it for years.
           </p>
           <div className={styles.heroCtaRow}>
             <Link href="/ai-action-plan" className="btn">
@@ -41,7 +43,7 @@ export default function HomePage() {
                 Before any contract is signed, before any data is touched, our partners sit with you. We understand businesses the way operators do — by listening to what is annoying, what is compounding, what would matter if it changed. The conversation is the work; the AI is what we aim at it.
               </p>
               <p className={styles.openingPunch}>
-                <strong>Business judgment first. AI second. In that order, by design.</strong>
+                <strong>Operators set the bets. AI gives them reach.</strong>
               </p>
             </div>
           </div>
@@ -52,20 +54,20 @@ export default function HomePage() {
         <div className="container">
           <p className="eyebrow">Why us</p>
           <h2 className={styles.diffHeadline}>
-            Most consulting compresses your calendar. We compress the work.
+            Most consulting compresses your calendar. We compound your operation.
           </h2>
           <div className={styles.diffGrid}>
             <article className={styles.diffCell}>
               <p className={styles.diffOld}>Three months of consultants</p>
-              <p className={styles.diffArrow} aria-hidden="true">→</p>
+              <p className={styles.diffArrow} aria-hidden="true"><ForwardArrow /></p>
               <p className={styles.diffNew}>Ten business days</p>
               <p className={styles.diffNote}>
-                AI parses the entire contract, vendor, and dispatch corpus at speed. The judgment stays human.
+                AI parses the entire contract, vendor, and dispatch corpus at speed. We weigh the bets that move the operation.
               </p>
             </article>
             <article className={styles.diffCell}>
               <p className={styles.diffOld}>A 60-page deck</p>
-              <p className={styles.diffArrow} aria-hidden="true">→</p>
+              <p className={styles.diffArrow} aria-hidden="true"><ForwardArrow /></p>
               <p className={styles.diffNew}>An AI Action Plan</p>
               <p className={styles.diffNote}>
                 Five sections, every recommendation tied to a dollar. Scanned in one sitting. Defensible at the board.
@@ -73,7 +75,7 @@ export default function HomePage() {
             </article>
             <article className={styles.diffCell}>
               <p className={styles.diffOld}>Generic AI advice</p>
-              <p className={styles.diffArrow} aria-hidden="true">→</p>
+              <p className={styles.diffArrow} aria-hidden="true"><ForwardArrow /></p>
               <p className={styles.diffNew}>AI built into the work</p>
               <p className={styles.diffNote}>
                 After the Plan, we ship the AI it identified — software you can use, agents that run themselves.
@@ -173,8 +175,8 @@ export default function HomePage() {
                 <li>
                   <span className={styles.deliverableNum}><em>ii.</em></span>
                   <div>
-                    <h4>Where the leak is</h4>
-                    <p>Specific cost savings. Ranked by size, named by source.</p>
+                    <h4>Where the margin&rsquo;s been waiting</h4>
+                    <p>Specific margin you weren&rsquo;t reaching. Ranked, named, sourced.</p>
                   </div>
                 </li>
                 <li>
@@ -308,14 +310,16 @@ export default function HomePage() {
       <section className={`section rule-top ${styles.late}`}>
         <div className="container">
           <p className={styles.lateLine}>
-            <em>Operators don&rsquo;t fear AI.</em>{" "}
-            <span className={styles.lateAccent}>They fear being late to it.</span>
+            <em>The operators who move on AI this year</em>{" "}
+            <span className={styles.lateAccent}>compound for the next ten.</span>
           </p>
           <p className={styles.lateBody}>
-            What AI changes about an operation is small, specific, and unglamorous — and it changes every quarter. The cost of waiting is paid in margin to whoever moved first, and in growth lanes to whoever wired the agents in this year instead of next.
+            What AI does to an operation is small, specific, and quiet — and it stacks every quarter. The agents you wire in this year are the operation you run for the next ten.
           </p>
         </div>
       </section>
+
+      <BrandSpine />
 
       <section className={`section section--paper rule-top ${styles.cta}`}>
         <div className="container">

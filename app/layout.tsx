@@ -13,11 +13,11 @@ export const metadata: Metadata = {
     template: "%s · Here Now Labs",
   },
   description:
-    "AI inside your operation. We find where margin is leaking, where growth is waiting, and we build the AI to act on both.",
+    "AI inside your operation. We find your AI advantage in ten days, then build the software and agents that compound it for years.",
   openGraph: {
     title: "Here Now Labs",
     description:
-      "AI inside your operation. Find what is leaking. See where growth is waiting. Build the AI to act on both.",
+      "AI inside your operation. Find your AI advantage. Build what compounds.",
     url: SITE_URL,
     siteName: "Here Now Labs",
     type: "website",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Here Now Labs",
     description:
-      "AI inside your operation. Find what is leaking. See where growth is waiting. Build the AI to act on both.",
+      "AI inside your operation. Find your AI advantage. Build what compounds.",
     images: ["/og-image.png"],
   },
   icons: {
@@ -137,7 +137,7 @@ function SiteFooter() {
             <strong style={{ color: "var(--ink)", fontWeight: 500 }}>Here Now Labs</strong>
           </p>
           <p style={{ marginTop: "0.5rem", maxWidth: "28rem" }}>
-            AI inside your operation. Find what is leaking. See where growth is waiting. Build the AI to act on both.
+            AI inside your operation. Find your AI advantage. Build what compounds.
           </p>
         </div>
         <div>

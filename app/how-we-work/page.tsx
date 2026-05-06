@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import HeroImage from "../_components/HeroImage";
+import BrandSpine from "../_components/BrandSpine";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -20,7 +21,7 @@ export default function HowWeWorkPage() {
           One Action Plan.
         </h1>
         <p className="lead" style={{ marginTop: "1rem" }}>
-          A conversation, then ten business days of work. AI compresses the volume. Our partners carry the judgment. Then the relationship continues, and the work compounds.
+          A conversation, then ten business days — AI parsing every contract, vendor record, and dispatch log while your partners weigh the bets that move the operation. Then the relationship continues, and the work compounds.
         </p>
         <HeroImage
           src="/images/hero/how-we-work.jpg"
@@ -69,7 +70,7 @@ export default function HowWeWorkPage() {
       <section>
         <h2>iv. The AI Action Plan</h2>
         <p>
-          Five sections, eight to ten pages. <strong>Cost savings, growth lanes, software builds, and agent builds — all named, ranked, and tagged.</strong> Where the margin is leaking. Where growth is waiting. What AI changes about both. What to build first.
+          Five sections, eight to ten pages. <strong>Cost savings, growth lanes, software builds, and agent builds — all named, ranked, and tagged.</strong> Where the margin&rsquo;s been waiting. Where growth is waiting. What AI changes about both. What to build first.
         </p>
         <p>
           Every recommendation is tied to a dollar figure and tagged with the kind of work it implies — workflow change, procurement, AI software, or AI agent. A fully de-identified sample is on{" "}
@@ -150,6 +151,8 @@ export default function HowWeWorkPage() {
       </section>
 
       <hr />
+
+      <BrandSpine />
 
       <section className={styles.cta}>
         <h2>If this sounds like the right shape.</h2>

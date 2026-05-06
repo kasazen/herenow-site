@@ -6,7 +6,7 @@ import styles from "./page.module.css";
 export const metadata: Metadata = {
   title: "AI Action Plan (Lite)",
   description:
-    "A short version of an AI Action Plan, generated from your URL. Find what's leaking. See where growth is waiting. The first section unlocks here.",
+    "A short version of an AI Action Plan, generated from your URL. Find the AI advantage waiting in your operation. The first section unlocks here.",
 };
 
 export default function AIActionPlanLitePage() {

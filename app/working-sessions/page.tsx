@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import HeroImage from "../_components/HeroImage";
+import BrandSpine from "../_components/BrandSpine";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -85,7 +86,7 @@ const SESSIONS: Session[] = [
     walkOutWith:
       "The AI Action Plan. Five sections, eight to ten pages, every recommendation tied to a dollar figure.",
     aiRole:
-      "AI compressed nine days of ingestion into the document you are now holding. The voice, the ranking, and the questions are ours.",
+      "AI parsed nine days of ingestion into the document you are now holding. The voice, the ranking, and the questions are ours.",
     body: [
       "The Plan arrives as a PDF and as printed copies — three is typical, more on request. We send it early on the day of the walkthrough so you have an hour with it on your own. Most clients spend that hour with a pen.",
       "A fully de-identified sample is on the AI Action Plan page. If it does not look like something you would actually use, the engagement has failed at the most important step.",
@@ -193,6 +194,8 @@ export default function WorkingSessionsPage() {
       </ol>
 
       <hr />
+
+      <BrandSpine />
 
       <section className={styles.cta}>
         <h2>The first session is the intro call.</h2>

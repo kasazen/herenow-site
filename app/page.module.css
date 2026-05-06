@@ -14,6 +14,12 @@
   align-items: flex-start;
 }
 
+.heroEyebrow {
+  margin: 0;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
 .heroLine {
   font-family: var(--font-serif);
   font-size: clamp(2.25rem, 5.6vw, 3.875rem);
@@ -162,23 +168,20 @@
 }
 
 .diffOld {
-  font-family: var(--font-sans);
-  font-size: 0.9rem;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.95rem;
   color: var(--faint);
-  text-decoration: line-through;
-  text-decoration-color: var(--faint);
-  text-decoration-thickness: 1.5px;
   margin: 0;
   letter-spacing: -0.005em;
 }
 
 .diffArrow {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 1.4rem;
+  display: inline-flex;
+  align-items: center;
   color: var(--accent);
   line-height: 1;
-  margin: 0;
+  margin: 0.15rem 0;
 }
 
 .diffNew {

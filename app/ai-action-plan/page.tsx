@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import HeroImage from "../_components/HeroImage";
+import BrandSpine from "../_components/BrandSpine";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -62,9 +63,9 @@ export default function AIActionPlanPage() {
       </section>
 
       <section>
-        <h2>ii. Where the leak is</h2>
+        <h2>ii. Where the margin&rsquo;s been waiting</h2>
         <p>
-          Across the contracts, vendor records, dispatch logs, and software inventory parsed during the engagement, four pools of leakage are large enough to act on this quarter. The order is by estimated annualized impact, not by ease.
+          Across the contracts, vendor records, dispatch logs, and software inventory parsed during the engagement, four pools of margin are large enough to claim this quarter. The order is by estimated annualized impact, not by ease.
         </p>
         <ol className={styles.findings}>
           <li>
@@ -97,7 +98,7 @@ export default function AIActionPlanPage() {
           </li>
         </ol>
         <p>
-          Total estimated annualized leakage across these four pools: <mark>$2.4M to $3.3M.</mark> Approximately 10–13% of revenue. All four are addressable inside the current fiscal year with existing staff, two outside specialists, and roughly six to eight weeks of attention each.
+          Total estimated annualized margin across these four pools: <mark>$2.4M to $3.3M.</mark> Approximately 10–13% of revenue. All four are addressable inside the current fiscal year with existing staff, two outside specialists, and roughly six to eight weeks of attention each.
         </p>
       </section>
 
@@ -190,6 +191,10 @@ export default function AIActionPlanPage() {
       </p>
 
       <hr data-print-hide="true" />
+
+      <div data-print-hide="true">
+        <BrandSpine />
+      </div>
 
       <section className={styles.cta} data-print-hide="true">
         <h2>The printable Action Plan.</h2>
