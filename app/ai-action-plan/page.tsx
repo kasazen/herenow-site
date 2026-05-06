@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import HeroImage from "../_components/HeroImage";
-import BrandSpine from "../_components/BrandSpine";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -18,7 +17,7 @@ export default function AIActionPlanPage() {
         Northshore Mechanical Services
       </h1>
       <p className={styles.dek}>
-        A fully de-identified sample. <em>Northshore is fictional.</em> The figures, clauses, and account counts are invented. The structure, density, and voice are exactly how a real Action Plan arrives in the executive&rsquo;s inbox.
+        A fully de-identified sample. <em>Northshore is fictional</em>. The figures, clauses, and account counts are invented. The structure, density, and voice are exactly how a real Action Plan arrives in the executive&rsquo;s inbox.
       </p>
 
       <HeroImage
@@ -27,6 +26,14 @@ export default function AIActionPlanPage() {
         className={styles.heroImage}
       />
 
+      <div className={styles.topCtaRow} data-print-hide="true">
+        <a href="/ai-action-plan.pdf" className="btn" download>
+          Download PDF
+        </a>
+        <Link href="/ai-action-plan-lite" className="btn btn--ghost">
+          Try one for your business
+        </Link>
+      </div>
 
       <dl className={styles.meta}>
         <div>
@@ -126,7 +133,7 @@ export default function AIActionPlanPage() {
           </p>
         </div>
         <p className={styles.aiPunchline}>
-          What AI does not do is generate the strategy. <em>It collapses the rate-limiting step.</em> The volume of reading was, until recently, the part of the work that priced consulting out of mid-market budgets.
+          What AI does not do is generate the strategy. <em>It collapses the rate-limiting step</em>. The volume of reading was, until recently, the part of the work that priced consulting out of mid-market budgets.
         </p>
       </section>
 
@@ -192,10 +199,6 @@ export default function AIActionPlanPage() {
 
       <hr data-print-hide="true" />
 
-      <div data-print-hide="true">
-        <BrandSpine />
-      </div>
-
       <section className={styles.cta} data-print-hide="true">
         <h2>The printable Action Plan.</h2>
         <p>
@@ -209,6 +212,10 @@ export default function AIActionPlanPage() {
             Talk to us about your operation
           </Link>
         </div>
+        <p className={styles.ctaTry}>
+          Want one for your business? Try the{" "}
+          <Link href="/ai-action-plan-lite">AI Action Plan (Lite)</Link> — generated from your URL, the first section in your inbox.
+        </p>
       </section>
     </article>
   );

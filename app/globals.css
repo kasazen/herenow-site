@@ -170,6 +170,22 @@ hr {
   opacity: 0.7;
 }
 
+/* Rising-curve mark — the brand's "horizon at dawn." A long, thin line
+   that rises gently. Used as section break or page-foot signature.
+   Sibling to .mark-divider; quieter, wider, more atmospheric. */
+.rising-mark {
+  display: flex;
+  justify-content: center;
+  margin-block: clamp(2.5rem, 5vw, 4rem);
+  padding-inline: var(--gutter);
+  color: var(--accent);
+}
+
+.rising-mark svg {
+  max-width: 100%;
+  height: auto;
+}
+
 /* Brand spine — Find · Build · Compound — recurs at the foot of major pages
    as the typographic signature. The forward+up arrow between verbs carries
    the compounding gesture. Repetition is what makes it memorable. */
@@ -246,10 +262,30 @@ hr {
 
 .section--alt {
   background: var(--paper-tint);
+  position: relative;
+  isolation: isolate;
 }
 
 .section--paper {
   background: var(--paper);
+  position: relative;
+  isolation: isolate;
+}
+
+/* Paper-grain wash — subtle noise behind paper sections to knock the digital
+   sheen off the cream. Inline SVG with fractalNoise; runs at low opacity so
+   it reads as texture, not pattern. */
+.section--paper::before,
+.section--alt::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.06  0 0 0 0 0.05  0 0 0 0 0.02  0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  opacity: 0.06;
+  mix-blend-mode: multiply;
 }
 
 .rule-top {
@@ -289,10 +325,13 @@ body.nav-open .site-header {
 }
 
 .wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
   font-family: var(--font-serif);
-  font-size: 1.25rem;
-  font-weight: 400;
-  letter-spacing: -0.01em;
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: -0.012em;
   color: var(--ink);
   text-decoration: none;
   line-height: 1;
@@ -300,6 +339,20 @@ body.nav-open .site-header {
 
 .wordmark:hover {
   text-decoration: none;
+}
+
+.wordmark__mark {
+  display: inline-block;
+  width: 1.35rem;
+  height: 0.875rem;
+  flex-shrink: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 11'%3E%3Crect width='5' height='5' fill='%2315803d'/%3E%3Crect x='6' width='5' height='5' fill='%2315803d'/%3E%3Crect x='12' width='5' height='5' fill='%2315803d'/%3E%3Crect y='6' width='5' height='5' fill='%2315803d'/%3E%3Crect x='6' y='6' width='5' height='5' fill='%2315803d'/%3E%3Crect x='12' y='6' width='5' height='5' fill='%2315803d'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.wordmark__text {
+  display: inline-block;
 }
 
 /* Desktop nav — hidden on small screens */
@@ -324,9 +377,13 @@ body.nav-open .site-header {
   transition: color 120ms ease;
 }
 
-.nav-desktop a:hover,
-.nav-desktop a[aria-current="page"] {
+.nav-desktop a:hover {
   color: var(--ink);
+}
+
+.nav-desktop a[aria-current="page"] {
+  color: var(--accent);
+  font-weight: 500;
 }
 
 .nav-desktop .nav__cta {
@@ -416,6 +473,11 @@ body.nav-open .site-header {
   text-decoration: none;
   display: block;
   line-height: 1.15;
+}
+
+.nav-mobile a[aria-current="page"] {
+  color: var(--accent);
+  font-style: italic;
 }
 
 .nav-mobile li:last-child a {

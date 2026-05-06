@@ -118,7 +118,8 @@ function SiteHeader() {
     <header className="site-header">
       <div className="site-header__inner">
         <Link href="/" className="wordmark" aria-label="Here Now Labs — home">
-          Here Now Labs
+          <span className="wordmark__mark" aria-hidden="true" />
+          <span className="wordmark__text">Here Now Labs</span>
         </Link>
         <SiteNav />
       </div>
@@ -151,9 +152,6 @@ function SiteFooter() {
             </li>
             <li>
               <Link href="/ai-action-plan">AI Action Plan (sample)</Link>
-            </li>
-            <li>
-              <Link href="/ai-action-plan-lite">AI Action Plan (Lite)</Link>
             </li>
           </ul>
         </div>

@@ -1,7 +1,6 @@
 import Link from "next/link";
 import HeroImage from "./_components/HeroImage";
 import ForwardArrow from "./_components/Arrow";
-import BrandSpine from "./_components/BrandSpine";
 import styles from "./page.module.css";
 
 export default function HomePage() {
@@ -9,7 +8,7 @@ export default function HomePage() {
     <>
       <section className={styles.hero}>
         <div className={`container ${styles.heroInner}`}>
-          <p className={`eyebrow ${styles.heroEyebrow}`}>AI Action Planning · for operators</p>
+          <p className={`eyebrow ${styles.heroEyebrow}`}>AI Action Planning</p>
           <h1 className={styles.heroLine}>
             Find the AI in your operation.
             <em>Build what compounds.</em>
@@ -58,24 +57,30 @@ export default function HomePage() {
           </h2>
           <div className={styles.diffGrid}>
             <article className={styles.diffCell}>
+              <p className={styles.diffOldLabel}>The old way</p>
               <p className={styles.diffOld}>Three months of consultants</p>
               <p className={styles.diffArrow} aria-hidden="true"><ForwardArrow /></p>
+              <p className={styles.diffNewLabel}>What we do</p>
               <p className={styles.diffNew}>Ten business days</p>
               <p className={styles.diffNote}>
                 AI parses the entire contract, vendor, and dispatch corpus at speed. We weigh the bets that move the operation.
               </p>
             </article>
             <article className={styles.diffCell}>
+              <p className={styles.diffOldLabel}>The old way</p>
               <p className={styles.diffOld}>A 60-page deck</p>
               <p className={styles.diffArrow} aria-hidden="true"><ForwardArrow /></p>
+              <p className={styles.diffNewLabel}>What we do</p>
               <p className={styles.diffNew}>An AI Action Plan</p>
               <p className={styles.diffNote}>
                 Five sections, every recommendation tied to a dollar. Scanned in one sitting. Defensible at the board.
               </p>
             </article>
             <article className={styles.diffCell}>
+              <p className={styles.diffOldLabel}>The old way</p>
               <p className={styles.diffOld}>Generic AI advice</p>
               <p className={styles.diffArrow} aria-hidden="true"><ForwardArrow /></p>
+              <p className={styles.diffNewLabel}>What we do</p>
               <p className={styles.diffNew}>AI built into the work</p>
               <p className={styles.diffNote}>
                 After the Plan, we ship the AI it identified — software you can use, agents that run themselves.
@@ -96,50 +101,30 @@ export default function HomePage() {
           </div>
 
           <ol className={styles.methodList}>
-            <li>
+            <li className={styles.methodCard}>
               <span className={styles.methodNum}><em>i.</em></span>
-              <div>
-                <h3>Listen, in person</h3>
-                <p>
-                  A two-hour working session with the executive team. We come in with a printed agenda and leave with a signed success criterion the Plan will be measured against.
-                </p>
-              </div>
+              <h3>Listen</h3>
+              <p>Two hours with the executive team. Printed agenda. Signed criterion by lunch.</p>
             </li>
-            <li>
+            <li className={styles.methodCard}>
               <span className={styles.methodNum}><em>ii.</em></span>
-              <div>
-                <h3>Ingest, with our tooling</h3>
-                <p>
-                  Six business days of work. Every contract, vendor record, dispatch log, renewal calendar, and policy document goes through our parsing stack — tuned to the patterns we have seen across mid-market operations.
-                </p>
-              </div>
+              <h3>Ingest</h3>
+              <p>Six days. Every contract, vendor record, dispatch log, and policy through our parsing stack.</p>
             </li>
-            <li>
+            <li className={styles.methodCard}>
               <span className={styles.methodNum}><em>iii.</em></span>
-              <div>
-                <h3>Weigh, with judgment</h3>
-                <p>
-                  The anomalies AI surfaces are not the answer. The judgment about which ones matter — and why — is the work. That is where our partners spend their time.
-                </p>
-              </div>
+              <h3>Weigh</h3>
+              <p>AI surfaces anomalies. Partners weigh which ones matter, and why.</p>
             </li>
-            <li>
+            <li className={styles.methodCard}>
               <span className={styles.methodNum}><em>iv.</em></span>
-              <div>
-                <h3>Deliver the AI Action Plan</h3>
-                <p>
-                  Five sections, eight to ten pages, every recommendation tied to a dollar figure. Cost savings, growth lanes, software builds, agent builds — all named, ranked, and tagged.
-                </p>
-              </div>
+              <h3>Deliver</h3>
+              <p>Five sections, ten pages. Every recommendation tied to a dollar. Named, ranked, tagged.</p>
             </li>
-            <li>
+            <li className={styles.methodCard}>
               <span className={styles.methodNum}><em>v.</em></span>
-              <div>
-                <h3>Build what compounds</h3>
-                <p>
-                  The Plan is the wedge. Most engagements continue — quarterly advisory, custom AI software, autonomous agents. The relationship deepens as more of the work happens automatically.
-                </p>
-              </div>
+              <h3>Build</h3>
+              <p>Most engagements continue — advisory, AI software, autonomous agents.</p>
             </li>
           </ol>
 
@@ -228,76 +213,82 @@ export default function HomePage() {
               <p className={styles.buildOutcome}>
                 Built around a specific role. Used by a specific person. Measurable in hours and dollars.
               </p>
-              <p className={styles.buildExampleHead}>Recent example</p>
-              <p className={styles.buildExample}>
-                <strong>AI proposal generator</strong> for a senior estimator. Drafts from a prospect&rsquo;s scope document, pre-populates labor and parts from the last forty winning bids.
-              </p>
-              <ul className={styles.buildMetrics}>
-                <li>
-                  <span>Estimator time recovered</span>
-                  <strong>~14 hrs / week</strong>
-                </li>
-                <li>
-                  <span>Quote cycle</span>
-                  <strong>3 days → 4 hours</strong>
-                </li>
-                <li>
-                  <span>Revenue lift</span>
-                  <strong>+8–12%</strong>
-                </li>
-              </ul>
+              <div className={styles.buildExampleBlock}>
+                <p className={styles.buildExampleHead}>From a recent engagement</p>
+                <p className={styles.buildExample}>
+                  <strong>AI proposal generator</strong> for a senior estimator. Drafts from a prospect&rsquo;s scope document, pre-populates labor and parts from the last forty winning bids.
+                </p>
+                <ul className={styles.buildMetrics}>
+                  <li>
+                    <span>Estimator time recovered</span>
+                    <strong>~14 hrs / week</strong>
+                  </li>
+                  <li>
+                    <span>Quote cycle</span>
+                    <strong>3 days → 4 hours</strong>
+                  </li>
+                  <li>
+                    <span>Revenue lift</span>
+                    <strong>+8–12%</strong>
+                  </li>
+                </ul>
+              </div>
             </article>
 
             <article className={styles.buildCard}>
-              <p className={styles.buildLabelAgent}>AI agent · 2–4 weeks</p>
+              <p className={styles.buildLabel}>AI agent · 2–4 weeks</p>
               <h3>Autonomous workers, on a schedule or trigger</h3>
               <p className={styles.buildOutcome}>
                 No one invokes them. They watch the calendar, the inbox, the document folder — and act when their conditions fire.
               </p>
-              <p className={styles.buildExampleHead}>Recent example</p>
-              <p className={styles.buildExample}>
-                <strong>Anniversary review agent.</strong> Watches the contract calendar. At each maintenance-agreement anniversary, reviews the rate-card escalator clauses and drafts the renewal letter for human sign-off.
-              </p>
-              <ul className={styles.buildMetrics}>
-                <li>
-                  <span>Contracts reviewed</span>
-                  <strong>93 in 90 minutes</strong>
-                </li>
-                <li>
-                  <span>Captured margin</span>
-                  <strong>$1.4M – $1.8M / yr</strong>
-                </li>
-                <li>
-                  <span>Human time</span>
-                  <strong>Sign-off only</strong>
-                </li>
-              </ul>
+              <div className={styles.buildExampleBlock}>
+                <p className={styles.buildExampleHead}>From a recent engagement</p>
+                <p className={styles.buildExample}>
+                  <strong>Anniversary review agent.</strong> Watches the contract calendar. At each maintenance-agreement anniversary, reviews the rate-card escalator clauses and drafts the renewal letter for human sign-off.
+                </p>
+                <ul className={styles.buildMetrics}>
+                  <li>
+                    <span>Contracts reviewed</span>
+                    <strong>93 in 90 minutes</strong>
+                  </li>
+                  <li>
+                    <span>Captured margin</span>
+                    <strong>$1.4M – $1.8M / yr</strong>
+                  </li>
+                  <li>
+                    <span>Human time</span>
+                    <strong>Sign-off only</strong>
+                  </li>
+                </ul>
+              </div>
             </article>
 
             <article className={styles.buildCard}>
-              <p className={styles.buildLabelRetainer}>Advisory · ongoing</p>
+              <p className={styles.buildLabel}>Advisory · ongoing</p>
               <h3>The quarterly AI working group</h3>
               <p className={styles.buildOutcome}>
                 Two of our partners sit with the executive team once a quarter. Review what shipped. Rank what to build next. Retire what is not pulling its weight.
               </p>
-              <p className={styles.buildExampleHead}>Cadence</p>
-              <p className={styles.buildExample}>
-                Two hours, quarterly. Printed agenda. Output is a short list of next AI builds, each scoped to a dollar target. Build work is scoped separately.
-              </p>
-              <ul className={styles.buildMetrics}>
-                <li>
-                  <span>Cadence</span>
-                  <strong>Quarterly · 2 hrs</strong>
-                </li>
-                <li>
-                  <span>Scope</span>
-                  <strong>What to build, what to retire</strong>
-                </li>
-                <li>
-                  <span>Continues from</span>
-                  <strong>The Action Plan</strong>
-                </li>
-              </ul>
+              <div className={styles.buildExampleBlock}>
+                <p className={styles.buildExampleHead}>How it runs</p>
+                <p className={styles.buildExample}>
+                  Two hours, quarterly. Printed agenda. Output is a short list of next AI builds, each scoped to a dollar target. Build work is scoped separately.
+                </p>
+                <ul className={styles.buildMetrics}>
+                  <li>
+                    <span>Cadence</span>
+                    <strong>Quarterly · 2 hrs</strong>
+                  </li>
+                  <li>
+                    <span>Scope</span>
+                    <strong>What to build, what to retire</strong>
+                  </li>
+                  <li>
+                    <span>Continues from</span>
+                    <strong>The Action Plan</strong>
+                  </li>
+                </ul>
+              </div>
             </article>
           </div>
 
@@ -319,8 +310,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <BrandSpine />
-
       <section className={`section section--paper rule-top ${styles.cta}`}>
         <div className="container">
           <h2 className={styles.ctaHeadline}>If now is the moment.</h2>
@@ -333,10 +322,6 @@ export default function HomePage() {
               Use the contact form
             </Link>
           </div>
-          <p className={styles.ctaTry}>
-            Or try a smaller version —{" "}
-            <Link href="/ai-action-plan-lite">an AI Action Plan (Lite)</Link> generated from your URL.
-          </p>
         </div>
       </section>
     </>

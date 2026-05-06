@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const NAV_ITEMS = [
@@ -9,7 +10,14 @@ const NAV_ITEMS = [
   { href: "/ai-action-plan", label: "Action Plan" },
 ];
 
+function isActive(pathname: string | null, href: string) {
+  if (!pathname) return false;
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
 export default function SiteNav() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -31,11 +39,19 @@ export default function SiteNav() {
     <>
       <nav className="nav-desktop" aria-label="Primary">
         {NAV_ITEMS.map((item) => (
-          <Link key={item.href} href={item.href}>
+          <Link
+            key={item.href}
+            href={item.href}
+            aria-current={isActive(pathname, item.href) ? "page" : undefined}
+          >
             {item.label}
           </Link>
         ))}
-        <Link href="/contact" className="nav__cta">
+        <Link
+          href="/contact"
+          className="nav__cta"
+          aria-current={isActive(pathname, "/contact") ? "page" : undefined}
+        >
           Contact
         </Link>
       </nav>
@@ -59,13 +75,21 @@ export default function SiteNav() {
         <ul>
           {NAV_ITEMS.map((item) => (
             <li key={item.href}>
-              <Link href={item.href} onClick={() => setOpen(false)}>
+              <Link
+                href={item.href}
+                aria-current={isActive(pathname, item.href) ? "page" : undefined}
+                onClick={() => setOpen(false)}
+              >
                 {item.label}
               </Link>
             </li>
           ))}
           <li>
-            <Link href="/contact" onClick={() => setOpen(false)}>
+            <Link
+              href="/contact"
+              aria-current={isActive(pathname, "/contact") ? "page" : undefined}
+              onClick={() => setOpen(false)}
+            >
               Contact
             </Link>
           </li>

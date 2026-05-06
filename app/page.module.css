@@ -167,6 +167,24 @@
   padding-left: 1.25rem;
 }
 
+.diffOldLabel,
+.diffNewLabel {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+}
+
+.diffOldLabel {
+  color: var(--faint);
+}
+
+.diffNewLabel {
+  color: var(--accent);
+}
+
 .diffOld {
   font-family: var(--font-serif);
   font-style: italic;
@@ -229,31 +247,41 @@
   padding: 0;
   margin: 0;
   display: grid;
-  gap: 1.25rem;
-  max-width: 56rem;
+  gap: 1rem;
+  grid-template-columns: 1fr;
 }
 
-.methodList li {
-  display: grid;
-  grid-template-columns: 2.5rem 1fr;
-  gap: 1.25rem;
-  align-items: start;
-  padding: 1.25rem 0;
-  border-bottom: 1px solid var(--rule);
+@media (min-width: 36rem) {
+  .methodList {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-.methodList li:last-child {
-  border-bottom: 0;
-  padding-bottom: 0;
+@media (min-width: 64rem) {
+  .methodList {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.85rem;
+  }
+}
+
+.methodCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.25rem 1.1rem 1.4rem;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  position: relative;
 }
 
 .methodNum {
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: 1.4rem;
+  font-size: 1.75rem;
   color: var(--accent);
   line-height: 1;
-  padding-top: 0.15rem;
+  margin-bottom: 0.15rem;
 }
 
 .methodList h3 {
@@ -262,15 +290,15 @@
   font-weight: 400;
   font-size: 1.25rem;
   color: var(--ink);
-  margin-bottom: 0.4rem;
+  margin: 0;
   line-height: 1.3;
   letter-spacing: -0.012em;
 }
 
 .methodList p {
   color: var(--muted);
-  font-size: 1rem;
-  line-height: 1.55;
+  font-size: 0.9rem;
+  line-height: 1.5;
   margin: 0;
 }
 
@@ -406,9 +434,7 @@
   gap: 0.85rem;
 }
 
-.buildLabel,
-.buildLabelAgent,
-.buildLabelRetainer {
+.buildLabel {
   font-family: var(--font-sans);
   font-size: 0.7rem;
   letter-spacing: 0.07em;
@@ -419,22 +445,8 @@
   width: fit-content;
   padding: 0.25rem 0.6rem;
   border-radius: 999px;
-}
-
-.buildLabel {
   color: var(--accent);
   background: var(--accent-soft);
-}
-
-.buildLabelAgent {
-  color: var(--bg);
-  background: var(--accent);
-}
-
-.buildLabelRetainer {
-  color: var(--muted);
-  background: var(--paper-tint);
-  border: 1px solid var(--rule);
 }
 
 .buildCard h3 {
@@ -455,14 +467,22 @@
   color: var(--muted);
 }
 
+.buildExampleBlock {
+  margin-top: 0.5rem;
+  padding: 0.95rem 1.05rem 1.1rem;
+  background: var(--paper-tint);
+  border-left: 2px solid var(--accent-soft);
+  border-radius: 4px;
+}
+
 .buildExampleHead {
   font-family: var(--font-sans);
   font-size: 0.7rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
   font-weight: 600;
-  color: var(--faint);
-  margin: 0.4rem 0 0;
+  color: var(--accent);
+  margin: 0 0 0.4rem;
 }
 
 .buildExample {

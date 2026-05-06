@@ -21,6 +21,68 @@
   font-weight: 400;
 }
 
+/* Compact overview row — five tiles linking to detail anchors below.
+   Lets the reader scan the full method at a glance before diving in. */
+.overview {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2.5rem;
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 36rem) {
+  .overview {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 64rem) {
+  .overview {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+  }
+}
+
+.overviewItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.85rem 0.95rem 0.95rem;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  text-decoration: none !important;
+  color: inherit;
+  transition: border-color 140ms ease, background 140ms ease;
+}
+
+.overviewItem:hover {
+  border-color: var(--accent);
+  background: var(--paper-tint);
+}
+
+.overviewNum {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.overviewTitle {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  line-height: 1.25;
+  color: var(--ink);
+  letter-spacing: -0.008em;
+}
+
+:global(section[id^="step-"]) {
+  scroll-margin-top: 5rem;
+}
+
 /* "Without AI / With AI" comparison block, used below each step */
 
 .diff {

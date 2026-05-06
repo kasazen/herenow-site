@@ -227,7 +227,7 @@ export default function LiteTool() {
       {phase === "parsing" ? (
         <div className={styles.reading} role="status" aria-live="polite">
           <p className={styles.readingHead}>
-            <em>Parsing.</em>{" "}
+            <em>Parsing</em>.{" "}
             <span style={{ color: "var(--muted)" }}>
               {stream.progress ?? "Opening the door"}
             </span>

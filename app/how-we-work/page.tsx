@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import HeroImage from "../_components/HeroImage";
-import BrandSpine from "../_components/BrandSpine";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -16,7 +15,7 @@ export default function HowWeWorkPage() {
       <header className={styles.header}>
         <p className="eyebrow">How we work</p>
         <h1 className={styles.title}>
-          <em>The Here Now Method.</em>{" "}
+          <em>The Here Now Method</em>.{" "}
           <span className={styles.titleAccent}>Five stages.</span>{" "}
           One Action Plan.
         </h1>
@@ -32,7 +31,30 @@ export default function HowWeWorkPage() {
 
       <hr />
 
-      <section>
+      <ol className={styles.overview} aria-label="Method overview">
+        <li><a href="#step-i" className={styles.overviewItem}>
+          <span className={styles.overviewNum}><em>i.</em></span>
+          <span className={styles.overviewTitle}>Listen, in person</span>
+        </a></li>
+        <li><a href="#step-ii" className={styles.overviewItem}>
+          <span className={styles.overviewNum}><em>ii.</em></span>
+          <span className={styles.overviewTitle}>Ingest, with our tooling</span>
+        </a></li>
+        <li><a href="#step-iii" className={styles.overviewItem}>
+          <span className={styles.overviewNum}><em>iii.</em></span>
+          <span className={styles.overviewTitle}>Weigh, with judgment</span>
+        </a></li>
+        <li><a href="#step-iv" className={styles.overviewItem}>
+          <span className={styles.overviewNum}><em>iv.</em></span>
+          <span className={styles.overviewTitle}>The AI Action Plan</span>
+        </a></li>
+        <li><a href="#step-v" className={styles.overviewItem}>
+          <span className={styles.overviewNum}><em>v.</em></span>
+          <span className={styles.overviewTitle}>The walkthrough</span>
+        </a></li>
+      </ol>
+
+      <section id="step-i">
         <h2>i. Listen, in person</h2>
         <p>
           Mutual NDA, master engagement letter with the price written down, and a two-hour working session with you and one or two senior leaders. We are operators ourselves; we listen the way operators listen — for what is annoying, what is compounding, what would matter if it changed.
@@ -46,7 +68,7 @@ export default function HowWeWorkPage() {
         />
       </section>
 
-      <section>
+      <section id="step-ii">
         <h2>ii. Ingest, with our tooling</h2>
         <p>
           Six business days. Every contract, every renewal calendar, every vendor invoice, every dispatch log, every page of the public site, every line of the policies. Our internal parsing stack is tuned to what mid-market operations actually produce — the standard- and legacy-form contracts, the vendor masters, the maintenance tickets, the renewal calendars — and surfaces patterns at speed.
@@ -57,7 +79,7 @@ export default function HowWeWorkPage() {
         />
       </section>
 
-      <section>
+      <section id="step-iii">
         <h2>iii. Weigh, with judgment</h2>
         <p>
           The anomalies AI surfaces are not the answer. The judgment about which ones matter — and why — is the work. Our partners spend the bulk of the engagement here, alongside two or three short calls with the people who run the parts of the operation we are weighing.
@@ -67,7 +89,7 @@ export default function HowWeWorkPage() {
         </p>
       </section>
 
-      <section>
+      <section id="step-iv">
         <h2>iv. The AI Action Plan</h2>
         <p>
           Five sections, eight to ten pages. <strong>Cost savings, growth lanes, software builds, and agent builds — all named, ranked, and tagged.</strong> Where the margin&rsquo;s been waiting. Where growth is waiting. What AI changes about both. What to build first.
@@ -82,7 +104,7 @@ export default function HowWeWorkPage() {
         />
       </section>
 
-      <section>
+      <section id="step-v">
         <h2>v. The walkthrough</h2>
         <p>
           Ninety minutes. Printed copies on the table. We walk every finding. Questions land in the room. By the end every recommendation has been agreed with, sharpened, or struck.
@@ -151,8 +173,6 @@ export default function HowWeWorkPage() {
       </section>
 
       <hr />
-
-      <BrandSpine />
 
       <section className={styles.cta}>
         <h2>If this sounds like the right shape.</h2>

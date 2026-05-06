@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import HeroImage from "../_components/HeroImage";
-import BrandSpine from "../_components/BrandSpine";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -150,9 +149,23 @@ export default function WorkingSessionsPage() {
 
       <hr />
 
+      <ol className={styles.overview} aria-label="Session overview">
+        {SESSIONS.map((s) => (
+          <li key={s.number}>
+            <a href={`#session-${s.number}`} className={styles.overviewItem}>
+              <span className={styles.overviewNum}><em>{s.number}.</em></span>
+              <span className={styles.overviewTitle}>{s.title}</span>
+              <span className={styles.overviewMeta}>
+                {s.inTheRoom.find((r) => r.label === "Length")?.value ?? ""}
+              </span>
+            </a>
+          </li>
+        ))}
+      </ol>
+
       <ol className={styles.sessions}>
         {SESSIONS.map((s) => (
-          <li key={s.number} className={styles.session}>
+          <li key={s.number} id={`session-${s.number}`} className={styles.session}>
             <header className={styles.sessionHeader}>
               <span className={styles.sessionNum}>
                 <em>{s.number}.</em>
@@ -194,8 +207,6 @@ export default function WorkingSessionsPage() {
       </ol>
 
       <hr />
-
-      <BrandSpine />
 
       <section className={styles.cta}>
         <h2>The first session is the intro call.</h2>

@@ -31,6 +31,78 @@
   height: auto;
 }
 
+/* Compact overview row — six tiles linking to detail anchors below.
+   Lets the reader scan the full sequence at a glance before diving in. */
+.overview {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 3rem;
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 36rem) {
+  .overview {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 56rem) {
+  .overview {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 80rem) {
+  .overview {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.5rem;
+  }
+}
+
+.overviewItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.85rem 0.95rem 0.95rem;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  text-decoration: none !important;
+  color: inherit;
+  transition: border-color 140ms ease, background 140ms ease;
+}
+
+.overviewItem:hover {
+  border-color: var(--accent);
+  background: var(--paper-tint);
+}
+
+.overviewNum {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.overviewTitle {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  line-height: 1.25;
+  color: var(--ink);
+  letter-spacing: -0.008em;
+}
+
+.overviewMeta {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--faint);
+  margin-top: 0.15rem;
+}
+
 .sessions {
   list-style: none;
   padding: 0;
@@ -38,6 +110,10 @@
   display: flex;
   flex-direction: column;
   gap: 3rem;
+}
+
+.session {
+  scroll-margin-top: 5rem;
 }
 
 .session {
