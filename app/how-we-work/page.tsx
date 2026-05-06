@@ -25,7 +25,7 @@ export default function HowWeWorkPage() {
           One Action Plan.
         </h1>
         <p className="lead" style={{ marginTop: "1rem" }}>
-          A conversation, then ten business days — AI parsing every contract, vendor record, and dispatch log while your partners weigh the bets that move the operation. Then the relationship continues, and the work compounds.
+          A conversation. Ten business days. Then a relationship that compounds.
         </p>
         <HeroImage
           src={howWeWorkHero}
@@ -62,7 +62,7 @@ export default function HowWeWorkPage() {
       <section id="step-i">
         <h2>i. Listen, in person</h2>
         <p>
-          Mutual NDA, master engagement letter with the price written down, and a two-hour working session with you and one or two senior leaders. We are operators ourselves; we listen the way operators listen — for what is annoying, what is compounding, what would matter if it changed.
+          NDA, engagement letter, two hours with you. We listen the way operators listen — for what&rsquo;s annoying, what&rsquo;s compounding, what would matter changed.
         </p>
         <Difference
           without="A two-week kickoff phase. Slide deck. Status meetings."
@@ -70,7 +70,7 @@ export default function HowWeWorkPage() {
         />
         <Accordion label="What you walk out with">
           <p>
-            Three things on paper: the access we need, the calls we will need, and the success criterion the Plan will be measured against.
+            Three things on paper: the access we need, the calls we&rsquo;ll need, and the success criterion the Plan will be measured against.
           </p>
         </Accordion>
       </section>
@@ -78,7 +78,7 @@ export default function HowWeWorkPage() {
       <section id="step-ii">
         <h2>ii. Ingest, with our tooling</h2>
         <p>
-          Six business days. Every contract, every renewal calendar, every vendor invoice, every dispatch log, every page of the public site, every line of the policies. Our internal parsing stack is tuned to what mid-market operations actually produce — the standard- and legacy-form contracts, the vendor masters, the maintenance tickets, the renewal calendars — and surfaces patterns at speed.
+          Six days. Every contract, vendor invoice, dispatch log, renewal calendar. Our parsing stack is tuned to what mid-market operations actually produce.
         </p>
         <Difference
           without="A procurement specialist works through 93 contracts over three weeks. Misses the 61 with unexercised escalator clauses."
@@ -89,11 +89,11 @@ export default function HowWeWorkPage() {
       <section id="step-iii">
         <h2>iii. Weigh, with judgment</h2>
         <p>
-          The anomalies AI surfaces are not the answer. The judgment about which ones matter — and why — is the work. Our partners spend the bulk of the engagement here, alongside two or three short calls with the people who run the parts of the operation we are weighing.
+          AI surfaces anomalies. The judgment about which ones matter — and why — is the work. Most partner time goes here.
         </p>
         <Accordion label="The mid-discovery check-in">
           <p>
-            Around day five or six, we sit with you for a forty-five-minute check-in. We share what is starting to surface; you tell us what to pull on harder. The Plan&rsquo;s shape gets agreed before it is written.
+            Around day five or six, a forty-five-minute check-in. We share what&rsquo;s surfacing; you tell us what to pull on harder. The Plan&rsquo;s shape gets agreed before it&rsquo;s written.
           </p>
         </Accordion>
       </section>
@@ -101,15 +101,15 @@ export default function HowWeWorkPage() {
       <section id="step-iv">
         <h2>iv. The AI Action Plan</h2>
         <p>
-          Five sections, eight to ten pages. <strong>Cost savings, growth lanes, software builds, and agent builds — all named, ranked, and tagged.</strong> Where the margin&rsquo;s been waiting. Where growth is waiting. What AI changes about both. What to build first.
+          Five sections, ten pages. <strong>Cost savings, growth lanes, software builds, agent builds — all named, ranked, dollar-tagged.</strong>
         </p>
         <Difference
           without="A 60-slide deck. Skimmed across three calls. Lost in a SharePoint folder by Q3."
           with_="A 9-page document. Sat with for an hour. Every line tied to a dollar and tagged for what we would build."
         />
-        <Accordion label="How the recommendations are tagged">
+        <Accordion label="How recommendations are tagged">
           <p>
-            Every recommendation is tied to a dollar figure and tagged with the kind of work it implies — workflow change, procurement, AI software, or AI agent. A fully de-identified sample is on{" "}
+            Every line is tagged with the kind of work it implies — workflow, procurement, AI software, or AI agent. A de-identified sample is on{" "}
             <Link href="/ai-action-plan">the AI Action Plan page</Link>.
           </p>
         </Accordion>
@@ -118,15 +118,14 @@ export default function HowWeWorkPage() {
       <section id="step-v">
         <h2>v. The walkthrough</h2>
         <p>
-          Ninety minutes. Printed copies on the table. We walk every finding. Questions land in the room. By the end every recommendation has been agreed with, sharpened, or struck.
+          Ninety minutes. Printed copies on the table. By the end every recommendation has been agreed, sharpened, or struck.
         </p>
         <Difference
           without="A polished read-out. Q&A at the end. Decisions deferred to a follow-up."
           with_="A working session. Pushback in real time. Decisions made before you leave the room."
         />
         <p style={{ marginTop: "1.5em" }}>
-          For the room itself —{" "}
-          <Link href="/working-sessions">see what each session looks like</Link>.
+          <Link href="/working-sessions">See what each session looks like →</Link>
         </p>
       </section>
 
@@ -136,7 +135,7 @@ export default function HowWeWorkPage() {
         <p className="eyebrow">The work that compounds</p>
         <h2>After the Plan, the AI starts to operate.</h2>
         <p>
-          Most engagements continue. The audit is the wedge; the relationship that follows is where AI begins to operate inside the business. Three shapes the continuation tends to take.
+          Most engagements continue. Three shapes the work tends to take.
         </p>
 
         <BuildsCarousel
@@ -148,12 +147,12 @@ export default function HowWeWorkPage() {
               content: (
                 <div className={styles.continuationCard}>
                   <p className={styles.continuationLabel}>AI software · 4–6 weeks per tool</p>
-                  <h3>Custom tools, scoped to a role</h3>
+                  <h3>Tools scoped to a role</h3>
                   <p>
-                    Software your team uses every day. A senior estimator gets a proposal generator. A dispatch coordinator gets an inventory and routing helper. A controller gets a renewal-and-anomaly scanner. Built around a specific role; used by a specific person.
+                    Used every day. Built for a specific role: a proposal generator for the senior estimator, a renewal scanner for the controller, a routing helper for dispatch.
                   </p>
                   <p className={styles.continuationExamples}>
-                    <strong>Worked example.</strong> A senior estimator at a $25M mechanical contractor spends roughly 14 hours a week on proposals. An AI generator drafts from the prospect&rsquo;s scope document, pre-populating labor and parts from the last forty winning bids. <mark>Estimator time recovered: ~14 hrs/week.</mark> Quote cycle: 3 days → 4 hours. Estimated revenue lift: <mark>+8–12%</mark>. Build cost: 4–6 weeks. Run cost: under $400/month.
+                    <strong>Worked example.</strong> Senior estimator at a $25M contractor: <mark>~14 hrs/week recovered</mark>; quote cycle 3 days → 4 hours; <mark>+8–12% revenue lift</mark>. Build 4–6 weeks; run cost under $400/month.
                   </p>
                 </div>
               ),
@@ -164,12 +163,12 @@ export default function HowWeWorkPage() {
               content: (
                 <div className={styles.continuationCard}>
                   <p className={styles.continuationLabel}>AI agents · 2–4 weeks per agent</p>
-                  <h3>Autonomous workers, on a schedule or trigger</h3>
+                  <h3>Autonomous, on a schedule or trigger</h3>
                   <p>
-                    No one invokes them. They watch the calendar, the inbox, the document folder, the dispatch queue — and act when their conditions fire. Human review is sign-off, not effort.
+                    No one invokes them. They watch the calendar; act when conditions fire. Human review is sign-off.
                   </p>
                   <p className={styles.continuationExamples}>
-                    <strong>Worked example.</strong> An anniversary review agent watches the contract calendar. At each maintenance-agreement anniversary, it parses the rate-card escalator clauses (<em>Schedule B</em> and <em>Section 4.2</em>), checks the current labor-rate baseline, and drafts the renewal letter for human sign-off. <mark>93 contracts reviewed in 90 minutes</mark> instead of three weeks. Captured margin: <mark>$1.4M – $1.8M / yr</mark>. Human time: sign-off only.
+                    <strong>Worked example.</strong> Anniversary review agent. Drafts the renewal letter at each contract anniversary. <mark>93 contracts in 90 minutes</mark>; <mark>$1.4M–$1.8M/yr captured</mark>; human time = sign-off.
                   </p>
                 </div>
               ),
@@ -180,12 +179,12 @@ export default function HowWeWorkPage() {
               content: (
                 <div className={styles.continuationCard}>
                   <p className={styles.continuationLabel}>Advisory · ongoing</p>
-                  <h3>The quarterly AI working group</h3>
+                  <h3>Quarterly AI working group</h3>
                   <p>
-                    Two of our partners sit with the executive team once a quarter. We review what shipped. Rank what to build next. Retire what is not pulling its weight. Cost is fixed; cadence is the point.
+                    Two partners with the executive team. Review what shipped. Rank what to build next. Retire what isn&rsquo;t pulling weight.
                   </p>
                   <p className={styles.continuationExamples}>
-                    <strong>Output.</strong> A short list of next AI builds — software or agent — each scoped to a known dollar target, ready for the build pipeline. The quarterly is also where a struggling tool gets killed before it accrues maintenance debt.
+                    <strong>Output.</strong> A short list of next builds, each scoped to a dollar. Also where a struggling tool gets killed.
                   </p>
                 </div>
               ),
@@ -200,7 +199,7 @@ export default function HowWeWorkPage() {
         <p className="eyebrow">What we do not do</p>
         <h2>A short list.</h2>
         <p>
-          We are not a transformation consultancy. We do not redesign org charts or sit inside your operations for ninety days. We are not a generalist AI shop — no chatbots, no marketing copy generators, no model fine-tuning side projects. We do not work with companies under $10M in revenue.
+          Not a transformation consultancy. Not a generalist AI shop — no chatbots, no marketing-copy generators, no model fine-tuning. No companies under $10M in revenue.
         </p>
       </section>
 

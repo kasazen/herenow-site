@@ -85,30 +85,46 @@
   gap: 0.45rem;
 }
 
+/* Dot has a visible 9px circle but a 32px hit-area via padding so the
+   tap target meets accessibility guidelines on touch devices. */
 .dot {
+  position: relative;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dot::before {
+  content: "";
   width: 0.55rem;
   height: 0.55rem;
   border-radius: 999px;
   border: 1px solid var(--rule-strong);
   background: transparent;
-  cursor: pointer;
-  padding: 0;
   transition: background 140ms ease, border-color 140ms ease, transform 140ms ease;
 }
 
-.dot:hover {
+.dot:hover::before {
   border-color: var(--accent);
 }
 
 .dot:focus-visible {
   outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline-offset: 0;
+  border-radius: 999px;
 }
 
-.dotActive {
+.dotActive::before {
   background: var(--accent);
   border-color: var(--accent);
-  transform: scale(1.1);
+  transform: scale(1.2);
 }
 
 .pauseBtn {

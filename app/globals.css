@@ -29,7 +29,7 @@
   --content-max: 75rem; /* 1200px */
   --article-max: 45rem; /* 720px */
   --gutter: clamp(1.25rem, 5vw, 2.5rem);
-  --section-y: clamp(3.5rem, 8vw, 6rem);
+  --section-y: clamp(2.75rem, 7vw, 5.25rem);
 
   /* Type */
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;

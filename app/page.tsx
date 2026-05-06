@@ -20,7 +20,7 @@ export default function HomePage() {
             <em>Build what compounds.</em>
           </h1>
           <p className={styles.heroLead}>
-            Most operations have an AI advantage waiting inside them. We find yours in ten days. Then we build the software and agents that compound it for years.
+            Ten days to find yours. Months to build what compounds for years.
           </p>
           <div className={styles.heroCtaRow}>
             <Link href="/ai-action-plan" className="btn">
@@ -41,14 +41,14 @@ export default function HomePage() {
         <div className="container">
           <div className={styles.openingGrid}>
             <div>
-              <p className="eyebrow">Where engagements begin</p>
+              <p className="eyebrow">Where it begins</p>
               <h2 className={styles.openingHeadline}>
-                A conversation about your operation.
+                A conversation. Then ten days.
               </h2>
             </div>
             <div className={styles.openingBody}>
               <p>
-                Before any contract is signed, before any data is touched, our partners sit with you. We understand businesses the way operators do — by listening to what is annoying, what is compounding, what would matter if it changed. The conversation is the work; the AI is what we aim at it.
+                Our partners sit with you before anything is signed. We listen the way operators listen — for what&rsquo;s annoying, what&rsquo;s compounding, what would matter changed.
               </p>
               <p className={styles.openingPunch}>
                 <strong>Operators set the bets. AI gives them reach.</strong>
@@ -72,7 +72,7 @@ export default function HomePage() {
               <p className={styles.diffNewLabel}>What we do</p>
               <p className={styles.diffNew}>Ten business days</p>
               <p className={styles.diffNote}>
-                AI parses the entire contract, vendor, and dispatch corpus at speed. We weigh the bets that move the operation.
+                AI reads the whole corpus at speed. We weigh the bets.
               </p>
             </article>
             <article className={styles.diffCell}>
@@ -82,7 +82,7 @@ export default function HomePage() {
               <p className={styles.diffNewLabel}>What we do</p>
               <p className={styles.diffNew}>An AI Action Plan</p>
               <p className={styles.diffNote}>
-                Five sections, every recommendation tied to a dollar. Scanned in one sitting. Defensible at the board.
+                Five sections. Every line tied to a dollar. Read in one sitting.
               </p>
             </article>
             <article className={styles.diffCell}>
@@ -92,7 +92,7 @@ export default function HomePage() {
               <p className={styles.diffNewLabel}>What we do</p>
               <p className={styles.diffNew}>AI built into the work</p>
               <p className={styles.diffNote}>
-                After the Plan, we ship the AI it identified — software you can use, agents that run themselves.
+                We ship the AI the Plan identified. Tools and agents that run.
               </p>
             </article>
           </div>
@@ -105,7 +105,7 @@ export default function HomePage() {
             <p className="eyebrow">The Here Now Method</p>
             <h2>What makes the work proprietary.</h2>
             <p className={styles.methodLead}>
-              The same five-stage workflow runs every engagement. The patterns we look for are drawn from comparable operations we have worked through. The AI tooling is ours — built and tuned to read what mid-market operations actually produce, not what a SaaS tool wishes they did.
+              Five stages, every engagement. AI tooling tuned to mid-market operations — not what SaaS tools wish they were.
             </p>
           </div>
 
@@ -113,27 +113,27 @@ export default function HomePage() {
             <li className={styles.methodCard}>
               <span className={styles.methodNum}><em>i.</em></span>
               <h3>Listen</h3>
-              <p>Two hours with the executive team. Printed agenda. Signed criterion by lunch.</p>
+              <p>Two hours. Signed criterion by lunch.</p>
             </li>
             <li className={styles.methodCard}>
               <span className={styles.methodNum}><em>ii.</em></span>
               <h3>Ingest</h3>
-              <p>Six days. Every contract, vendor record, dispatch log, and policy through our parsing stack.</p>
+              <p>Six days. Every contract, vendor, and dispatch log.</p>
             </li>
             <li className={styles.methodCard}>
               <span className={styles.methodNum}><em>iii.</em></span>
               <h3>Weigh</h3>
-              <p>AI surfaces anomalies. Partners weigh which ones matter, and why.</p>
+              <p>AI surfaces. Partners decide what matters.</p>
             </li>
             <li className={styles.methodCard}>
               <span className={styles.methodNum}><em>iv.</em></span>
               <h3>Deliver</h3>
-              <p>Five sections, ten pages. Every recommendation tied to a dollar. Named, ranked, tagged.</p>
+              <p>Ten pages. Every line tied to a dollar.</p>
             </li>
             <li className={styles.methodCard}>
               <span className={styles.methodNum}><em>v.</em></span>
               <h3>Build</h3>
-              <p>Most engagements continue — advisory, AI software, autonomous agents.</p>
+              <p>Software, agents, advisory. Most engagements continue.</p>
             </li>
           </ol>
 
@@ -154,7 +154,7 @@ export default function HomePage() {
               <p className="eyebrow">The deliverable</p>
               <h2>The AI Action Plan.</h2>
               <p className={styles.deliverableLead}>
-                Five sections. Read in one sitting. Every line tied to a dollar figure — and tagged for what we would build.
+                Five sections. One sitting. Every line tagged with a dollar.
               </p>
             </div>
             <div className={styles.deliverableBody}>
@@ -213,7 +213,7 @@ export default function HomePage() {
             <p className="eyebrow">After the Plan</p>
             <h2>The work that compounds.</h2>
             <p className={styles.longgameLead}>
-              Most engagements continue. We ship custom AI software your team uses, autonomous agents that run themselves, and we stay close as the operation gets sharper.
+              Most engagements continue. Custom software, autonomous agents, ongoing advisory.
             </p>
           </div>
 
@@ -226,14 +226,14 @@ export default function HomePage() {
                 content: (
                   <article className={styles.buildCard}>
                     <p className={styles.buildLabel}>AI software · 4–6 weeks</p>
-                    <h3>Custom tools your team uses every day</h3>
+                    <h3>Tools your team uses every day</h3>
                     <p className={styles.buildOutcome}>
-                      Built around a specific role. Used by a specific person. Measurable in hours and dollars.
+                      Built for a specific role. Measurable in hours and dollars.
                     </p>
                     <div className={styles.buildExampleBlock}>
                       <p className={styles.buildExampleHead}>From a recent engagement</p>
                       <p className={styles.buildExample}>
-                        <strong>AI proposal generator</strong> for a senior estimator. Drafts from a prospect&rsquo;s scope document, pre-populates labor and parts from the last forty winning bids.
+                        <strong>AI proposal generator.</strong> Drafts from a prospect&rsquo;s scope; pulls labor and parts from past wins.
                       </p>
                       <ul className={styles.buildMetrics}>
                         <li>
@@ -259,14 +259,14 @@ export default function HomePage() {
                 content: (
                   <article className={styles.buildCard}>
                     <p className={styles.buildLabel}>AI agent · 2–4 weeks</p>
-                    <h3>Autonomous workers, on a schedule or trigger</h3>
+                    <h3>Autonomous, on a schedule or trigger</h3>
                     <p className={styles.buildOutcome}>
-                      No one invokes them. They watch the calendar, the inbox, the document folder — and act when their conditions fire.
+                      No one invokes them. They watch the calendar; act when conditions fire. Human review is sign-off.
                     </p>
                     <div className={styles.buildExampleBlock}>
                       <p className={styles.buildExampleHead}>From a recent engagement</p>
                       <p className={styles.buildExample}>
-                        <strong>Anniversary review agent.</strong> Watches the contract calendar. At each maintenance-agreement anniversary, reviews the rate-card escalator clauses and drafts the renewal letter for human sign-off.
+                        <strong>Anniversary review agent.</strong> At each maintenance anniversary, reviews escalator clauses and drafts the renewal letter.
                       </p>
                       <ul className={styles.buildMetrics}>
                         <li>
@@ -292,14 +292,14 @@ export default function HomePage() {
                 content: (
                   <article className={styles.buildCard}>
                     <p className={styles.buildLabel}>Advisory · ongoing</p>
-                    <h3>The quarterly AI working group</h3>
+                    <h3>Quarterly AI working group</h3>
                     <p className={styles.buildOutcome}>
-                      Two of our partners sit with the executive team once a quarter. Review what shipped. Rank what to build next. Retire what is not pulling its weight.
+                      Two partners with the executive team. Review what shipped. Rank what to build next. Retire what isn&rsquo;t pulling weight.
                     </p>
                     <div className={styles.buildExampleBlock}>
                       <p className={styles.buildExampleHead}>How it runs</p>
                       <p className={styles.buildExample}>
-                        Two hours, quarterly. Printed agenda. Output is a short list of next AI builds, each scoped to a dollar target. Build work is scoped separately.
+                        Two hours, quarterly. A short list of next builds, each scoped to a dollar.
                       </p>
                       <ul className={styles.buildMetrics}>
                         <li>
@@ -323,7 +323,7 @@ export default function HomePage() {
           />
 
           <p className={styles.longgameFoot}>
-            Examples are representative builds drawn from the patterns we see across mid-market engagements. The specific software and agents we recommend depend on the diagnostic.
+            Representative builds. Specifics depend on the diagnostic.
           </p>
         </div>
       </section>
@@ -335,7 +335,7 @@ export default function HomePage() {
             <span className={styles.lateAccent}>compound for the next ten.</span>
           </p>
           <p className={styles.lateBody}>
-            What AI does to an operation is small, specific, and quiet — and it stacks every quarter. The agents you wire in this year are the operation you run for the next ten.
+            Small, specific, quiet — and it stacks every quarter.
           </p>
         </div>
       </section>

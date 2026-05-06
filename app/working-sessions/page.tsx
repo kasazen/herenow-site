@@ -35,8 +35,7 @@ const SESSIONS: Session[] = [
     aiRole:
       "Before the call, AI parses your public site and flags two or three patterns we want to ask about. Saves you the recap.",
     body: [
-      "A working conversation. Not a pitch. We use the time to understand the operation, what is on your mind, and what you have already tried. We tell you, plainly, whether we are a fit.",
-      "About a third of intro calls end without a next step and are still useful. The introductions we make tend to land.",
+      "A working conversation. Not a pitch. We tell you, plainly, whether we’re a fit. About a third end without a next step — still useful.",
     ],
   },
   {
@@ -53,8 +52,7 @@ const SESSIONS: Session[] = [
     aiRole:
       "AI does not run this session. The criterion gets written by humans, in a room, by lunch. AI takes over the next morning.",
     body: [
-      "The most important two hours of the engagement. A structured conversation about the operation as you see it: where the margin lives, where growth is waiting, what is annoying, what you have already tried, what success looks like ten days from now.",
-      "We leave with three things written down: the access we need, the calls we will need, and the success criterion you sign off on. The rest is honest only because of this hour.",
+      "The most important two hours of the engagement. Where the margin lives, where growth is waiting, what’s annoying, what success looks like in ten days. We leave with three things on paper: the access we need, the calls we’ll need, and the success criterion you sign off on.",
     ],
   },
   {
@@ -71,8 +69,7 @@ const SESSIONS: Session[] = [
     aiRole:
       "By day 5, AI has parsed the corpus and surfaced ~40 anomalies. We weigh them with you and re-route the second half of discovery.",
     body: [
-      "Halfway through the engagement we sit with you. We share what is starting to surface; you tell us which threads to pull on harder and which are already known. The check-in often re-routes the second half.",
-      "Small, fast-moving issues get raised here. If something should be acted on this week, we say so before the Action Plan lands.",
+      "Halfway through, we sit with you. We share what’s surfacing; you tell us what to pull on harder. The check-in often re-routes the second half. Anything that should be acted on this week gets raised here.",
     ],
   },
   {
@@ -89,8 +86,7 @@ const SESSIONS: Session[] = [
     aiRole:
       "AI parsed nine days of ingestion into the document you are now holding. The voice, the ranking, and the questions are ours.",
     body: [
-      "The Plan arrives as a PDF and as printed copies — three is typical, more on request. We send it early on the day of the walkthrough so you have an hour with it on your own. Most clients spend that hour with a pen.",
-      "A fully de-identified sample is on the AI Action Plan page. If it does not look like something you would actually use, the engagement has failed at the most important step.",
+      "PDF + printed copies, sent the morning of the walkthrough. Most clients spend that hour with a pen. A de-identified sample lives on the AI Action Plan page.",
     ],
   },
   {
@@ -107,8 +103,7 @@ const SESSIONS: Session[] = [
     aiRole:
       "AI is not in the room. The walkthrough is human pushback against human judgment, on paper. Every line gets defended or struck.",
     body: [
-      "We sit with the executive team and walk every finding. Questions land in the room. The room runs on whoever has the sharpest pushback; we do not defend the Plan, we explain it. By the end every recommendation has been agreed with, sharpened, or struck.",
-      "From there the work either stops or compounds. The natural continuations are an advisory retainer (we stay close as you operate the moves) or a custom AI build (we ship the agents and tools the Plan identified). Either is scoped separately, with no commitment.",
+      "We walk every finding with the executive team. Questions land in the room. The room runs on whoever has the sharpest pushback. By the end every recommendation has been agreed, sharpened, or struck. From there, the work either stops or compounds.",
     ],
   },
   {
@@ -125,8 +120,7 @@ const SESSIONS: Session[] = [
     aiRole:
       "AI is the subject of the meeting. We review what shipped, what it is producing, and what is on the bench. The judgment about what to build next is the work.",
     body: [
-      "After the engagement, the relationship continues at a quarterly cadence. Two of our partners sit with the executive team for two hours. We review what was shipped, what is producing, and what should be revisited or retired.",
-      "Each quarterly produces a short list of the next AI builds — agents, generators, reviewers — scoped to a known dollar target. The retainer covers the strategic time; the build work is scoped separately.",
+      "Two partners with the executive team for two hours, every quarter. We review what shipped, what’s producing, what should be retired. Output: a short list of next builds, each scoped to a dollar target.",
     ],
   },
 ];
