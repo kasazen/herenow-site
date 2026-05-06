@@ -31,11 +31,11 @@ const SESSIONS: Session[] = [
       { label: "Cost", value: "No fee" },
     ],
     walkOutWith:
-      "A direct answer on whether we are the right people for what you are looking for.",
+      "A plain answer on whether we’re a fit.",
     aiRole:
-      "Before the call, AI parses your public site and flags two or three patterns we want to ask about. Saves you the recap.",
+      "AI parses your site beforehand. Saves you the recap.",
     body: [
-      "A working conversation. Not a pitch. We tell you, plainly, whether we’re a fit. About a third end without a next step — still useful.",
+      "A working conversation. Not a pitch. About a third end without a next step — still useful.",
     ],
   },
   {
@@ -48,11 +48,11 @@ const SESSIONS: Session[] = [
       { label: "When", value: "Day 1, after NDA" },
     ],
     walkOutWith:
-      "A signed success criterion. The single page the Action Plan will be measured against.",
+      "A signed success criterion. The page the Plan is measured against.",
     aiRole:
-      "AI does not run this session. The criterion gets written by humans, in a room, by lunch. AI takes over the next morning.",
+      "AI doesn’t run this. Criterion gets written by humans, by lunch. AI takes over the next morning.",
     body: [
-      "The most important two hours of the engagement. Where the margin lives, where growth is waiting, what’s annoying, what success looks like in ten days. We leave with three things on paper: the access we need, the calls we’ll need, and the success criterion you sign off on.",
+      "The most important two hours. Where the margin lives, where growth is waiting, what success looks like in ten days.",
     ],
   },
   {
@@ -65,11 +65,11 @@ const SESSIONS: Session[] = [
       { label: "When", value: "Day 5–6" },
     ],
     walkOutWith:
-      "A flagged-findings list. No surprises in the final Action Plan.",
+      "A flagged-findings list. No surprises in the final Plan.",
     aiRole:
-      "By day 5, AI has parsed the corpus and surfaced ~40 anomalies. We weigh them with you and re-route the second half of discovery.",
+      "By day 5, AI has surfaced ~40 anomalies. We re-route discovery with you.",
     body: [
-      "Halfway through, we sit with you. We share what’s surfacing; you tell us what to pull on harder. The check-in often re-routes the second half. Anything that should be acted on this week gets raised here.",
+      "Halfway through, we share what’s surfacing. You tell us what to pull on harder. Often re-routes the second half.",
     ],
   },
   {
@@ -82,11 +82,11 @@ const SESSIONS: Session[] = [
       { label: "When", value: "Day 9, morning of the walkthrough" },
     ],
     walkOutWith:
-      "The AI Action Plan. Five sections, eight to ten pages, every recommendation tied to a dollar figure.",
+      "The Plan. Five sections, ten pages, every line tied to a dollar.",
     aiRole:
-      "AI parsed nine days of ingestion into the document you are now holding. The voice, the ranking, and the questions are ours.",
+      "AI compressed nine days of reading into the document. Voice, ranking, and questions are ours.",
     body: [
-      "PDF + printed copies, sent the morning of the walkthrough. Most clients spend that hour with a pen. A de-identified sample lives on the AI Action Plan page.",
+      "PDF + printed copies, sent the morning of the walkthrough. Most clients spend that hour with a pen.",
     ],
   },
   {
@@ -99,11 +99,11 @@ const SESSIONS: Session[] = [
       { label: "When", value: "Day 9 or 10, end of the engagement" },
     ],
     walkOutWith:
-      "Every finding walked, every question answered, and a clear next step.",
+      "Every finding walked. Every question answered. A clear next step.",
     aiRole:
-      "AI is not in the room. The walkthrough is human pushback against human judgment, on paper. Every line gets defended or struck.",
+      "AI isn’t in the room. Human pushback, on paper. Every line defended or struck.",
     body: [
-      "We walk every finding with the executive team. Questions land in the room. The room runs on whoever has the sharpest pushback. By the end every recommendation has been agreed, sharpened, or struck. From there, the work either stops or compounds.",
+      "We walk every finding with the executive team. The room runs on whoever has the sharpest pushback. Every line gets agreed, sharpened, or struck.",
     ],
   },
   {
@@ -116,11 +116,11 @@ const SESSIONS: Session[] = [
       { label: "When", value: "Quarterly · ongoing under retainer" },
     ],
     walkOutWith:
-      "A reviewed pipeline of AI tools — what to build next, what to retire, what to revisit at the next quarterly.",
+      "A reviewed pipeline. What to build next, what to retire.",
     aiRole:
-      "AI is the subject of the meeting. We review what shipped, what it is producing, and what is on the bench. The judgment about what to build next is the work.",
+      "AI is the subject of the meeting. The judgment about what to build next is the work.",
     body: [
-      "Two partners with the executive team for two hours, every quarter. We review what shipped, what’s producing, what should be retired. Output: a short list of next builds, each scoped to a dollar target.",
+      "Two partners, two hours, every quarter. Review what shipped, what’s producing, what should be retired.",
     ],
   },
 ];
@@ -134,7 +134,7 @@ export default function WorkingSessionsPage() {
           What every session <em>actually</em> looks like.
         </h1>
         <p className="lead" style={{ marginTop: "1rem" }}>
-          Who is in the room. How long. What you walk out with. Where AI is doing the work — and where it is not.
+          Who&rsquo;s in the room. What you walk out with. What AI does — and what it doesn&rsquo;t.
         </p>
         <HeroImage
           src={workingSessionsHero}

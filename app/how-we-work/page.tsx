@@ -1,12 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import HeroImage from "../_components/HeroImage";
-import Accordion from "../_components/Accordion";
-import BuildsCarousel from "../_components/BuildsCarousel";
-import SectionImage from "../_components/SectionImage";
 import styles from "./page.module.css";
 import howWeWorkHero from "../../public/images/hero/how-we-work.jpg";
-import weatheredNetworkSection from "../../public/images/sections/weathered-network.jpg";
 
 export const metadata: Metadata = {
   title: "How we work",
@@ -61,136 +57,46 @@ export default function HowWeWorkPage() {
 
       <section id="step-i">
         <h2>i. Listen, in person</h2>
-        <p>
-          NDA, engagement letter, two hours with you. We listen the way operators listen — for what&rsquo;s annoying, what&rsquo;s compounding, what would matter changed.
-        </p>
+        <p>Two hours with you. NDA, engagement letter, signed criterion by lunch.</p>
         <Difference
-          without="A two-week kickoff phase. Slide deck. Status meetings."
+          without="A two-week kickoff. Slide deck. Status meetings."
           with_="A working session. Printed agenda. Signed criterion by lunch."
         />
-        <Accordion label="What you walk out with">
-          <p>
-            Three things on paper: the access we need, the calls we&rsquo;ll need, and the success criterion the Plan will be measured against.
-          </p>
-        </Accordion>
       </section>
 
       <section id="step-ii">
         <h2>ii. Ingest, with our tooling</h2>
-        <p>
-          Six days. Every contract, vendor invoice, dispatch log, renewal calendar. Our parsing stack is tuned to what mid-market operations actually produce.
-        </p>
+        <p>Six days. Every contract, vendor invoice, dispatch log, renewal calendar — through our parsing stack.</p>
         <Difference
-          without="A procurement specialist works through 93 contracts over three weeks. Misses the 61 with unexercised escalator clauses."
+          without="A procurement specialist works through 93 contracts in three weeks. Misses the 61 with unexercised escalators."
           with_="Our stack parses 93 contracts in 90 minutes. Flags every escalator. We weigh which ones matter."
         />
       </section>
 
       <section id="step-iii">
         <h2>iii. Weigh, with judgment</h2>
-        <p>
-          AI surfaces anomalies. The judgment about which ones matter — and why — is the work. Most partner time goes here.
-        </p>
-        <Accordion label="The mid-discovery check-in">
-          <p>
-            Around day five or six, a forty-five-minute check-in. We share what&rsquo;s surfacing; you tell us what to pull on harder. The Plan&rsquo;s shape gets agreed before it&rsquo;s written.
-          </p>
-        </Accordion>
+        <p>AI surfaces anomalies. Partners weigh which ones matter, and why. Most partner time goes here.</p>
       </section>
 
       <section id="step-iv">
         <h2>iv. The AI Action Plan</h2>
-        <p>
-          Five sections, ten pages. <strong>Cost savings, growth lanes, software builds, agent builds — all named, ranked, dollar-tagged.</strong>
-        </p>
+        <p>Five sections, ten pages. Cost savings, growth lanes, software, agents — all named, ranked, dollar-tagged.</p>
         <Difference
-          without="A 60-slide deck. Skimmed across three calls. Lost in a SharePoint folder by Q3."
-          with_="A 9-page document. Sat with for an hour. Every line tied to a dollar and tagged for what we would build."
+          without="A 60-slide deck. Skimmed across three calls. Lost in SharePoint by Q3."
+          with_="A 9-page document. Sat with for an hour. Every line tied to a dollar."
         />
-        <Accordion label="How recommendations are tagged">
-          <p>
-            Every line is tagged with the kind of work it implies — workflow, procurement, AI software, or AI agent. A de-identified sample is on{" "}
-            <Link href="/ai-action-plan">the AI Action Plan page</Link>.
-          </p>
-        </Accordion>
       </section>
 
       <section id="step-v">
         <h2>v. The walkthrough</h2>
-        <p>
-          Ninety minutes. Printed copies on the table. By the end every recommendation has been agreed, sharpened, or struck.
-        </p>
+        <p>Ninety minutes. Printed copies on the table. Every line agreed, sharpened, or struck.</p>
         <Difference
-          without="A polished read-out. Q&A at the end. Decisions deferred to a follow-up."
-          with_="A working session. Pushback in real time. Decisions made before you leave the room."
+          without="A polished read-out. Q&A at the end. Decisions deferred."
+          with_="A working session. Pushback in real time. Decisions before you leave."
         />
         <p style={{ marginTop: "1.5em" }}>
           <Link href="/working-sessions">See what each session looks like →</Link>
         </p>
-      </section>
-
-      <div className="mark-divider" aria-hidden="true" />
-
-      <section className={styles.compoundSection}>
-        <p className="eyebrow">The work that compounds</p>
-        <h2>After the Plan, the AI starts to operate.</h2>
-        <p>
-          Most engagements continue. Three shapes the work tends to take.
-        </p>
-
-        <BuildsCarousel
-          ariaLabel="Three shapes the engagement continues in"
-          slides={[
-            {
-              id: "software",
-              label: "AI software",
-              content: (
-                <div className={styles.continuationCard}>
-                  <p className={styles.continuationLabel}>AI software · 4–6 weeks per tool</p>
-                  <h3>Tools scoped to a role</h3>
-                  <p>
-                    Used every day. Built for a specific role: a proposal generator for the senior estimator, a renewal scanner for the controller, a routing helper for dispatch.
-                  </p>
-                  <p className={styles.continuationExamples}>
-                    <strong>Worked example.</strong> Senior estimator at a $25M contractor: <mark>~14 hrs/week recovered</mark>; quote cycle 3 days → 4 hours; <mark>+8–12% revenue lift</mark>. Build 4–6 weeks; run cost under $400/month.
-                  </p>
-                </div>
-              ),
-            },
-            {
-              id: "agent",
-              label: "AI agents",
-              content: (
-                <div className={styles.continuationCard}>
-                  <p className={styles.continuationLabel}>AI agents · 2–4 weeks per agent</p>
-                  <h3>Autonomous, on a schedule or trigger</h3>
-                  <p>
-                    No one invokes them. They watch the calendar; act when conditions fire. Human review is sign-off.
-                  </p>
-                  <p className={styles.continuationExamples}>
-                    <strong>Worked example.</strong> Anniversary review agent. Drafts the renewal letter at each contract anniversary. <mark>93 contracts in 90 minutes</mark>; <mark>$1.4M–$1.8M/yr captured</mark>; human time = sign-off.
-                  </p>
-                </div>
-              ),
-            },
-            {
-              id: "advisory",
-              label: "Advisory",
-              content: (
-                <div className={styles.continuationCard}>
-                  <p className={styles.continuationLabel}>Advisory · ongoing</p>
-                  <h3>Quarterly AI working group</h3>
-                  <p>
-                    Two partners with the executive team. Review what shipped. Rank what to build next. Retire what isn&rsquo;t pulling weight.
-                  </p>
-                  <p className={styles.continuationExamples}>
-                    <strong>Output.</strong> A short list of next builds, each scoped to a dollar. Also where a struggling tool gets killed.
-                  </p>
-                </div>
-              ),
-            },
-          ]}
-        />
       </section>
 
       <hr />
@@ -199,11 +105,9 @@ export default function HowWeWorkPage() {
         <p className="eyebrow">What we do not do</p>
         <h2>A short list.</h2>
         <p>
-          Not a transformation consultancy. Not a generalist AI shop — no chatbots, no marketing-copy generators, no model fine-tuning. No companies under $10M in revenue.
+          Not transformation consulting. Not a generalist AI shop — no chatbots, no marketing copy, no model fine-tuning. No companies under $10M.
         </p>
       </section>
-
-      <SectionImage src={weatheredNetworkSection} />
 
       <section className={styles.cta}>
         <h2>If this sounds like the right shape.</h2>
