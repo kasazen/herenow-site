@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import HeroImage from "../_components/HeroImage";
+import Accordion from "../_components/Accordion";
+import BuildsCarousel from "../_components/BuildsCarousel";
+import SectionImage from "../_components/SectionImage";
 import styles from "./page.module.css";
+import howWeWorkHero from "../../public/images/hero/how-we-work.jpg";
+import weatheredNetworkSection from "../../public/images/sections/weathered-network.jpg";
 
 export const metadata: Metadata = {
   title: "How we work",
@@ -23,7 +28,7 @@ export default function HowWeWorkPage() {
           A conversation, then ten business days — AI parsing every contract, vendor record, and dispatch log while your partners weigh the bets that move the operation. Then the relationship continues, and the work compounds.
         </p>
         <HeroImage
-          src="/images/hero/how-we-work.jpg"
+          src={howWeWorkHero}
           alt=""
           className={styles.heroImage}
         />
@@ -59,13 +64,15 @@ export default function HowWeWorkPage() {
         <p>
           Mutual NDA, master engagement letter with the price written down, and a two-hour working session with you and one or two senior leaders. We are operators ourselves; we listen the way operators listen — for what is annoying, what is compounding, what would matter if it changed.
         </p>
-        <p>
-          We come out with three things on paper: the access we need, the calls we will need, and the success criterion the Plan will be measured against.
-        </p>
         <Difference
           without="A two-week kickoff phase. Slide deck. Status meetings."
           with_="A working session. Printed agenda. Signed criterion by lunch."
         />
+        <Accordion label="What you walk out with">
+          <p>
+            Three things on paper: the access we need, the calls we will need, and the success criterion the Plan will be measured against.
+          </p>
+        </Accordion>
       </section>
 
       <section id="step-ii">
@@ -84,9 +91,11 @@ export default function HowWeWorkPage() {
         <p>
           The anomalies AI surfaces are not the answer. The judgment about which ones matter — and why — is the work. Our partners spend the bulk of the engagement here, alongside two or three short calls with the people who run the parts of the operation we are weighing.
         </p>
-        <p>
-          Around day five or six, we sit with you for a forty-five-minute check-in. We share what is starting to surface; you tell us what to pull on harder. The Plan&rsquo;s shape gets agreed before it is written.
-        </p>
+        <Accordion label="The mid-discovery check-in">
+          <p>
+            Around day five or six, we sit with you for a forty-five-minute check-in. We share what is starting to surface; you tell us what to pull on harder. The Plan&rsquo;s shape gets agreed before it is written.
+          </p>
+        </Accordion>
       </section>
 
       <section id="step-iv">
@@ -94,14 +103,16 @@ export default function HowWeWorkPage() {
         <p>
           Five sections, eight to ten pages. <strong>Cost savings, growth lanes, software builds, and agent builds — all named, ranked, and tagged.</strong> Where the margin&rsquo;s been waiting. Where growth is waiting. What AI changes about both. What to build first.
         </p>
-        <p>
-          Every recommendation is tied to a dollar figure and tagged with the kind of work it implies — workflow change, procurement, AI software, or AI agent. A fully de-identified sample is on{" "}
-          <Link href="/ai-action-plan">the AI Action Plan page</Link>.
-        </p>
         <Difference
           without="A 60-slide deck. Skimmed across three calls. Lost in a SharePoint folder by Q3."
           with_="A 9-page document. Sat with for an hour. Every line tied to a dollar and tagged for what we would build."
         />
+        <Accordion label="How the recommendations are tagged">
+          <p>
+            Every recommendation is tied to a dollar figure and tagged with the kind of work it implies — workflow change, procurement, AI software, or AI agent. A fully de-identified sample is on{" "}
+            <Link href="/ai-action-plan">the AI Action Plan page</Link>.
+          </p>
+        </Accordion>
       </section>
 
       <section id="step-v">
@@ -128,38 +139,59 @@ export default function HowWeWorkPage() {
           Most engagements continue. The audit is the wedge; the relationship that follows is where AI begins to operate inside the business. Three shapes the continuation tends to take.
         </p>
 
-        <ol className={styles.continuationList}>
-          <li>
-            <p className={styles.continuationLabel}>AI software · 4–6 weeks per tool</p>
-            <h3>Custom tools, scoped to a role</h3>
-            <p>
-              Software your team uses every day. A senior estimator gets a proposal generator. A dispatch coordinator gets an inventory and routing helper. A controller gets a renewal-and-anomaly scanner. Built around a specific role; used by a specific person.
-            </p>
-            <p className={styles.continuationExamples}>
-              <strong>Worked example.</strong> A senior estimator at a $25M mechanical contractor spends roughly 14 hours a week on proposals. An AI generator drafts from the prospect&rsquo;s scope document, pre-populating labor and parts from the last forty winning bids. <mark>Estimator time recovered: ~14 hrs/week.</mark> Quote cycle: 3 days → 4 hours. Estimated revenue lift: <mark>+8–12%</mark>. Build cost: 4–6 weeks. Run cost: under $400/month.
-            </p>
-          </li>
-          <li>
-            <p className={styles.continuationLabelAgent}>AI agents · 2–4 weeks per agent</p>
-            <h3>Autonomous workers, on a schedule or trigger</h3>
-            <p>
-              No one invokes them. They watch the calendar, the inbox, the document folder, the dispatch queue — and act when their conditions fire. Human review is sign-off, not effort.
-            </p>
-            <p className={styles.continuationExamples}>
-              <strong>Worked example.</strong> An anniversary review agent watches the contract calendar. At each maintenance-agreement anniversary, it parses the rate-card escalator clauses (<em>Schedule B</em> and <em>Section 4.2</em>), checks the current labor-rate baseline, and drafts the renewal letter for human sign-off. <mark>93 contracts reviewed in 90 minutes</mark> instead of three weeks. Captured margin: <mark>$1.4M – $1.8M / yr</mark>. Human time: sign-off only.
-            </p>
-          </li>
-          <li>
-            <p className={styles.continuationLabelRetainer}>Advisory · ongoing</p>
-            <h3>The quarterly AI working group</h3>
-            <p>
-              Two of our partners sit with the executive team once a quarter. We review what shipped. Rank what to build next. Retire what is not pulling its weight. Cost is fixed; cadence is the point.
-            </p>
-            <p className={styles.continuationExamples}>
-              <strong>Output.</strong> A short list of next AI builds — software or agent — each scoped to a known dollar target, ready for the build pipeline. The quarterly is also where a struggling tool gets killed before it accrues maintenance debt.
-            </p>
-          </li>
-        </ol>
+        <BuildsCarousel
+          ariaLabel="Three shapes the engagement continues in"
+          slides={[
+            {
+              id: "software",
+              label: "AI software",
+              content: (
+                <div className={styles.continuationCard}>
+                  <p className={styles.continuationLabel}>AI software · 4–6 weeks per tool</p>
+                  <h3>Custom tools, scoped to a role</h3>
+                  <p>
+                    Software your team uses every day. A senior estimator gets a proposal generator. A dispatch coordinator gets an inventory and routing helper. A controller gets a renewal-and-anomaly scanner. Built around a specific role; used by a specific person.
+                  </p>
+                  <p className={styles.continuationExamples}>
+                    <strong>Worked example.</strong> A senior estimator at a $25M mechanical contractor spends roughly 14 hours a week on proposals. An AI generator drafts from the prospect&rsquo;s scope document, pre-populating labor and parts from the last forty winning bids. <mark>Estimator time recovered: ~14 hrs/week.</mark> Quote cycle: 3 days → 4 hours. Estimated revenue lift: <mark>+8–12%</mark>. Build cost: 4–6 weeks. Run cost: under $400/month.
+                  </p>
+                </div>
+              ),
+            },
+            {
+              id: "agent",
+              label: "AI agents",
+              content: (
+                <div className={styles.continuationCard}>
+                  <p className={styles.continuationLabel}>AI agents · 2–4 weeks per agent</p>
+                  <h3>Autonomous workers, on a schedule or trigger</h3>
+                  <p>
+                    No one invokes them. They watch the calendar, the inbox, the document folder, the dispatch queue — and act when their conditions fire. Human review is sign-off, not effort.
+                  </p>
+                  <p className={styles.continuationExamples}>
+                    <strong>Worked example.</strong> An anniversary review agent watches the contract calendar. At each maintenance-agreement anniversary, it parses the rate-card escalator clauses (<em>Schedule B</em> and <em>Section 4.2</em>), checks the current labor-rate baseline, and drafts the renewal letter for human sign-off. <mark>93 contracts reviewed in 90 minutes</mark> instead of three weeks. Captured margin: <mark>$1.4M – $1.8M / yr</mark>. Human time: sign-off only.
+                  </p>
+                </div>
+              ),
+            },
+            {
+              id: "advisory",
+              label: "Advisory",
+              content: (
+                <div className={styles.continuationCard}>
+                  <p className={styles.continuationLabel}>Advisory · ongoing</p>
+                  <h3>The quarterly AI working group</h3>
+                  <p>
+                    Two of our partners sit with the executive team once a quarter. We review what shipped. Rank what to build next. Retire what is not pulling its weight. Cost is fixed; cadence is the point.
+                  </p>
+                  <p className={styles.continuationExamples}>
+                    <strong>Output.</strong> A short list of next AI builds — software or agent — each scoped to a known dollar target, ready for the build pipeline. The quarterly is also where a struggling tool gets killed before it accrues maintenance debt.
+                  </p>
+                </div>
+              ),
+            },
+          ]}
+        />
       </section>
 
       <hr />
@@ -172,7 +204,7 @@ export default function HowWeWorkPage() {
         </p>
       </section>
 
-      <hr />
+      <SectionImage src={weatheredNetworkSection} />
 
       <section className={styles.cta}>
         <h2>If this sounds like the right shape.</h2>

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import HeroImage from "../_components/HeroImage";
+import Tabs from "../_components/Tabs";
 import styles from "./page.module.css";
+import workingSessionsHero from "../../public/images/hero/working-sessions.jpg";
 
 export const metadata: Metadata = {
   title: "Working sessions",
@@ -141,7 +143,7 @@ export default function WorkingSessionsPage() {
           Who is in the room. How long. What you walk out with. Where AI is doing the work — and where it is not.
         </p>
         <HeroImage
-          src="/images/hero/working-sessions.jpg"
+          src={workingSessionsHero}
           alt=""
           className={styles.heroImage}
         />
@@ -149,62 +151,47 @@ export default function WorkingSessionsPage() {
 
       <hr />
 
-      <ol className={styles.overview} aria-label="Session overview">
-        {SESSIONS.map((s) => (
-          <li key={s.number}>
-            <a href={`#session-${s.number}`} className={styles.overviewItem}>
-              <span className={styles.overviewNum}><em>{s.number}.</em></span>
-              <span className={styles.overviewTitle}>{s.title}</span>
-              <span className={styles.overviewMeta}>
-                {s.inTheRoom.find((r) => r.label === "Length")?.value ?? ""}
-              </span>
-            </a>
-          </li>
-        ))}
-      </ol>
-
-      <ol className={styles.sessions}>
-        {SESSIONS.map((s) => (
-          <li key={s.number} id={`session-${s.number}`} className={styles.session}>
-            <header className={styles.sessionHeader}>
-              <span className={styles.sessionNum}>
-                <em>{s.number}.</em>
-              </span>
-              <h2>{s.title}</h2>
-            </header>
-
-            <div className={styles.sessionBody}>
-              <div className={styles.sessionProse}>
-                {s.body.map((p, i) => (
-                  <p key={i}>{p}</p>
-                ))}
-                <div className={styles.aiBlock} aria-label="Where AI does the work">
-                  <span className={styles.aiLabel}>What AI does here</span>
-                  <p>{s.aiRole}</p>
+      <Tabs
+        ariaLabel="Working session details"
+        tabs={SESSIONS.map((s) => ({
+          id: s.number,
+          label: `${s.number}. ${s.title}`,
+          caption: s.inTheRoom.find((r) => r.label === "Length")?.value ?? "",
+          panel: (
+            <div className={styles.session}>
+              <div className={styles.sessionBody}>
+                <div className={styles.sessionProse}>
+                  {s.body.map((p, i) => (
+                    <p key={i}>{p}</p>
+                  ))}
+                  <div className={styles.aiBlock} aria-label="Where AI does the work">
+                    <span className={styles.aiLabel}>What AI does here</span>
+                    <p>{s.aiRole}</p>
+                  </div>
                 </div>
+
+                <aside className={styles.sessionAside}>
+                  <div className={styles.asideBlock}>
+                    <h3 className={styles.asideHead}>In the room</h3>
+                    <dl className={styles.asideList}>
+                      {s.inTheRoom.map((row) => (
+                        <div key={row.label}>
+                          <dt>{row.label}</dt>
+                          <dd>{row.value}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </div>
+                  <div className={styles.asideBlock}>
+                    <h3 className={styles.asideHead}>Walk out with</h3>
+                    <p className={styles.asideOutcome}>{s.walkOutWith}</p>
+                  </div>
+                </aside>
               </div>
-
-              <aside className={styles.sessionAside}>
-                <div className={styles.asideBlock}>
-                  <h3 className={styles.asideHead}>In the room</h3>
-                  <dl className={styles.asideList}>
-                    {s.inTheRoom.map((row) => (
-                      <div key={row.label}>
-                        <dt>{row.label}</dt>
-                        <dd>{row.value}</dd>
-                      </div>
-                    ))}
-                  </dl>
-                </div>
-                <div className={styles.asideBlock}>
-                  <h3 className={styles.asideHead}>Walk out with</h3>
-                  <p className={styles.asideOutcome}>{s.walkOutWith}</p>
-                </div>
-              </aside>
             </div>
-          </li>
-        ))}
-      </ol>
+          ),
+        }))}
+      />
 
       <hr />
 

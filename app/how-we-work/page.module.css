@@ -160,11 +160,37 @@
   gap: 1.75rem;
 }
 
-.continuationList li {
+.continuationList li,
+.continuationCard {
   padding: 1.25rem 1.4rem 1.4rem;
   background: var(--paper);
   border: 1px solid var(--rule);
   border-radius: 6px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.continuationCard h3 {
+  font-family: var(--font-serif);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.25rem;
+  line-height: 1.3;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+  margin: 0 0 0.6rem;
+}
+
+.continuationCard p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--ink);
+  margin: 0 0 0.6rem;
+}
+
+.continuationCard p:last-child {
+  margin-bottom: 0;
 }
 
 .continuationLabel,

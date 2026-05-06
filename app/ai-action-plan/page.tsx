@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import HeroImage from "../_components/HeroImage";
 import styles from "./page.module.css";
+import aiActionPlanHero from "../../public/images/hero/ai-action-plan.jpg";
 
 export const metadata: Metadata = {
   title: "AI Action Plan",
@@ -21,7 +22,7 @@ export default function AIActionPlanPage() {
       </p>
 
       <HeroImage
-        src="/images/hero/ai-action-plan.jpg"
+        src={aiActionPlanHero}
         alt=""
         className={styles.heroImage}
       />

@@ -1,47 +1,31 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import Image, { type StaticImageData } from "next/image";
 
 type Props = {
-  src: string;
+  src: StaticImageData | null | undefined;
   alt: string;
   className?: string;
+  priority?: boolean;
 };
 
 /**
- * Renders an editorial image only if it actually exists at `src` on the
- * server. Avoids broken-image fallbacks when the user has not yet dropped
- * a file at the matching path in /public/images. The check uses a HEAD
- * request once on mount; the slot collapses to nothing when the file is
- * missing, with no layout shift afterwards.
+ * Renders an editorial hero image with the unified brand treatment
+ * (paper-bordered frame, subtle desaturation/contrast, warm overlay —
+ * see .hero-image-frame in globals.css).
+ *
+ * Pass a statically imported image so dimensions are baked in at build
+ * time and Next.js can generate responsive variants. If `src` is null
+ * or undefined the slot collapses cleanly.
  */
-export default function HeroImage({ src, alt, className }: Props) {
-  const [state, setState] = useState<"checking" | "ok" | "missing">("checking");
-
-  useEffect(() => {
-    let cancelled = false;
-    fetch(src, { method: "HEAD", cache: "no-store" })
-      .then((r) => {
-        if (cancelled) return;
-        setState(r.ok ? "ok" : "missing");
-      })
-      .catch(() => {
-        if (!cancelled) setState("missing");
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [src]);
-
-  if (state !== "ok") return null;
-
+export default function HeroImage({ src, alt, className, priority = true }: Props) {
+  if (!src) return null;
   return (
     <figure className={`hero-image-frame ${className ?? ""}`}>
-      <img
+      <Image
         src={src}
         alt={alt}
-        loading="eager"
-        decoding="async"
+        priority={priority}
+        sizes="(max-width: 48rem) 100vw, 36rem"
+        placeholder="blur"
       />
     </figure>
   );

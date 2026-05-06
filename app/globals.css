@@ -203,6 +203,28 @@ hr {
   mix-blend-mode: multiply;
 }
 
+/* Section image — full-bleed editorial break. Wider, shorter, no border;
+   feathered top/bottom edges via mask gradient so it reads as a break,
+   not another hero. */
+.section-image-frame {
+  position: relative;
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  height: clamp(180px, 22vw, 280px);
+  overflow: hidden;
+  margin-block: clamp(2.5rem, 5vw, 4rem);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+}
+
+.section-image-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(0.85);
+}
+
 /* Rising-curve mark — the brand's "horizon at dawn." A long, thin line
    that rises gently. Used as section break or page-foot signature.
    Sibling to .mark-divider; quieter, wider, more atmospheric. */

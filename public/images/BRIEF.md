@@ -1,88 +1,74 @@
-# Imagery — how to add an image
+# Imagery — direction and inventory
 
-The site renders cleanly with no images. The visual system is built around the **Operations-as-systems diagram** (code-built, on the home page) — photography is a *supporting* atmospheric layer, not the lead. When you drop a file at one of the named paths below, the matching slot lights up. The slot stays collapsed (no broken-image, no layout shift) until the file lands.
+The brand visual thesis is **nature-as-network**: leaf veins, cellular structures, branching/radial patterns. The metaphor is *what neural networks already are in nature* — networks in living things that flow growth toward a conclusion. Photographic imagery and a custom branching-SVG animation work together at this register, neither on-the-nose.
 
-## Workflow
+The photographic system is **stock from Unsplash, curated tightly to one subject vocabulary** (leaf-vein networks). Treatment is automatic via `<HeroImage>` and `<SectionImage>` components — drop the file in, no preprocessing required.
 
-1. Pick the image. Save it as the exact filename below.
-2. Drop it in the right folder under `public/images/`.
-3. Commit and push. Vercel deploys; the image appears on production.
+## Wired slots (live)
 
-```bash
-# example
-cp ~/Downloads/dawn-light.jpg public/images/hero/home.jpg
-git add public/images/hero/home.jpg
-git commit -m "Home hero image"
-git push
-```
+### Hero photos — `public/images/hero/`
 
-## Slots wired up today
-
-| Page | File path | Notes |
+| Path | Subject | Page |
 |---|---|---|
-| `/` (home) | `hero/home.jpg` | Optional. The Operations diagram is the primary visual. Photo plays atmospheric role. |
-| `/how-we-work` | `hero/how-we-work.jpg` | Below the title block |
-| `/working-sessions` | `hero/working-sessions.jpg` | Below the title block |
-| `/ai-action-plan` | `hero/ai-action-plan.jpg` | Below the dek; subtle, the document still leads |
+| `hero/home.jpg` | Bright leaf-vein cellular mesh (Ash Edmonds) | `/` |
+| `hero/how-we-work.jpg` | Cellular tessellation pattern (David Clode) | `/how-we-work` |
+| `hero/working-sessions.jpg` | Bold yellow leaf-vein infrastructure (Noemi Macavei) | `/working-sessions` |
+| `hero/ai-action-plan.jpg` | Symmetrical leaf branching network (Maxence Pira) | `/ai-action-plan` |
 
-All four are rendered by `<HeroImage>` (`app/_components/HeroImage.tsx`), which checks if the file exists on the server before rendering. Missing → nothing rendered.
+### Section-break photos — `public/images/sections/`
 
-The `<HeroImage>` component automatically applies a unified treatment (subtle desaturation, warm overlay, rounded paper-bordered frame) so any stock image drops into the brand without breaking it.
+Used as full-bleed editorial breaks via `<SectionImage>`, with feathered top/bottom edges.
 
-## Curation rules — what to look for
+| Path | Subject | Currently placed at |
+|---|---|---|
+| `sections/radial-hub.jpg` | Radial leaf vein hub (Stefan Steinbauer) | Home, between Method and Deliverable |
+| `sections/weathered-network.jpg` | Weathered leaf with golden vein network (Nishaan Ahmed) | How-we-work, before CTA |
+| `sections/leaf-droplet.jpg` | Symmetrical leaf with droplet (Clay Banks) | Held for future use |
+| `sections/translucent-leaf.jpg` | Translucent leaf (Mulyadi) | Held for future use |
+| `sections/grid-energy.jpg` | Dense vein grid energy (Tony Sebastian) | Held for future use |
 
-The brand register is **hybrid editorial + tech-modernist**. Photography supports the Operations diagram; it doesn't compete with it. Search Unsplash with these constraints:
+### Parking lot — `public/images/options/`
+
+Four photos that read more botanical than network. Held for editorial future needs:
+
+- `gildardo-rh-q1-dAZuhs7I-unsplash.jpg` (palm frond linear ridges)
+- `pedro-vit-_9c1z0LWzdA-unsplash.jpg` (leaf with droplets)
+- `scott-webb-w0-PjhhbdS8-unsplash.jpg` (dark leaf central vein)
+- `yoksel-zok-LdDewlTIn34-unsplash.jpg` (scaled frond layered)
+
+## Curation rules — what to look for if adding more
 
 ### YES — these subjects work
-- **First light, dawn, golden hour** — morning light through a window, low sun across a horizon, soft early light on a desk corner
-- **Architectural restraint** — empty boardroom at end-of-day, brass details, wood grain, the corner of a window
-- **Quiet horizons** — a road curving up over a hill, a waterline at dawn, farmland at first light, a coastline (eastern seaboard mood)
-- **Texture and surface** — paper grain, ledger paper, a single sheet on a wood desk, brass and leather
-- **Hands at rest, not action** — hands holding coffee, hands on a desk, never hands striking/signing/working
+- **Leaf veins** — high-contrast networks, especially backlit leaves where veins glow.
+- **Cellular tessellation** — Voronoi-like patterns in plant cell walls.
+- **Branching structures** — bilateral symmetry leaf veins, river dendrites, root systems, lichen networks.
+- **Translucent organic mesh** — light passing through thin natural surfaces.
 
 ### NO — never these
-- **Faces** (we are anonymous in v1)
-- **Group photography** ("team meeting", "diverse business", "office handshake")
-- **Generic consulting tropes** — laptops on glass tables, sticky notes on whiteboards, brainstorm sessions
-- **AI-cliché imagery** — neural networks, neon gradients, brain icons, robot hands, holograms, "data" abstractions
-- **Trade-tool action** — wrench biting bolt, sparks flying, sawdust mid-air (loss-coded action register, wrong for opportunity frame)
-- **Glass-and-steel skyscrapers, finance-bro stock**
-- **Over-saturated lifestyle** — bright primary colors, contrasty Instagram filters
-- **Generated-by-AI imagery** — reads ironic and lazy for an AI consultancy
-
-### Treatment is automatic
-The `<HeroImage>` component applies:
-- `saturate(0.78)` — knocks back saturation toward the cream palette
-- `contrast(0.96)` — softens contrast slightly
-- A warm cream overlay + faint green radial wash
-- A 1px paper-rule border + 6px rounded corners
-
-You don't need to pre-process. Pick raw images that follow the curation rules; the CSS treatment unifies them.
+- Faces, group photography, generic consulting tropes.
+- AI-cliché imagery (neural network diagrams, neon gradients, brain icons, robot hands).
+- On-the-nose tech metaphors (circuit boards, glowing data lines, server racks).
+- Over-saturated lifestyle, primary-color contrast.
+- Generated-by-AI imagery (reads ironic and lazy for an AI consultancy).
 
 ## Recommended specs
 
-- **Format**: JPG or WebP. PNG is fine but heavier.
-- **Aspect ratio**: 16:9 or 3:2 (landscape).
-- **Width**: ≥1600px.
-- **File size**: aim for under 400KB. Run through TinyPNG or `sips -Z 1600` on macOS if needed.
+- **Format**: JPG.
+- **Aspect ratio**: 3:2 or 16:9 landscape.
+- **Width**: 1600px is sufficient (next/image handles responsive variants).
+- **File size**: target <600KB before next/image optimization.
 
-## Sourcing on Unsplash — search terms that tend to land
+## How treatment works
 
-- *"morning light desk"*, *"first light window"*, *"dawn horizon"*
-- *"empty boardroom"*, *"corner office wood"*, *"brass detail"*
-- *"north shore mountain"*, *"single tree horizon"*, *"coastline dawn"*
-- *"contract pages"*, *"ledger paper"*, *"fountain pen paper"* (for Action Plan slot specifically — document register)
+`<HeroImage>` (in `app/_components/HeroImage.tsx`) wraps photos in a paper-rule frame with subtle desaturation, warm cream overlay, and faint green radial wash. Drop a JPG into the right path; it appears with the unified treatment.
 
-Avoid anything titled *"team meeting,"* *"diverse business,"* *"office handshake,"* *"brainstorm,"* *"data analytics,"* *"AI,"* *"technology,"* *"future."*
+`<SectionImage>` (in `app/_components/SectionImage.tsx`) renders full-bleed section breaks at clamp(180px, 22vw, 280px) height, with feathered top/bottom edges fading to the page background. Slight saturation pull-back unifies them.
 
-## Subfolders
+## Resizing if needed
 
-`hero/` — page-top images (the four slots above).
+```bash
+# Resize a new candidate to match the existing inventory
+sips -Z 1600 -s formatOptions 65 input.jpg --out output.jpg
+```
 
-`sections/` — for future use as editorial breaks between text sections (not wired up yet; tell me when you have files and I'll wire them in).
-
-`texture/` — subtle textural overlays for background washes (paper grain is now built-in CSS; this folder is a parking lot for any future texture overlays).
-
-## Commission later, curate now
-
-The current direction (stock photography + code-built diagram) is the *get-to-good-fast* path. If the site warrants it later, commission a single photographer for a consistent set or a single illustrator for spot illustrations — those are the *get-to-defensible* paths. For now, careful Unsplash curation through the unified CSS treatment gets us 80% there at zero cost.
+This typically lands files in the 250–700KB range before next/image further optimizes them.

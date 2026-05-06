@@ -2,7 +2,12 @@ import Link from "next/link";
 import HeroImage from "./_components/HeroImage";
 import ForwardArrow from "./_components/Arrow";
 import OperationsDiagram from "./_components/OperationsDiagram";
+import BranchingMark from "./_components/BranchingMark";
+import BuildsCarousel from "./_components/BuildsCarousel";
+import SectionImage from "./_components/SectionImage";
 import styles from "./page.module.css";
+import homeHero from "../public/images/hero/home.jpg";
+import radialHubSection from "../public/images/sections/radial-hub.jpg";
 
 export default function HomePage() {
   return (
@@ -25,7 +30,7 @@ export default function HomePage() {
               How we work
             </Link>
           </div>
-          <HeroImage src="/images/hero/home.jpg" alt="" className={styles.heroImage} />
+          <HeroImage src={homeHero} alt="" className={styles.heroImage} />
         </div>
         <div className={`container ${styles.heroDiagramWrap}`}>
           <OperationsDiagram />
@@ -140,7 +145,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <div className="mark-divider" aria-hidden="true" />
+      <SectionImage src={radialHubSection} />
 
       <section className={`section ${styles.deliverable}`}>
         <div className="container">
@@ -200,6 +205,8 @@ export default function HomePage() {
         </div>
       </section>
 
+      <BranchingMark />
+
       <section className={`section section--alt rule-top ${styles.longgame}`}>
         <div className="container">
           <div className={styles.longgameHead}>
@@ -210,91 +217,110 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className={styles.longgameGrid}>
-            <article className={styles.buildCard}>
-              <p className={styles.buildLabel}>AI software · 4–6 weeks</p>
-              <h3>Custom tools your team uses every day</h3>
-              <p className={styles.buildOutcome}>
-                Built around a specific role. Used by a specific person. Measurable in hours and dollars.
-              </p>
-              <div className={styles.buildExampleBlock}>
-                <p className={styles.buildExampleHead}>From a recent engagement</p>
-                <p className={styles.buildExample}>
-                  <strong>AI proposal generator</strong> for a senior estimator. Drafts from a prospect&rsquo;s scope document, pre-populates labor and parts from the last forty winning bids.
-                </p>
-                <ul className={styles.buildMetrics}>
-                  <li>
-                    <span>Estimator time recovered</span>
-                    <strong>~14 hrs / week</strong>
-                  </li>
-                  <li>
-                    <span>Quote cycle</span>
-                    <strong>3 days → 4 hours</strong>
-                  </li>
-                  <li>
-                    <span>Revenue lift</span>
-                    <strong>+8–12%</strong>
-                  </li>
-                </ul>
-              </div>
-            </article>
-
-            <article className={styles.buildCard}>
-              <p className={styles.buildLabel}>AI agent · 2–4 weeks</p>
-              <h3>Autonomous workers, on a schedule or trigger</h3>
-              <p className={styles.buildOutcome}>
-                No one invokes them. They watch the calendar, the inbox, the document folder — and act when their conditions fire.
-              </p>
-              <div className={styles.buildExampleBlock}>
-                <p className={styles.buildExampleHead}>From a recent engagement</p>
-                <p className={styles.buildExample}>
-                  <strong>Anniversary review agent.</strong> Watches the contract calendar. At each maintenance-agreement anniversary, reviews the rate-card escalator clauses and drafts the renewal letter for human sign-off.
-                </p>
-                <ul className={styles.buildMetrics}>
-                  <li>
-                    <span>Contracts reviewed</span>
-                    <strong>93 in 90 minutes</strong>
-                  </li>
-                  <li>
-                    <span>Captured margin</span>
-                    <strong>$1.4M – $1.8M / yr</strong>
-                  </li>
-                  <li>
-                    <span>Human time</span>
-                    <strong>Sign-off only</strong>
-                  </li>
-                </ul>
-              </div>
-            </article>
-
-            <article className={styles.buildCard}>
-              <p className={styles.buildLabel}>Advisory · ongoing</p>
-              <h3>The quarterly AI working group</h3>
-              <p className={styles.buildOutcome}>
-                Two of our partners sit with the executive team once a quarter. Review what shipped. Rank what to build next. Retire what is not pulling its weight.
-              </p>
-              <div className={styles.buildExampleBlock}>
-                <p className={styles.buildExampleHead}>How it runs</p>
-                <p className={styles.buildExample}>
-                  Two hours, quarterly. Printed agenda. Output is a short list of next AI builds, each scoped to a dollar target. Build work is scoped separately.
-                </p>
-                <ul className={styles.buildMetrics}>
-                  <li>
-                    <span>Cadence</span>
-                    <strong>Quarterly · 2 hrs</strong>
-                  </li>
-                  <li>
-                    <span>Scope</span>
-                    <strong>What to build, what to retire</strong>
-                  </li>
-                  <li>
-                    <span>Continues from</span>
-                    <strong>The Action Plan</strong>
-                  </li>
-                </ul>
-              </div>
-            </article>
-          </div>
+          <BuildsCarousel
+            ariaLabel="After the Plan: three shapes the work takes"
+            slides={[
+              {
+                id: "software",
+                label: "AI software",
+                content: (
+                  <article className={styles.buildCard}>
+                    <p className={styles.buildLabel}>AI software · 4–6 weeks</p>
+                    <h3>Custom tools your team uses every day</h3>
+                    <p className={styles.buildOutcome}>
+                      Built around a specific role. Used by a specific person. Measurable in hours and dollars.
+                    </p>
+                    <div className={styles.buildExampleBlock}>
+                      <p className={styles.buildExampleHead}>From a recent engagement</p>
+                      <p className={styles.buildExample}>
+                        <strong>AI proposal generator</strong> for a senior estimator. Drafts from a prospect&rsquo;s scope document, pre-populates labor and parts from the last forty winning bids.
+                      </p>
+                      <ul className={styles.buildMetrics}>
+                        <li>
+                          <span>Estimator time recovered</span>
+                          <strong>~14 hrs / week</strong>
+                        </li>
+                        <li>
+                          <span>Quote cycle</span>
+                          <strong>3 days → 4 hours</strong>
+                        </li>
+                        <li>
+                          <span>Revenue lift</span>
+                          <strong>+8–12%</strong>
+                        </li>
+                      </ul>
+                    </div>
+                  </article>
+                ),
+              },
+              {
+                id: "agent",
+                label: "AI agent",
+                content: (
+                  <article className={styles.buildCard}>
+                    <p className={styles.buildLabel}>AI agent · 2–4 weeks</p>
+                    <h3>Autonomous workers, on a schedule or trigger</h3>
+                    <p className={styles.buildOutcome}>
+                      No one invokes them. They watch the calendar, the inbox, the document folder — and act when their conditions fire.
+                    </p>
+                    <div className={styles.buildExampleBlock}>
+                      <p className={styles.buildExampleHead}>From a recent engagement</p>
+                      <p className={styles.buildExample}>
+                        <strong>Anniversary review agent.</strong> Watches the contract calendar. At each maintenance-agreement anniversary, reviews the rate-card escalator clauses and drafts the renewal letter for human sign-off.
+                      </p>
+                      <ul className={styles.buildMetrics}>
+                        <li>
+                          <span>Contracts reviewed</span>
+                          <strong>93 in 90 minutes</strong>
+                        </li>
+                        <li>
+                          <span>Captured margin</span>
+                          <strong>$1.4M – $1.8M / yr</strong>
+                        </li>
+                        <li>
+                          <span>Human time</span>
+                          <strong>Sign-off only</strong>
+                        </li>
+                      </ul>
+                    </div>
+                  </article>
+                ),
+              },
+              {
+                id: "advisory",
+                label: "Advisory",
+                content: (
+                  <article className={styles.buildCard}>
+                    <p className={styles.buildLabel}>Advisory · ongoing</p>
+                    <h3>The quarterly AI working group</h3>
+                    <p className={styles.buildOutcome}>
+                      Two of our partners sit with the executive team once a quarter. Review what shipped. Rank what to build next. Retire what is not pulling its weight.
+                    </p>
+                    <div className={styles.buildExampleBlock}>
+                      <p className={styles.buildExampleHead}>How it runs</p>
+                      <p className={styles.buildExample}>
+                        Two hours, quarterly. Printed agenda. Output is a short list of next AI builds, each scoped to a dollar target. Build work is scoped separately.
+                      </p>
+                      <ul className={styles.buildMetrics}>
+                        <li>
+                          <span>Cadence</span>
+                          <strong>Quarterly · 2 hrs</strong>
+                        </li>
+                        <li>
+                          <span>Scope</span>
+                          <strong>What to build, what to retire</strong>
+                        </li>
+                        <li>
+                          <span>Continues from</span>
+                          <strong>The Action Plan</strong>
+                        </li>
+                      </ul>
+                    </div>
+                  </article>
+                ),
+              },
+            ]}
+          />
 
           <p className={styles.longgameFoot}>
             Examples are representative builds drawn from the patterns we see across mid-market engagements. The specific software and agents we recommend depend on the diagnostic.
