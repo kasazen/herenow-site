@@ -170,6 +170,39 @@ hr {
   opacity: 0.7;
 }
 
+/* Photography treatment — unified styling so stock images dropped into
+   hero/section slots read as a coherent brand layer, not generic stock.
+   Subtle desaturation knocks the saturation back; a faint warm overlay
+   pulls the image toward the cream palette; rounded corners + paper
+   border match the rest of the system. */
+.hero-image-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  border: 1px solid var(--rule);
+  margin: 0;
+  isolation: isolate;
+  background: var(--paper-tint);
+}
+
+.hero-image-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: saturate(0.78) contrast(0.96);
+}
+
+.hero-image-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(250, 249, 245, 0.04) 0%, rgba(250, 249, 245, 0.16) 100%),
+    radial-gradient(circle at 30% 25%, rgba(21, 128, 61, 0.04) 0%, transparent 60%);
+  mix-blend-mode: multiply;
+}
+
 /* Rising-curve mark — the brand's "horizon at dawn." A long, thin line
    that rises gently. Used as section break or page-foot signature.
    Sibling to .mark-divider; quieter, wider, more atmospheric. */

@@ -84,6 +84,10 @@
   height: auto;
 }
 
+.heroDiagramWrap {
+  margin-top: clamp(1.5rem, 4vw, 3rem);
+}
+
 /* ─── Opening (where engagements begin) ───────────────────────── */
 
 .opening {

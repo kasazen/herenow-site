@@ -36,12 +36,13 @@ export default function HeroImage({ src, alt, className }: Props) {
   if (state !== "ok") return null;
 
   return (
-    <img
-      src={src}
-      alt={alt}
-      className={className}
-      loading="eager"
-      decoding="async"
-    />
+    <figure className={`hero-image-frame ${className ?? ""}`}>
+      <img
+        src={src}
+        alt={alt}
+        loading="eager"
+        decoding="async"
+      />
+    </figure>
   );
 }

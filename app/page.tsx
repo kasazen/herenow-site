@@ -1,6 +1,7 @@
 import Link from "next/link";
 import HeroImage from "./_components/HeroImage";
 import ForwardArrow from "./_components/Arrow";
+import OperationsDiagram from "./_components/OperationsDiagram";
 import styles from "./page.module.css";
 
 export default function HomePage() {
@@ -25,6 +26,9 @@ export default function HomePage() {
             </Link>
           </div>
           <HeroImage src="/images/hero/home.jpg" alt="" className={styles.heroImage} />
+        </div>
+        <div className={`container ${styles.heroDiagramWrap}`}>
+          <OperationsDiagram />
         </div>
       </section>
 
