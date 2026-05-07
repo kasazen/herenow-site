@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import HeroImage from "../_components/HeroImage";
-import Tabs from "../_components/Tabs";
+import SessionsAccordion from "./SessionsAccordion";
 import styles from "./page.module.css";
 import workingSessionsHero from "../../public/images/hero/working-sessions.jpg";
 
@@ -145,43 +145,42 @@ export default function WorkingSessionsPage() {
 
       <hr />
 
-      <Tabs
+      <SessionsAccordion
         ariaLabel="Working session details"
-        tabs={SESSIONS.map((s) => ({
+        items={SESSIONS.map((s) => ({
           id: s.number,
-          label: `${s.number}. ${s.title}`,
+          number: s.number,
+          title: s.title,
           caption: s.inTheRoom.find((r) => r.label === "Length")?.value ?? "",
-          panel: (
-            <div className={styles.session}>
-              <div className={styles.sessionBody}>
-                <div className={styles.sessionProse}>
-                  {s.body.map((p, i) => (
-                    <p key={i}>{p}</p>
-                  ))}
-                  <div className={styles.aiBlock} aria-label="Where AI does the work">
-                    <span className={styles.aiLabel}>What AI does here</span>
-                    <p>{s.aiRole}</p>
-                  </div>
+          content: (
+            <div className={styles.sessionBody}>
+              <div className={styles.sessionProse}>
+                {s.body.map((p, i) => (
+                  <p key={i}>{p}</p>
+                ))}
+                <div className={styles.aiBlock} aria-label="Where AI does the work">
+                  <span className={styles.aiLabel}>What AI does here</span>
+                  <p>{s.aiRole}</p>
                 </div>
-
-                <aside className={styles.sessionAside}>
-                  <div className={styles.asideBlock}>
-                    <h3 className={styles.asideHead}>In the room</h3>
-                    <dl className={styles.asideList}>
-                      {s.inTheRoom.map((row) => (
-                        <div key={row.label}>
-                          <dt>{row.label}</dt>
-                          <dd>{row.value}</dd>
-                        </div>
-                      ))}
-                    </dl>
-                  </div>
-                  <div className={styles.asideBlock}>
-                    <h3 className={styles.asideHead}>Walk out with</h3>
-                    <p className={styles.asideOutcome}>{s.walkOutWith}</p>
-                  </div>
-                </aside>
               </div>
+
+              <aside className={styles.sessionAside}>
+                <div className={styles.asideBlock}>
+                  <h3 className={styles.asideHead}>In the room</h3>
+                  <dl className={styles.asideList}>
+                    {s.inTheRoom.map((row) => (
+                      <div key={row.label}>
+                        <dt>{row.label}</dt>
+                        <dd>{row.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+                <div className={styles.asideBlock}>
+                  <h3 className={styles.asideHead}>Walk out with</h3>
+                  <p className={styles.asideOutcome}>{s.walkOutWith}</p>
+                </div>
+              </aside>
             </div>
           ),
         }))}

@@ -1,0 +1,141 @@
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--rule);
+}
+
+.item {
+  border-bottom: 1px solid var(--rule);
+  scroll-margin-top: 5rem;
+}
+
+.headingRow {
+  margin: 0;
+  font-weight: 400;
+  font-size: inherit;
+  line-height: 1;
+}
+
+.trigger {
+  display: grid;
+  grid-template-columns: 1.6rem minmax(0, 1fr) auto 1.2rem;
+  align-items: baseline;
+  column-gap: 0.85rem;
+  width: 100%;
+  padding: 1.15rem 0;
+  background: transparent;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--ink);
+  transition: color 140ms ease;
+}
+
+.trigger:hover {
+  color: var(--accent);
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.num {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(1.125rem, 1.8vw, 1.375rem);
+  line-height: 1.25;
+  color: inherit;
+  letter-spacing: -0.01em;
+}
+
+.caption {
+  font-family: var(--font-sans);
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--faint);
+  white-space: nowrap;
+}
+
+.chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2rem;
+  height: 1.2rem;
+  color: var(--accent);
+  font-family: var(--font-sans);
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+/* On narrow screens, drop the inline meta caption to its own row beneath
+   the title so nothing has to truncate. The chevron stays pinned right.
+   We keep the number aligned with the title baseline. */
+@media (max-width: 36rem) {
+  .trigger {
+    grid-template-columns: 1.4rem minmax(0, 1fr) 1.2rem;
+    grid-template-rows: auto auto;
+    column-gap: 0.6rem;
+    row-gap: 0.2rem;
+    padding: 1rem 0;
+    align-items: baseline;
+  }
+  .num {
+    grid-row: 1;
+    grid-column: 1;
+  }
+  .title {
+    grid-row: 1;
+    grid-column: 2;
+  }
+  .chevron {
+    grid-row: 1;
+    grid-column: 3;
+    justify-self: end;
+  }
+  .caption {
+    grid-row: 2;
+    grid-column: 2;
+    font-size: 0.7rem;
+  }
+}
+
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 360ms cubic-bezier(0.55, 0.05, 0.25, 1);
+}
+
+.panelOpen {
+  grid-template-rows: 1fr;
+}
+
+.panelInner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.panelOpen .panelInner {
+  padding-bottom: 1.6rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    transition: none;
+  }
+}
