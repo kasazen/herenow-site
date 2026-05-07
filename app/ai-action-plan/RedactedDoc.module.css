@@ -1,0 +1,140 @@
+.wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.svg {
+  width: 100%;
+  max-width: 22rem;
+  height: auto;
+  filter: drop-shadow(0 4px 24px rgba(20, 20, 26, 0.06));
+}
+
+/* Each element starts hidden + slightly scaled. On .visible, sequential
+   transition delays reveal the document top-down: brand mark → eyebrow
+   → title → sections in order → highlights last. */
+
+.brandMark {
+  opacity: 0;
+  transition: opacity 320ms ease;
+}
+
+.eyebrow,
+.title,
+.title2 {
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 480ms cubic-bezier(0.55, 0.05, 0.25, 1);
+}
+
+/* Section groups — fade and slide in */
+.section1,
+.section2,
+.section3,
+.section4,
+.section5 {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 420ms ease, transform 420ms cubic-bezier(0.55, 0.05, 0.25, 1);
+}
+
+.highlight1,
+.highlight2 {
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 560ms cubic-bezier(0.55, 0.05, 0.25, 1);
+}
+
+.footerMark {
+  opacity: 0;
+  transition: opacity 320ms ease;
+}
+
+/* Animation order: brand mark → eyebrow → titles → sections (one by one)
+   → highlights last (the "tagged" moments) → footer */
+
+.visible .brandMark {
+  opacity: 1;
+  transition-delay: 0ms;
+}
+
+.visible .eyebrow {
+  transform: scaleX(1);
+  transition-delay: 120ms;
+}
+
+.visible .title {
+  transform: scaleX(1);
+  transition-delay: 240ms;
+}
+
+.visible .title2 {
+  transform: scaleX(1);
+  transition-delay: 360ms;
+}
+
+.visible .section1 {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 540ms;
+}
+
+.visible .section2 {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 700ms;
+}
+
+.visible .section3 {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 860ms;
+}
+
+.visible .section4 {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 1020ms;
+}
+
+.visible .section5 {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 1180ms;
+}
+
+.visible .highlight1 {
+  transform: scaleX(1);
+  transition-delay: 1320ms;
+}
+
+.visible .highlight2 {
+  transform: scaleX(1);
+  transition-delay: 1440ms;
+}
+
+.visible .footerMark {
+  opacity: 1;
+  transition-delay: 1600ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brandMark,
+  .eyebrow,
+  .title,
+  .title2,
+  .section1,
+  .section2,
+  .section3,
+  .section4,
+  .section5,
+  .highlight1,
+  .highlight2,
+  .footerMark {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
