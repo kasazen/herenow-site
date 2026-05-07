@@ -1,2 +1,197 @@
-/* Slim — the deck owns its own styling.
-   This file is kept as a placeholder; remove if Next.js stops complaining. */
+.page {
+  padding-block: var(--section-y);
+}
+
+.header {
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  margin-top: 0.5rem;
+  line-height: 1.1;
+  letter-spacing: -0.022em;
+  font-weight: 400;
+  max-width: 22ch;
+}
+
+.lead {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.0625rem, 1.6vw, 1.25rem);
+  color: var(--muted);
+  margin-top: 1rem;
+  max-width: 36rem;
+}
+
+.h2 {
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  margin-top: 0.5rem;
+  letter-spacing: -0.018em;
+  max-width: 28ch;
+}
+
+/* ─── What's in it (5-section list) ───────────────────────── */
+
+.sectionsBlock {
+  padding-block: 1rem 0;
+}
+
+.sections {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.section {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  gap: 1.25rem;
+  align-items: start;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.section:last-child {
+  border-bottom: 0;
+}
+
+.sectionNum {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.4rem;
+  color: var(--accent);
+  line-height: 1;
+  padding-top: 0.1rem;
+}
+
+.sectionTitle {
+  font-family: var(--font-serif);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.1875rem;
+  color: var(--ink);
+  margin: 0 0 0.25rem;
+  letter-spacing: -0.012em;
+  line-height: 1.3;
+}
+
+.sectionDesc {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* ─── Patterns we look for (anonymized stat tiles) ────────── */
+
+.patternsBlock {
+  padding-block: 1rem 0;
+}
+
+.patternsLead {
+  font-size: 0.95rem;
+  color: var(--faint);
+  font-style: italic;
+  font-family: var(--font-serif);
+  margin-top: 0.5rem;
+  max-width: 48rem;
+}
+
+.patterns {
+  list-style: none;
+  padding: 0;
+  margin: 1.75rem 0 0;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 36rem) {
+  .patterns {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 64rem) {
+  .patterns {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.pattern {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 1.25rem 1.4rem 1.4rem;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+}
+
+.patternFigure {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.5rem, 2.2vw, 1.875rem);
+  font-weight: 400;
+  color: var(--accent);
+  line-height: 1.05;
+  letter-spacing: -0.018em;
+  margin: 0;
+}
+
+.patternLabel {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--ink);
+  margin: 0;
+}
+
+.patternTag {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--faint);
+  margin: 0;
+  text-transform: uppercase;
+  margin-top: 0.4rem;
+}
+
+/* ─── Methodology grid wrap ────────────────────────────────── */
+
+.methodologyBlock {
+  padding-block: 1rem 0;
+}
+
+.methodologyChart {
+  margin-top: 1.5rem;
+  width: 100%;
+  max-width: 56rem;
+}
+
+.methodologyChart svg {
+  width: 100%;
+  height: auto;
+}
+
+/* ─── CTA ──────────────────────────────────────────────────── */
+
+.cta {
+  padding-block: 1rem 0;
+}
+
+.ctaBody {
+  margin-top: 0.5rem;
+  margin-bottom: 1.25rem;
+  max-width: 40rem;
+  color: var(--muted);
+}
+
+.ctaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}

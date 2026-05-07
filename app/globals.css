@@ -737,8 +737,8 @@ textarea {
    on-screen viewer chrome is hidden. */
 
 @page {
-  size: 11in 8.5in; /* landscape Letter */
-  margin: 0;
+  size: letter;
+  margin: 0.85in 0.95in;
 }
 
 @media print {

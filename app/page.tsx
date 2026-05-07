@@ -23,7 +23,7 @@ export default function HomePage() {
           </p>
           <div className={styles.heroCtaRow}>
             <Link href="/ai-action-plan" className="btn">
-              See an AI Action Plan
+              About the Action Plan
             </Link>
             <Link href="/how-we-work" className="btn btn--ghost">
               How we work
@@ -93,7 +93,7 @@ export default function HomePage() {
           </p>
           <p className={styles.deliverableCta}>
             <Link href="/ai-action-plan" className="btn btn--ghost">
-              View a sample Plan →
+              About the Action Plan →
             </Link>
           </p>
         </div>

@@ -151,7 +151,7 @@ function SiteFooter() {
               <Link href="/working-sessions">Working sessions</Link>
             </li>
             <li>
-              <Link href="/ai-action-plan">AI Action Plan (sample)</Link>
+              <Link href="/ai-action-plan">About the Action Plan</Link>
             </li>
           </ul>
         </div>

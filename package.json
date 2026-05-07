@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "build:og-assets": "node scripts/og-assets/render.mjs",
-    "build:memo-pdf": "bash scripts/build-memo-pdf.sh"
+    "build:og-assets": "node scripts/og-assets/render.mjs"
   },
   "dependencies": {
     "embla-carousel-autoplay": "^8.6.0",
