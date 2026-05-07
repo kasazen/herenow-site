@@ -731,14 +731,14 @@ textarea {
 }
 
 /* ─── Print styles ────────────────────────────────────────────── */
-/* Used to render the canonical /ai-action-plan page as a typeset PDF
-   via Chrome --print-to-pdf. Hides site chrome, drops the CTA,
-   tightens layout for US Letter, and inserts page breaks where the
-   document would naturally fold. */
+/* Used to render /ai-action-plan as a slide-deck PDF via Chrome
+   --print-to-pdf. Each slide becomes one landscape Letter page. The
+   DeckViewer renders a hidden print stack with page-break rules; the
+   on-screen viewer chrome is hidden. */
 
 @page {
-  size: letter;
-  margin: 0.85in 0.95in;
+  size: 11in 8.5in; /* landscape Letter */
+  margin: 0;
 }
 
 @media print {
@@ -746,8 +746,7 @@ textarea {
   body {
     background: #fff !important;
     color: #14141a !important;
-    font-size: 10.5pt !important;
-    line-height: 1.45 !important;
+    min-height: auto !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
@@ -772,50 +771,7 @@ textarea {
     background: #c8c5b8 !important;
   }
 
-  /* Tighten section spacing for print */
-  article > section {
-    margin-block: 0 !important;
-    padding-block: 0.4rem 0.6rem !important;
-  }
-
-  /* Avoid orphan headlines */
-  h1, h2, h3, h4 {
-    break-after: avoid;
-    page-break-after: avoid;
-    break-inside: avoid;
-    page-break-inside: avoid;
-  }
-
-  h2 {
-    margin-top: 1.2em !important;
-    margin-bottom: 0.4em !important;
-    font-size: 16pt !important;
-  }
-
-  h3 {
-    margin-top: 0.8em !important;
-    margin-bottom: 0.3em !important;
-  }
-
-  p {
-    orphans: 3;
-    widows: 3;
-  }
-
-  /* Keep cohesive units together: findings, build blocks, comparison
-     panels should not split mid-content. Pagination flows naturally
-     between them rather than being forced. */
-  ol li, ul li,
-  [class*="findings"] li,
-  [class*="aiBuildBlock"],
-  [class*="aiBanner"],
-  [class*="diff"],
-  [class*="meta"] {
-    break-inside: avoid;
-    page-break-inside: avoid;
-  }
-
-  /* Hide the on-page download CTA from the printed deliverable */
+  /* Hide on-page CTAs and viewer chrome from print */
   [data-print-hide="true"] {
     display: none !important;
   }

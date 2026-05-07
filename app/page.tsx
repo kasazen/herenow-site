@@ -93,7 +93,7 @@ export default function HomePage() {
           </p>
           <p className={styles.deliverableCta}>
             <Link href="/ai-action-plan" className="btn btn--ghost">
-              Read a sample Plan →
+              View a sample Plan →
             </Link>
           </p>
         </div>

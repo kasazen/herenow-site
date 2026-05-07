@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
-# Build the typeset PDF for /sample-memo.pdf using the system Chrome
-# in headless mode. The page itself carries the print CSS in
-# app/globals.css; this script just wires Chrome to a running server.
+# Build the AI Action Plan deck PDF using the system Chrome in headless
+# mode. The /ai-action-plan deck carries print CSS that stacks all slides
+# with break-after: page on landscape Letter; this script just wires
+# Chrome to a running Next.js server.
+#
+# After rendering, the script verifies the PDF page count matches the
+# expected slide count (best-effort via macOS mdls).
 #
 # Usage: npm run build:memo-pdf
 # Requires: Google Chrome installed at the standard macOS path.
@@ -53,8 +57,8 @@ for i in {1..40}; do
   fi
 done
 
-# Small extra delay for fonts to settle in headless render.
-sleep 1
+# Extra delay for variable fonts to settle in headless render.
+sleep 2
 
 echo "→ Rendering PDF to ${OUT}..."
 "$CHROME" \
@@ -64,8 +68,20 @@ echo "→ Rendering PDF to ${OUT}..."
   --hide-scrollbars \
   --print-to-pdf="${ROOT_DIR}/${OUT}" \
   --no-pdf-header-footer \
-  --virtual-time-budget=10000 \
+  --virtual-time-budget=15000 \
   "$URL"
 
 echo "✓ Wrote ${OUT}"
 ls -lh "${OUT}"
+
+# Best-effort page count verification.
+EXPECTED_PAGES=18
+if command -v mdls >/dev/null 2>&1; then
+  ACTUAL_PAGES=$(mdls -raw -name kMDItemNumberOfPages "${ROOT_DIR}/${OUT}" 2>/dev/null || echo "?")
+  if [[ "${ACTUAL_PAGES}" == "${EXPECTED_PAGES}" ]]; then
+    echo "✓ PDF page count: ${ACTUAL_PAGES} (expected ${EXPECTED_PAGES})"
+  else
+    echo "⚠ PDF page count mismatch — got ${ACTUAL_PAGES}, expected ${EXPECTED_PAGES}." >&2
+    echo "  Likely a slide-render timing issue. Inspect the PDF manually." >&2
+  fi
+fi
