@@ -13,11 +13,11 @@ export const metadata: Metadata = {
     template: "%s · Here Now Labs",
   },
   description:
-    "AI inside your operation. We find your AI advantage in ten days, then build the software and agents that compound it for years.",
+    "AI inside your operation. We use AI to find what's possible inside an established operation, then build it. Action, not discussion.",
   openGraph: {
     title: "Here Now Labs",
     description:
-      "AI inside your operation. Find your AI advantage. Build what compounds.",
+      "AI inside your operation. Action, not discussion.",
     url: SITE_URL,
     siteName: "Here Now Labs",
     type: "website",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Here Now Labs",
     description:
-      "AI inside your operation. Find your AI advantage. Build what compounds.",
+      "AI inside your operation. Action, not discussion.",
     images: ["/og-image.png"],
   },
   icons: {
@@ -70,7 +70,7 @@ const PROFESSIONAL_SERVICE_LD = {
   logo: `${SITE_URL}/apple-touch-icon.png`,
   image: `${SITE_URL}/og-image.png`,
   description:
-    "AI-accelerated advisory for operators of established, profitable companies.",
+    "AI-driven discovery and build for operators of established companies.",
   email: "team@herenowlabs.xyz",
   areaServed: "US",
   priceRange: "$$$$",
@@ -138,32 +138,23 @@ function SiteFooter() {
             <strong style={{ color: "var(--ink)", fontWeight: 500 }}>Here Now Labs</strong>
           </p>
           <p style={{ marginTop: "0.5rem", maxWidth: "28rem" }}>
-            AI inside your operation. Find your AI advantage. Build what compounds.
+            AI inside your operation. Action, not discussion.
           </p>
         </div>
         <div>
-          <h4>Practice</h4>
+          <h4>Site</h4>
           <ul>
             <li>
               <Link href="/how-we-work">How we work</Link>
             </li>
             <li>
-              <Link href="/working-sessions">Working sessions</Link>
-            </li>
-            <li>
-              <Link href="/ai-action-plan">About the Action Plan</Link>
+              <Link href="/contact">Contact</Link>
             </li>
           </ul>
         </div>
         <div>
           <h4>Get in touch</h4>
           <ul>
-            <li>
-              <Link href="/contact">Contact form</Link>
-            </li>
-            <li>
-              <a href="https://cal.com/herenowlabs/intro">Book a 30-minute intro</a>
-            </li>
             <li>
               <a href="mailto:team@herenowlabs.xyz">team@herenowlabs.xyz</a>
             </li>

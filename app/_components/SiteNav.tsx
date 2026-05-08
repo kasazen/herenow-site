@@ -6,8 +6,6 @@ import { useEffect, useState } from "react";
 
 const NAV_ITEMS = [
   { href: "/how-we-work", label: "How we work" },
-  { href: "/working-sessions", label: "Sessions" },
-  { href: "/ai-action-plan", label: "Action Plan" },
 ];
 
 function isActive(pathname: string | null, href: string) {
@@ -92,11 +90,6 @@ export default function SiteNav() {
             >
               Contact
             </Link>
-          </li>
-          <li>
-            <a href="https://cal.com/herenowlabs/intro" onClick={() => setOpen(false)}>
-              Book a 30-minute intro
-            </a>
           </li>
         </ul>
       </div>
