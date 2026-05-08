@@ -1,3 +1,22 @@
+// ─── Voice rules ─── Linear / Stripe / Notion canon ───────────────
+//  Every line of user-facing copy on this site must pass these:
+//   1. Subject + verb + outcome. Active voice unless passive carries
+//      specific information.
+//   2. Cut every adjective that doesn't change the meaning.
+//   3. No process words as headlines ("workflow," "pipeline,"
+//      "ingestion," "deployment," "infrastructure").
+//   4. No hedging ("typically," "usually," "may," "approximately").
+//   5. No marketing intensifiers ("incredibly," "deeply," "powerful,"
+//      "next-generation," "best-in-class").
+//   6. Specifics over abstractions: name the artifact, dollar, hour,
+//      role.
+//   7. Don't sell what the buyer doesn't want. Cost is not a feature.
+//      Mention payment terms once, in pricing. Never repeat.
+//   8. Don't repeat anchor terms across pages.
+//   9. Show the outcome, not the system. "The ops lead got her time
+//      back" beats "12 hrs/week saved."
+//  10. Headlines say what something IS or DOES, not how it FEELS.
+
 import Link from "next/link";
 import ExampleCallout from "./_components/ExampleCallout";
 import HeroImage from "./_components/HeroImage";
@@ -16,7 +35,7 @@ export default function HomePage() {
       <section className={styles.hero}>
         <div className={`container ${styles.heroInner}`}>
           <div className={styles.heroText}>
-            <p className="eyebrow">Two-week sprint. Paid. A working deliverable.</p>
+            <p className="eyebrow">Two weeks inside your operation.</p>
             <h1 className={styles.heroTitle}>
               AI you haven&rsquo;t built yet, <em>hiding in your operation.</em>
             </h1>
@@ -63,7 +82,7 @@ export default function HomePage() {
           <div className={styles.arcHead}>
             <p className="eyebrow">The arc</p>
             <h2 className={styles.arcTitle}>
-              Two weeks paid. <em>Then we build.</em>
+              Two weeks. <em>Then we build.</em>
             </h2>
           </div>
           <ol className={styles.arcGrid}>
@@ -71,7 +90,7 @@ export default function HomePage() {
               <span className={styles.arcNum}>01</span>
               <h3 className={styles.arcName}><em>Sprint.</em></h3>
               <p className={styles.arcBody}>
-                Two weeks, paid. Stakeholder interviews, document analysis, working deliverable.
+                Stakeholder interviews. Document analysis. Working deliverable.
               </p>
             </li>
             <li className={styles.arcCol}>
@@ -111,7 +130,7 @@ export default function HomePage() {
             <TierCard
               tier="Starter"
               headline="One process, automated."
-              body="A single high-friction workflow becomes an AI deployment that runs on its own. Quick to ship. Obvious return."
+              body="Your highest-friction workflow runs itself. You manage exceptions. Quick to ship. Obvious return."
               examples={[
                 "Proposal generation from CRM and project data",
                 "First-draft contract review with risk flags",
@@ -122,7 +141,7 @@ export default function HomePage() {
             <TierCard
               tier="Builder"
               headline="Multiple systems, integrated."
-              body="Cross-functional infrastructure that compounds value across departments. Heavier lift. Foundational."
+              body="AI threading through multiple systems. Compounds across departments. Heavier lift. Foundational."
               examples={[
                 "CRM-to-finance pipeline with anomaly detection",
                 "Multi-source operational dashboard with AI commentary",
@@ -163,15 +182,15 @@ export default function HomePage() {
               quote="Our ops lead spends three days a week building proposals in Word from PDF screenshots."
               build="An AI agent that reads the source data and writes a fully formatted proposal directly into the email drafts folder. The ops lead reviews and sends."
               tier="Starter"
-              outcome="~12 hrs/week saved"
+              outcome="Three days a week back"
               image={exampleHvac}
             />
             <ExampleCallout
               industry="Logistics"
               quote="We have ten years of shipping manifests no one reads."
-              build="A document ingestion pipeline that surfaces cost anomalies, lane optimization, and renegotiation candidates. Plugs into the existing ops dashboard."
+              build="An AI that reads ten years of shipping data and shows you where you&rsquo;re overpaying, lane by lane. Feeds your existing ops dashboard."
               tier="Builder"
-              outcome="6-figure annual recovery typical"
+              outcome="Six-figure annual recovery"
               image={exampleLogistics}
             />
             <ExampleCallout
@@ -179,7 +198,7 @@ export default function HomePage() {
               quote="Our partners spend partner-rate hours on first-draft contract review."
               build="A continuous AI agent that reviews incoming contracts, flags deviations from templates, drafts redlines, and routes only the genuinely ambiguous cases to a human partner."
               tier="Compound"
-              outcome="60–80% partner hours redirected"
+              outcome="Partner hours back to partner work"
               image={exampleServices}
             />
           </div>

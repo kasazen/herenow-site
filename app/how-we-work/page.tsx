@@ -9,7 +9,7 @@ import deliverableDetail from "../../public/photos/deliverable-detail.jpg";
 export const metadata: Metadata = {
   title: "How we work",
   description:
-    "Two weeks paid. A working deliverable. Then we build. Here is exactly what the sprint looks like, what we ask from you, and what you walk out with.",
+    "Two weeks. A working deliverable. Then we build. Here is exactly what the sprint looks like, what we ask from you, and what you walk out with.",
 };
 
 const STAGES: Stage[] = [
@@ -30,9 +30,9 @@ const STAGES: Stage[] = [
   {
     number: "03",
     name: "Weigh",
-    tagline: "Every move ranked. Cost, complexity, blast radius. Every move tied to a dollar.",
+    tagline: "Every move ranked. Cost, complexity, how badly it can break things. Every move tied to a dollar.",
     body:
-      "We list every AI move that fits your operation — usually fifteen to thirty candidates. Each one gets a name (what it is), a rank (where it sits in priority), a price (what it costs to build and to run), and a tier (Starter, Builder, or Compound). We weigh by three factors: dollar return, time to ship, and operational blast radius. The output is a ranked list, defensible in your boardroom.",
+      "We list every AI move that fits your operation — usually fifteen to thirty candidates. Each one gets a name (what it is), a rank (where it sits in priority), a price (what it costs to build and to run), and a tier (Starter, Builder, or Compound). We weigh by three factors: dollar return, time to ship, and how badly it can break things if it goes sideways. The output is a ranked list, defensible in your boardroom.",
   },
   {
     number: "04",
@@ -58,7 +58,7 @@ export default function HowWeWorkPage() {
         <div className={`article ${styles.heroInner}`}>
           <p className="eyebrow">How we work</p>
           <h1 className={styles.heroTitle}>
-            Two weeks paid. <em>A working deliverable.</em> Then we build.
+            Two weeks. <em>A working deliverable.</em> Then we build.
           </h1>
           <p className={`lead ${styles.heroLede}`}>
             Here is exactly what the sprint looks like, what we ask from you, and what you walk out with.
@@ -120,10 +120,10 @@ export default function HowWeWorkPage() {
         <div className={`article ${styles.pricingInner}`}>
           <p className="eyebrow">What it costs</p>
           <h2 className={styles.h2}>
-            Five thousand to ten thousand. <em>Paid up front.</em>
+            Five to <em>ten thousand.</em>
           </h2>
           <p className={styles.body}>
-            Sprint pricing scales with operation complexity &mdash; number of stakeholders, document volume, number of operating systems we have to read across. Build engagements are scoped separately, after the sprint. We quote builds in fixed price for Starters, milestone for Builders, and monthly retainer for Compound.
+            Invoiced up front. Sprint pricing scales with operation complexity &mdash; number of stakeholders, document volume, number of operating systems we have to read across. Build engagements are scoped separately, after the sprint. We quote builds in fixed price for Starters, milestone for Builders, and monthly retainer for Compound.
           </p>
         </div>
       </section>

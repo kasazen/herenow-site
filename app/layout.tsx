@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Here Now Labs",
     description:
-      "AI you haven't built yet, hiding in your operation. Two weeks. Paid. A working deliverable.",
+      "AI you haven't built yet, hiding in your operation. Two weeks. A working deliverable.",
     url: SITE_URL,
     siteName: "Here Now Labs",
     type: "website",
@@ -71,7 +71,7 @@ const PROFESSIONAL_SERVICE_LD = {
   logo: `${SITE_URL}/apple-touch-icon.png`,
   image: `${SITE_URL}/og-image.png`,
   description:
-    "AI advisory and build firm. Two-week paid sprints produce a ranked, priced, sequenced list of AI moves. Build engagements ship the moves.",
+    "AI advisory and build firm. Two-week sprints produce a ranked, priced, sequenced list of AI moves. Build engagements ship the moves.",
   email: "team@herenowlabs.xyz",
   areaServed: "US",
   priceRange: "$$$$",

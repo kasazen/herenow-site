@@ -7,7 +7,6 @@ import styles from "./SiteNav.module.css";
 
 const NAV_ITEMS = [
   { href: "/how-we-work", label: "How we work" },
-  { href: "/contact", label: "Contact" },
 ];
 
 function isActive(pathname: string | null, href: string) {

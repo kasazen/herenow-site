@@ -17,11 +17,6 @@
   --accent-soft: #d8ecdf;
   --accent-deep: #0e5a2b;
 
-  /* Leaf-vein animation glow */
-  --vein-base: #2f6b3e;
-  --vein-glow: #7ee0a4;
-  --vein-particle: #c8f4d4;
-
   /* Layout */
   --content-max: 75rem;
   --article-max: 45rem;

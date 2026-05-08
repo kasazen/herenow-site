@@ -22,70 +22,36 @@
 }
 
 @media (max-width: 767px) {
-  .svgDesktop {
-    display: none;
-  }
-  .svgMobile {
-    display: block;
-  }
+  .svgDesktop { display: none; }
+  .svgMobile { display: block; }
 }
 
-/* ─── Midrib ─── 0.0–0.6s draw-in, then subtle pulse ──────────── */
+/* ─── Midrib — draws first, 0–500ms ───────────────────────────── */
 
 .midrib {
   stroke-dasharray: 100;
   stroke-dashoffset: 100;
-  transition: stroke-dashoffset 600ms var(--ease-out);
+  transition: stroke-dashoffset 500ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .wrap[data-visible="true"] .midrib {
   stroke-dashoffset: 0;
-  animation: lvd-pulse 4000ms 2400ms infinite var(--ease-soft);
 }
 
-/* ─── Lateral veins ─── 0.6–1.4s, 100ms stagger ───────────────── */
+/* ─── Laterals — all five draw simultaneously starting at 300ms ── */
 
 .lateral {
   stroke-dasharray: 100;
   stroke-dashoffset: 100;
-  transition: stroke-dashoffset 400ms var(--ease-out);
-  transition-delay: calc(600ms + var(--i) * 100ms);
+  transition: stroke-dashoffset 400ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: 300ms;
 }
 
 .wrap[data-visible="true"] .lateral {
   stroke-dashoffset: 0;
-  animation: lvd-pulse 4000ms 2400ms infinite var(--ease-soft);
 }
 
-/* ─── Secondary veinlets ─── 1.4–1.9s opacity fade, 30ms stagger ── */
-
-.veinlet {
-  opacity: 0;
-  transition: opacity 320ms var(--ease-out);
-  transition-delay: calc(1400ms + var(--i) * 30ms);
-}
-
-.wrap[data-visible="true"] .veinlet {
-  opacity: 0.55;
-}
-
-/* ─── Tip nodes ─── appear with their lateral ─────────────────── */
-
-.tipNode {
-  opacity: 0;
-  transform: scale(0.3);
-  transform-origin: center;
-  transform-box: fill-box;
-  transition: opacity 360ms var(--ease-out), transform 480ms cubic-bezier(0.34, 1.56, 0.64, 1);
-  transition-delay: calc(1000ms + var(--i) * 100ms);
-}
-
-.wrap[data-visible="true"] .tipNode {
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* ─── Optional labels at tips (used on /how-we-work) ──────────── */
+/* ─── Optional labels — fade in once the diagram has settled ──── */
 
 .label {
   font-family: var(--font-serif);
@@ -94,35 +60,23 @@
   font-size: 18px;
   fill: var(--ink);
   opacity: 0;
-  transition: opacity 360ms var(--ease-out);
-  transition-delay: calc(1500ms + var(--i) * 80ms);
+  transition: opacity 360ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(800ms + var(--i) * 60ms);
 }
 
 .wrap[data-visible="true"] .label {
   opacity: 1;
 }
 
-/* ─── Looping pulse — opacity 0.85 ↔ 1.0 every 4s ─────────────── */
-
-@keyframes lvd-pulse {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.85; }
-}
-
-/* ─── Reduced motion: render the final state, no transitions ──── */
+/* ─── Reduced motion — render the final state, no transitions ──── */
 
 @media (prefers-reduced-motion: reduce) {
   .midrib,
   .lateral,
-  .veinlet,
-  .tipNode,
   .label {
     transition: none !important;
-    animation: none !important;
   }
   .midrib { stroke-dashoffset: 0; }
   .lateral { stroke-dashoffset: 0; }
-  .veinlet { opacity: 0.55; }
-  .tipNode { opacity: 1; transform: none; }
   .label { opacity: 1; }
 }
