@@ -1,31 +1,33 @@
 # Imagery — direction and inventory
 
-The brand visual thesis is **nature-as-network**: leaf veins, cellular structures, branching/radial patterns. The metaphor is *what neural networks already are in nature* — networks in living things that flow growth toward a conclusion. Photographic imagery and a custom branching-SVG animation work together at this register, neither on-the-nose.
+The brand visual thesis is **nature-as-network**: leaf veins, cellular structures, branching/radial patterns. The metaphor is *what neural networks already are in nature* — networks in living things that flow growth toward a conclusion. Photographic imagery and animated leaf-vein SVGs work together at this register, neither on-the-nose.
 
 The photographic system is **stock from Unsplash, curated tightly to one subject vocabulary** (leaf-vein networks). Treatment is automatic via `<HeroImage>` and `<SectionImage>` components — drop the file in, no preprocessing required.
 
-## Wired slots (live)
+After the May 2026 rebuild, the live pages lead with animated SVG diagrams (`HomeInsight`, `HowWeWorkDiagram`, `BranchingMark`) rather than photography. The leaf-vein photographic inventory below is on hand for future editorial slots — section breaks, longer-form pages, future case studies.
 
-### Hero photos — `public/images/hero/`
+## On-hand inventory
 
-| Path | Subject | Page |
-|---|---|---|
-| `hero/home.jpg` | Bright leaf-vein cellular mesh (Ash Edmonds) | `/` |
-| `hero/how-we-work.jpg` | Cellular tessellation pattern (David Clode) | `/how-we-work` |
-| `hero/working-sessions.jpg` | Bold yellow leaf-vein infrastructure (Noemi Macavei) | `/working-sessions` |
-| `hero/ai-action-plan.jpg` | Symmetrical leaf branching network (Maxence Pira) | `/ai-action-plan` |
+### Hero-grade photos — `public/images/hero/`
+
+| Path | Subject |
+|---|---|
+| `hero/home.jpg` | Bright leaf-vein cellular mesh (Ash Edmonds) |
+| `hero/how-we-work.jpg` | Cellular tessellation pattern (David Clode) |
+| `hero/working-sessions.jpg` | Bold yellow leaf-vein infrastructure (Noemi Macavei) |
+| `hero/ai-action-plan.jpg` | Symmetrical leaf branching network (Maxence Pira) |
 
 ### Section-break photos — `public/images/sections/`
 
 Used as full-bleed editorial breaks via `<SectionImage>`, with feathered top/bottom edges.
 
-| Path | Subject | Currently placed at |
-|---|---|---|
-| `sections/radial-hub.jpg` | Radial leaf vein hub (Stefan Steinbauer) | Home, between Method and Deliverable |
-| `sections/weathered-network.jpg` | Weathered leaf with golden vein network (Nishaan Ahmed) | How-we-work, before CTA |
-| `sections/leaf-droplet.jpg` | Symmetrical leaf with droplet (Clay Banks) | Held for future use |
-| `sections/translucent-leaf.jpg` | Translucent leaf (Mulyadi) | Held for future use |
-| `sections/grid-energy.jpg` | Dense vein grid energy (Tony Sebastian) | Held for future use |
+| Path | Subject |
+|---|---|
+| `sections/radial-hub.jpg` | Radial leaf vein hub (Stefan Steinbauer) |
+| `sections/weathered-network.jpg` | Weathered leaf with golden vein network (Nishaan Ahmed) |
+| `sections/leaf-droplet.jpg` | Symmetrical leaf with droplet (Clay Banks) |
+| `sections/translucent-leaf.jpg` | Translucent leaf (Mulyadi) |
+| `sections/grid-energy.jpg` | Dense vein grid energy (Tony Sebastian) |
 
 ### Parking lot — `public/images/options/`
 
@@ -35,6 +37,16 @@ Four photos that read more botanical than network. Held for editorial future nee
 - `pedro-vit-_9c1z0LWzdA-unsplash.jpg` (leaf with droplets)
 - `scott-webb-w0-PjhhbdS8-unsplash.jpg` (dark leaf central vein)
 - `yoksel-zok-LdDewlTIn34-unsplash.jpg` (scaled frond layered)
+
+## Animated SVG components
+
+Built into the rebuild and carry the leaf-vein grammar in motion:
+
+- `app/_components/HomeInsight.tsx` — Home signature. Trunk + 3 prominent branches with glowing terminal nodes, denser secondary network, SMIL `<animateMotion>` flowing dots along the primary veins. Visualizes "the obvious AI plays vs. the structural network behind them."
+- `app/_components/HowWeWorkDiagram.tsx` — How We Work signature. 8 inflowing veins from the canvas edges converge at a central glowing nexus (= The Analysis), with flowing dots traveling inward. Visualizes "many inputs funneling into one decision document."
+- `app/_components/BranchingMark.tsx` — Quieter accent used at the foot of the Contact page. Single self-drawing branching SVG; gentler register than the page-signature pieces.
+
+All three respect `prefers-reduced-motion` (skip the timeline, render in completed end-state, suppress flowing dots).
 
 ## Curation rules — what to look for if adding more
 
@@ -60,7 +72,7 @@ Four photos that read more botanical than network. Held for editorial future nee
 
 ## How treatment works
 
-`<HeroImage>` (in `app/_components/HeroImage.tsx`) wraps photos in a paper-rule frame with subtle desaturation, warm cream overlay, and faint green radial wash. Drop a JPG into the right path; it appears with the unified treatment.
+`<HeroImage>` (in `app/_components/HeroImage.tsx`) wraps photos in a paper-rule frame with subtle desaturation, warm cream overlay, and faint green radial wash. The frame is locked to a 3:2 aspect ratio with `object-fit: cover`, so portrait sources crop to landscape and never dominate the mobile viewport.
 
 `<SectionImage>` (in `app/_components/SectionImage.tsx`) renders full-bleed section breaks at clamp(180px, 22vw, 280px) height, with feathered top/bottom edges fading to the page background. Slight saturation pull-back unifies them.
 

@@ -114,7 +114,7 @@ export default function ContactForm() {
             <option>Prefer not to say</option>
           </select>
           <span className="form-help">
-            We typically engage with operations between $10M and $250M in revenue.
+            We typically work with operations between $10M and $250M in revenue.
           </span>
         </div>
       </div>
