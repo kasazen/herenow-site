@@ -1,0 +1,130 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 2rem;
+  background: var(--paper-tint);
+  border: 1px solid rgba(20, 20, 26, 0.08);
+  border-radius: 12px;
+  height: 100%;
+}
+
+/* ─── 1. Tier marker (italic Fraunces, accent) ────────────────── */
+
+.tierMarker {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--accent);
+  margin: 0;
+}
+
+/* ─── 2. LeafVeinAccent slot ──────────────────────────────────── */
+
+.accent {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 0.25rem 0 0.5rem -0.5rem;
+}
+
+/* ─── 3. Headline ─────────────────────────────────────────────── */
+
+.headline {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: var(--t-h3);
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+  margin: 0;
+}
+
+.headline em {
+  font-style: italic;
+  font-weight: 400;
+  color: inherit;
+}
+
+/* ─── 4. Body ─────────────────────────────────────────────────── */
+
+.body {
+  font-family: var(--font-sans);
+  font-size: var(--t-body);
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 0;
+}
+
+/* ─── 5. Horizontal rule ──────────────────────────────────────── */
+
+.rule {
+  border: 0;
+  height: 1px;
+  background: var(--paper-deep);
+  margin: 1.25rem 0;
+  width: 100%;
+}
+
+/* ─── 6. Examples label ───────────────────────────────────────── */
+
+.examplesLabel {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: var(--t-eyebrow);
+  color: var(--faint);
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+/* ─── 7. Examples list ────────────────────────────────────────── */
+
+.examplesList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.exampleItem {
+  display: grid;
+  grid-template-columns: 1.1rem 1fr;
+  gap: 0.4rem;
+  align-items: baseline;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.bullet {
+  color: var(--accent);
+  font-size: 0.85rem;
+  line-height: 1;
+  text-align: center;
+  padding-top: 0.1em;
+}
+
+/* ─── 8. Timeline line ────────────────────────────────────────── */
+
+.timeline {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--muted);
+  margin: 0.25rem 0 0;
+}
+
+.timeline em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--muted);
+}
