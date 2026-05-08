@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import Link from "next/link";
 import Script from "next/script";
+import BrandSpine from "./_components/BrandSpine";
 import SiteNav from "./_components/SiteNav";
+import navStyles from "./_components/SiteNav.module.css";
 import "./globals.css";
 
 const SITE_URL = "https://herenowlabs.xyz";
@@ -13,11 +14,11 @@ export const metadata: Metadata = {
     template: "%s · Here Now Labs",
   },
   description:
-    "AI inside your operation. We use AI to find what's possible inside an established operation, then build it. Action, not discussion.",
+    "AI you haven't built yet, hiding in your operation. We come in for two weeks, find what AI can do with your contracts, processes, and financials, and ship it.",
   openGraph: {
     title: "Here Now Labs",
     description:
-      "AI inside your operation. Action, not discussion.",
+      "AI you haven't built yet, hiding in your operation. Two weeks. Paid. A working deliverable.",
     url: SITE_URL,
     siteName: "Here Now Labs",
     type: "website",
@@ -35,7 +36,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Here Now Labs",
     description:
-      "AI inside your operation. Action, not discussion.",
+      "AI you haven't built yet, hiding in your operation.",
     images: ["/og-image.png"],
   },
   icons: {
@@ -70,7 +71,7 @@ const PROFESSIONAL_SERVICE_LD = {
   logo: `${SITE_URL}/apple-touch-icon.png`,
   image: `${SITE_URL}/og-image.png`,
   description:
-    "AI-driven discovery and build for operators of established companies.",
+    "AI advisory and build firm. Two-week paid sprints produce a ranked, priced, sequenced list of AI moves. Build engagements ship the moves.",
   email: "team@herenowlabs.xyz",
   areaServed: "US",
   priceRange: "$$$$",
@@ -97,9 +98,15 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <SiteHeader />
+        <SiteNav />
         <main>{children}</main>
-        <SiteFooter />
+        <BrandSpine />
+        <footer className={navStyles.footer}>
+          <div className={navStyles.footerInner}>
+            <span>© Here Now Labs, Inc.</span>
+            <a href="mailto:team@herenowlabs.xyz">team@herenowlabs.xyz</a>
+          </div>
+        </footer>
         {plausibleDomain ? (
           <Script
             defer
@@ -110,63 +117,5 @@ export default function RootLayout({
         ) : null}
       </body>
     </html>
-  );
-}
-
-function SiteHeader() {
-  return (
-    <header className="site-header">
-      <div className="site-header__inner">
-        <Link href="/" className="wordmark" aria-label="Here Now Labs — home">
-          <span className="wordmark__mark" aria-hidden="true" />
-          <span className="wordmark__text">Here Now Labs</span>
-        </Link>
-        <SiteNav />
-      </div>
-    </header>
-  );
-}
-
-function SiteFooter() {
-  const year = new Date().getFullYear();
-  return (
-    <footer className="site-footer">
-      <div className="site-footer__inner">
-        <div>
-          <p>
-            <span className="site-footer__mark" aria-hidden="true" />
-            <strong style={{ color: "var(--ink)", fontWeight: 500 }}>Here Now Labs</strong>
-          </p>
-          <p style={{ marginTop: "0.5rem", maxWidth: "28rem" }}>
-            AI inside your operation. Action, not discussion.
-          </p>
-        </div>
-        <div>
-          <h4>Site</h4>
-          <ul>
-            <li>
-              <Link href="/how-we-work">How we work</Link>
-            </li>
-            <li>
-              <Link href="/contact">Contact</Link>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h4>Get in touch</h4>
-          <ul>
-            <li>
-              <a href="mailto:team@herenowlabs.xyz">team@herenowlabs.xyz</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div
-        className="site-footer__inner"
-        style={{ marginTop: "2.5rem", fontSize: "0.85rem", color: "var(--faint)" }}
-      >
-        <p>© {year} Here Now Labs.</p>
-      </div>
-    </footer>
   );
 }
