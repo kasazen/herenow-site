@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import BranchingMark from "../_components/BranchingMark";
 import ContactForm from "./ContactForm";
 import styles from "./page.module.css";
 
@@ -40,8 +39,6 @@ export default function ContactPage() {
         </p>
         <ContactForm />
       </section>
-
-      <BranchingMark />
     </article>
   );
 }
