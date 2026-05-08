@@ -1,6 +1,6 @@
-// POST /api/contact — long-form contact form submissions.
+// POST /api/contact — contact form submissions.
 // Sends a notification to team@herenowlabs.xyz via Resend with the
-// submitter's name, email, company, revenue band, and message.
+// submitter's name, company, role, email, and message.
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -20,7 +20,7 @@ type ContactBody = {
   name?: string;
   email?: string;
   company?: string;
-  revenue?: string;
+  role?: string;
   message?: string;
   // Honeypot — bots fill this; humans never see it.
   website?: string;
@@ -42,7 +42,7 @@ export async function POST(request: Request): Promise<Response> {
   const name = (body?.name ?? "").trim().slice(0, 200);
   const email = (body?.email ?? "").trim().toLowerCase().slice(0, 200);
   const company = (body?.company ?? "").trim().slice(0, 200);
-  const revenue = (body?.revenue ?? "").trim().slice(0, 80);
+  const role = (body?.role ?? "").trim().slice(0, 200);
   const message = (body?.message ?? "").trim().slice(0, 4000);
 
   if (!name) return json(400, { ok: false, error: "missing_name", message: "Add your name." });
@@ -74,7 +74,7 @@ export async function POST(request: Request): Promise<Response> {
   const lines = [
     `From: ${name} <${email}>`,
     company ? `Company: ${company}` : null,
-    revenue ? `Revenue band: ${revenue}` : null,
+    role ? `Role: ${role}` : null,
     "",
     message,
   ]

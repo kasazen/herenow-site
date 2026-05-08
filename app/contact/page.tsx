@@ -5,40 +5,36 @@ import styles from "./page.module.css";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Talk to Here Now Labs. Book a thirty-minute intro or use the contact form — both go to the same place.",
+    "Two ways in. Send the note or pick a time. Both end up in the same place.",
 };
 
 export default function ContactPage() {
   return (
-    <article className={`article ${styles.page}`}>
-      <header className={styles.header}>
-        <p className="eyebrow">Contact</p>
+    <article className={styles.page}>
+      <header className={`article ${styles.header}`}>
+        <p className="eyebrow">The intro</p>
         <h1 className={styles.title}>Two ways in.</h1>
-        <p className="lead" style={{ marginTop: "1rem" }}>
-          We work with a small number of operators at a time. Everything coming through these channels gets read carefully.
+        <p className={`lead ${styles.lede}`}>
+          Pick whichever is easier. Both end up in the same place.
         </p>
       </header>
 
-      <section className={styles.intro}>
-        <h2>Book a thirty-minute intro</h2>
-        <p>A working call. No deck, no pitch.</p>
-        <p>
-          <a className="btn" href="https://cal.com/herenowlabs/intro">
-            Open the calendar
+      <div className={`container ${styles.columns}`}>
+        <section className={styles.formColumn}>
+          <ContactForm />
+        </section>
+
+        <section className={styles.bookColumn}>
+          <p className="eyebrow">Or just book</p>
+          <a
+            href="https://cal.com/herenowlabs/intro"
+            className={`btn ${styles.bookCta}`}
+          >
+            Pick a time
           </a>
-        </p>
-      </section>
-
-      <hr />
-
-      <section>
-        <h2>Or write first.</h2>
-        <p>
-          Read inside one business day. For anything sensitive &mdash; confidential search, a contested vendor &mdash; write{" "}
-          <a href="mailto:team@herenowlabs.xyz">team@herenowlabs.xyz</a> and we will move it to a more appropriate channel.
-        </p>
-        <ContactForm />
-      </section>
+          <p className={styles.bookNote}>Thirty minutes. No deck. No fee.</p>
+        </section>
+      </div>
     </article>
   );
 }

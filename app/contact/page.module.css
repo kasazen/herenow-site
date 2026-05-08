@@ -1,59 +1,59 @@
 .page {
-  padding-block: var(--section-y);
+  padding: calc(64px + 4rem) 0 4rem;
 }
 
+/* ─── Hero ─────────────────────────────────────────────────────── */
+
 .header {
-  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2.5rem;
 }
 
 .title {
-  font-size: clamp(2rem, 4.4vw, 3rem);
-  line-height: 1.2;
-  margin-top: 0.5rem;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: var(--t-h1);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0.5rem 0 0;
 }
 
-.intro {
-  margin-top: 2rem;
-  padding: 1.5rem 1.75rem;
-  background: var(--paper-tint);
-  border-radius: 6px;
+.lede {
+  margin: 0.5rem 0 0;
+  max-width: 36rem;
 }
 
-.intro h2 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-  font-size: 1.4rem;
-}
+/* ─── Two-column layout ──────────────────────────────────────────── */
 
-.intro p {
-  margin-top: 0;
-  margin-bottom: 1rem;
-  color: var(--muted);
-}
-
-.intro p:last-child {
-  margin-bottom: 0;
-}
-
-.form {
-  margin-top: 1.5rem;
-  position: relative;
-}
-
-.formGrid {
+.columns {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.25rem;
+  gap: 3rem;
+  align-items: start;
+  max-width: 64rem;
 }
 
-@media (min-width: 36rem) {
-  .formGrid {
-    grid-template-columns: 1fr 1fr;
+@media (min-width: 900px) {
+  .columns {
+    grid-template-columns: 1.4fr 1fr;
+    gap: 4rem;
   }
 }
 
-.formGrid .form-row {
-  margin: 0;
+/* ─── Form column ────────────────────────────────────────────────── */
+
+.formColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
 .submitRow {
@@ -62,4 +62,41 @@
   align-items: center;
   gap: 1rem;
   flex-wrap: wrap;
+}
+
+.formNote {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--faint);
+  margin: 0.85rem 0 0;
+}
+
+/* ─── Book column ────────────────────────────────────────────────── */
+
+.bookColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem;
+  background: var(--paper-tint);
+  border: 1px solid rgba(20, 20, 26, 0.08);
+  border-radius: 12px;
+  align-items: flex-start;
+}
+
+.bookCta {
+  font-size: 16px;
+  padding: 14px 28px;
+  min-height: 48px;
+}
+
+.bookNote {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 15px;
+  color: var(--faint);
+  margin: 0;
 }

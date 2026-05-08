@@ -1,180 +1,138 @@
-/* ─── Hero ─────────────────────────────────────────────────────── */
+/* ─── Shared body / h2 styling ──────────────────────────────────── */
+
+.h2 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: var(--t-h2);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0.5rem 0 1.25rem;
+}
+
+.h2 em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ink);
+}
+
+.body {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: var(--t-body);
+  line-height: 1.6;
+  color: var(--ink);
+  margin: 0;
+}
+
+/* ─── 1. Hero ───────────────────────────────────────────────────── */
 
 .hero {
-  padding: clamp(3rem, 7vw, 5.5rem) 0 clamp(1.5rem, 3vw, 2.5rem);
+  padding: calc(64px + 4rem) 0 3rem;
 }
 
 .heroInner {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  max-width: 48rem;
 }
 
 .heroTitle {
   font-family: var(--font-serif);
-  font-size: clamp(2.75rem, 8vw, 5rem);
   font-weight: 400;
-  line-height: 1.02;
-  letter-spacing: -0.028em;
-  margin: 0.4rem 0 0;
+  font-size: var(--t-h1);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
   color: var(--ink);
-  max-width: 14ch;
+  margin: 0.5rem 0 0;
 }
 
 .heroTitle em {
   font-style: italic;
-  color: var(--accent);
-}
-
-.heroLead {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: clamp(1.125rem, 1.7vw, 1.4rem);
-  line-height: 1.45;
-  color: var(--muted);
-  margin: 0.75rem 0 0;
-  max-width: 38rem;
-}
-
-/* ─── Signature animation block ───────────────────────────────── */
-
-.diagram {
-  padding: clamp(1.5rem, 3vw, 2.5rem) 0 clamp(2.5rem, 5vw, 4rem);
-}
-
-/* ─── Method + Analysis prose ────────────────────────────────── */
-
-.method,
-.analysis {
-  padding-block: clamp(2.75rem, 6vw, 4.5rem);
-}
-
-.methodInner,
-.analysisInner {
-  max-width: 48rem;
-}
-
-.methodTitle,
-.analysisTitle {
-  font-family: var(--font-serif);
-  font-size: clamp(1.75rem, 3.6vw, 2.5rem);
   font-weight: 400;
-  line-height: 1.12;
-  letter-spacing: -0.022em;
   color: var(--ink);
-  margin: 0.5rem 0 0;
-  max-width: 22ch;
 }
 
-.methodTitle em,
-.analysisTitle em {
-  font-style: italic;
-  color: var(--accent);
+.heroLede {
+  margin: 0.75rem 0 0;
 }
 
-.methodProse {
-  margin-top: 1.25rem;
+/* ─── 2. The five stages ─────────────────────────────────────────── */
+
+.stagesInner {
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;
+  gap: 2.5rem;
 }
 
-.methodProse p {
-  font-family: var(--font-sans);
-  font-size: 1.0625rem;
-  line-height: 1.6;
-  color: var(--ink);
-  margin: 0;
+.stagesHead {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-/* ─── Three tiers ─────────────────────────────────────────────── */
-
-.tiers {
-  padding-block: clamp(2.75rem, 6vw, 4.5rem);
+.diagramSlot {
+  width: 100%;
+  margin: 0 auto;
 }
 
-.tiersLead {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: clamp(1.0625rem, 1.6vw, 1.25rem);
-  color: var(--muted);
-  margin: 0.5rem 0 0;
-  max-width: 48rem;
-}
-
-.tiersList {
-  list-style: none;
-  margin: 1.5rem 0 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-}
-
-@media (min-width: 44rem) {
-  .tiersList {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.25rem;
+@media (min-width: 768px) {
+  .diagramSlot {
+    max-width: 50%;
   }
 }
 
-.tierCard {
-  padding: 1.5rem 1.5rem 1.75rem;
-  background: var(--paper);
-  border: 1px solid var(--rule);
-  border-radius: 6px;
+/* ─── 3. The deliverable (two-column) ───────────────────────────── */
+
+.deliverableInner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: start;
+  max-width: 64rem;
+}
+
+@media (min-width: 900px) {
+  .deliverableInner {
+    grid-template-columns: 40% 60%;
+    gap: 3rem;
+  }
+}
+
+.deliverableImage {
+  width: 100%;
+}
+
+.deliverableText {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.5rem;
 }
 
-.tierName {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: clamp(1.5rem, 2.4vw, 1.875rem);
-  letter-spacing: -0.018em;
-  line-height: 1;
-  color: var(--accent);
-  margin: 0;
+/* ─── 4 / 5 / 6: text-only article sections ─────────────────────── */
+
+.askInner,
+.pricingInner,
+.afterInner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-.tierBody {
-  font-family: var(--font-sans);
-  font-size: 1rem;
-  line-height: 1.55;
-  color: var(--ink);
-  margin: 0;
+/* ─── 7. Closing CTA ────────────────────────────────────────────── */
+
+.closingCta {
+  background: var(--accent-soft);
 }
 
-/* ─── CTA ─────────────────────────────────────────────────────── */
-
-.cta {
-  padding-block: clamp(2.75rem, 6vw, 4.5rem);
+.closingInner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 36rem;
 }
 
-.ctaTitle {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: clamp(1.875rem, 4vw, 2.75rem);
-  line-height: 1.1;
-  letter-spacing: -0.022em;
-  color: var(--ink);
-  margin: 0;
-  max-width: 22ch;
-}
-
-.ctaSub {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: clamp(1.0625rem, 1.6vw, 1.25rem);
-  line-height: 1.5;
-  color: var(--muted);
-  margin: 0.6rem 0 0;
-  max-width: 42rem;
-}
-
-.ctaButtons {
+.closingButtons {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;

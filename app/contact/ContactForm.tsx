@@ -18,9 +18,9 @@ export default function ContactForm() {
     const data = new FormData(form);
     const payload = {
       name: String(data.get("name") ?? "").trim(),
-      email: String(data.get("email") ?? "").trim(),
       company: String(data.get("company") ?? "").trim(),
-      revenue: String(data.get("revenue") ?? "").trim(),
+      role: String(data.get("role") ?? "").trim(),
+      email: String(data.get("email") ?? "").trim(),
       message: String(data.get("message") ?? "").trim(),
       website: String(data.get("website") ?? "").trim(),
     };
@@ -53,7 +53,7 @@ export default function ContactForm() {
   if (status === "ok") {
     return (
       <div className="form-success" role="status">
-        Got it — thanks for writing. Someone on the team will reply within a business day, usually faster. If you do not hear back, your note may have hit a filter; the backup inbox is{" "}
+        Got it &mdash; thanks for writing. Someone on the team will reply within one business day. If you do not hear back, your note may have hit a filter; the backup inbox is{" "}
         <a href="mailto:team@herenowlabs.xyz">team@herenowlabs.xyz</a>.
       </div>
     );
@@ -69,64 +69,55 @@ export default function ContactForm() {
         <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <div className={styles.formGrid}>
-        <div className="form-row">
-          <label htmlFor="contact-name">Your name</label>
-          <input
-            id="contact-name"
-            name="name"
-            type="text"
-            autoComplete="name"
-            required
-          />
-        </div>
-        <div className="form-row">
-          <label htmlFor="contact-email">Email</label>
-          <input
-            id="contact-email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            required
-          />
-        </div>
-        <div className="form-row">
-          <label htmlFor="contact-company">Company</label>
-          <input
-            id="contact-company"
-            name="company"
-            type="text"
-            autoComplete="organization"
-          />
-        </div>
-        <div className="form-row">
-          <label htmlFor="contact-revenue">Approximate annual revenue</label>
-          <select id="contact-revenue" name="revenue" defaultValue="">
-            <option value="" disabled>
-              Choose a band (optional)
-            </option>
-            <option>Under $10M</option>
-            <option>$10M – $25M</option>
-            <option>$25M – $50M</option>
-            <option>$50M – $100M</option>
-            <option>$100M – $250M</option>
-            <option>$250M+</option>
-            <option>Prefer not to say</option>
-          </select>
-          <span className="form-help">
-            We typically work with operations between $10M and $250M in revenue.
-          </span>
-        </div>
+      <div className="form-row">
+        <label htmlFor="contact-name">Name</label>
+        <input
+          id="contact-name"
+          name="name"
+          type="text"
+          autoComplete="name"
+          required
+        />
       </div>
 
       <div className="form-row">
-        <label htmlFor="contact-message">What brings you here?</label>
+        <label htmlFor="contact-company">Company</label>
+        <input
+          id="contact-company"
+          name="company"
+          type="text"
+          autoComplete="organization"
+        />
+      </div>
+
+      <div className="form-row">
+        <label htmlFor="contact-role">Role</label>
+        <input
+          id="contact-role"
+          name="role"
+          type="text"
+          autoComplete="organization-title"
+        />
+      </div>
+
+      <div className="form-row">
+        <label htmlFor="contact-email">Email</label>
+        <input
+          id="contact-email"
+          name="email"
+          type="email"
+          autoComplete="email"
+          required
+        />
+      </div>
+
+      <div className="form-row">
+        <label htmlFor="contact-message">What&rsquo;s annoying right now?</label>
         <textarea
           id="contact-message"
           name="message"
-          rows={6}
+          rows={5}
           required
-          placeholder="A line or two on the operation and what you are weighing. We will read it carefully."
         />
       </div>
 
@@ -138,12 +129,11 @@ export default function ContactForm() {
 
       <div className={styles.submitRow}>
         <button type="submit" className="btn" disabled={status === "submitting"}>
-          {status === "submitting" ? "Sending…" : "Send note"}
+          {status === "submitting" ? "Sending…" : "Send the note"}
         </button>
-        <span className="form-help">
-          Goes to <a href="mailto:team@herenowlabs.xyz">team@herenowlabs.xyz</a>.
-        </span>
       </div>
+
+      <p className={styles.formNote}>We reply within one business day.</p>
     </form>
   );
 }
