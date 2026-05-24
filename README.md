@@ -2,7 +2,7 @@
 
 Public website for **Here Now Labs, Inc.** at [herenowlabs.xyz](https://herenowlabs.xyz).
 
-Next.js 16 (App Router, Turbopack) + React 19 + plain CSS modules. Deployed to Vercel via push-to-main.
+Single-page corporate landing for the holding entity, plus Privacy and Terms. Next.js 16 (App Router) + React 19 + plain CSS. Deployed to Vercel via push-to-main.
 
 ## Local
 
@@ -10,18 +10,18 @@ Next.js 16 (App Router, Turbopack) + React 19 + plain CSS modules. Deployed to V
 npm install
 npm run dev      # http://localhost:3000
 npm run build
-npm run start    # serves the production build
+npm run start
 ```
 
-## Pages
+## Routes
 
-- `/` — home
-- `/how-we-work` — how the two-week sprint runs
-- `/contact` — book the intro or write first
+- `/` — landing (entity, contact, address, links to legal)
+- `/privacy` — corporate Privacy Policy
+- `/terms` — corporate Terms of Service
 
 ## Deploy
 
-Push to `main`. Vercel rebuilds and promotes to production. Custom domain `herenowlabs.xyz` is bound at the Vercel project level. There is no GitHub Pages workflow.
+Push to `main`. Vercel rebuilds and promotes to production. Custom domain `herenowlabs.xyz` is bound at the Vercel project level.
 
 ## Charter
 
