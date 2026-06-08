@@ -1,0 +1,184 @@
+/* Salty Dog landing scope. All selectors are nested under .saltydog-scope so
+   the parchment theme cannot leak out to the rest of herenowlabs.xyz. */
+.saltydog-scope {
+  --parchment: #f5ecd7;
+  --ink: #2a1f10;
+  --rope: #8a5a2b;
+  --crimson: #8b1e1e;
+  --crimson-deep: #5d1414;
+  --sand: #efe4c7;
+
+  background: var(--parchment);
+  color: var(--ink);
+  font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+  font-size: 19px;
+  line-height: 1.55;
+  min-height: 100vh;
+  padding: 32px 20px 80px;
+  background-image:
+    radial-gradient(circle at 10% 10%, rgba(0, 0, 0, 0.04), transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(0, 0, 0, 0.05), transparent 40%);
+}
+
+.saltydog-scope * {
+  box-sizing: border-box;
+}
+
+.saltydog-wrap {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.saltydog-flag {
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 8px;
+}
+
+.saltydog-scope h1 {
+  font-size: 56px;
+  line-height: 1;
+  letter-spacing: -1px;
+  margin: 12px 0 4px;
+  text-align: center;
+  font-weight: 900;
+  transform: rotate(-1deg);
+}
+
+.saltydog-tagline {
+  text-align: center;
+  font-style: italic;
+  font-size: 22px;
+  margin: 0 0 32px;
+  color: #4a3a22;
+}
+
+.saltydog-pitch {
+  background: var(--sand);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  padding: 20px 24px;
+  margin: 0 0 28px;
+  box-shadow: 4px 4px 0 var(--ink);
+  transform: rotate(-0.3deg);
+}
+.saltydog-pitch p { margin: 0 0 12px; }
+.saltydog-pitch p:last-child { margin-bottom: 0; }
+
+.saltydog-cta {
+  text-align: center;
+  margin: 28px 0;
+}
+.saltydog-cta button,
+.saltydog-cta a.btn,
+.saltydog-next {
+  font-family: inherit;
+  font-size: 22px;
+  font-weight: 700;
+  padding: 16px 32px;
+  background: var(--crimson);
+  color: #fff;
+  border: 2px solid var(--crimson-deep);
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 var(--ink);
+  text-decoration: none;
+  display: inline-block;
+  transition: transform 0.05s ease;
+}
+.saltydog-cta button:hover,
+.saltydog-cta a.btn:hover,
+.saltydog-next:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.saltydog-secondary {
+  text-align: center;
+  margin: 12px 0 36px;
+  font-size: 16px;
+}
+.saltydog-secondary a {
+  color: var(--ink);
+  text-decoration: underline wavy var(--rope);
+  text-underline-offset: 4px;
+}
+
+.saltydog-scope h2 {
+  font-size: 28px;
+  margin: 48px 0 6px;
+  text-align: center;
+  font-weight: 900;
+  transform: rotate(0.4deg);
+}
+
+.saltydog-leader-note {
+  text-align: center;
+  font-style: italic;
+  margin: 0 0 16px;
+  color: #4a3a22;
+}
+
+.saltydog-scroll {
+  background: var(--sand);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  padding: 12px 16px;
+  box-shadow: 4px 4px 0 var(--ink);
+  transform: rotate(0.2deg);
+}
+
+.saltydog-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.18);
+}
+.saltydog-row:last-child { border-bottom: 0; }
+
+.saltydog-rank {
+  font-weight: 900;
+  width: 38px;
+  font-size: 22px;
+}
+.saltydog-name { flex: 1; }
+.saltydog-balance {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+.saltydog-doubloon { color: var(--rope); }
+
+.saltydog-empty {
+  text-align: center;
+  font-style: italic;
+  padding: 12px;
+  color: #4a3a22;
+}
+
+.saltydog-footer {
+  text-align: center;
+  font-size: 13px;
+  color: #6a553a;
+  margin-top: 48px;
+}
+.saltydog-footer a { color: inherit; }
+
+.saltydog-welcome {
+  max-width: 520px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 32px 0;
+}
+.saltydog-welcome p { margin: 0 0 16px; }
+.saltydog-hint {
+  font-style: italic;
+  color: #4a3a22;
+  margin-top: 24px;
+}
+
+@media (max-width: 480px) {
+  .saltydog-scope h1 { font-size: 44px; }
+  .saltydog-scope { font-size: 17px; }
+}
